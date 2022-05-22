@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tdh.mapper.RepertoryMapper">
+    <insert id="insert" parameterType="com.tdh.pojo.Repertory" flushCache="true"
+            statementType="PREPARED">
+        insert into sys_repertory(
+        <if test="repertoryId!=null">repertory_id,</if>
+        <if test="goodsId!=null">goods_id,</if>
+        <if test="goodsName!=null">goods_name,</if>
+        <if test="total!=null">total,</if>
+        <if test="warningNum!=null">warning_num,</if>
+        <if test="remark!=null">remark,</if>
+        <if test="createUser!=null">create_user,</if>
+        create_time
+        )values(
+        <if test="repertoryId!=null">#{repertoryId},</if>
+        <if test="goodsId!=null">#{goodsId},</if>
+        <if test="goodsName!=null">#{goodsName},</if>
+        <if test="total!=null">${total},</if>
+        <if test="warningNum!=null">${warningNum},</if>
+        <if test="remark!=null">#{remark},</if>
+        <if test="createUser!=null">#{createUser},</if>
+        sysdate
+        )
+    </insert>
+
+    <select id="selectMap" parameterType="Map"
+            resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+        select tb.*,
+        (select b.factory_name from sys_goods a
+          left join sys_factory b on b.factory_id  = a.factory_id
+        where a.goods_id = tb.goods_id
+        ) as factory_name,
+        (select a.factory_id from sys_goods a where a.goods_id = tb.goods_id) as factory_id,
+
+        (select a.goods_code from sys_goods a where a.goods_id = tb.goods_id) as goods_code,
+        (select a.goods_img from sys_goods a where a.goods_id = tb.goods_id) as goods_img,
+        (select u.user_name from sys_user u where u.user_id=tb.create_user) as create_by_transformation,
+        (select u.user_name from sys_user u where u.user_id=tb.update_user) as update_by_transformation
+        from sys_repertory tb
+
+        where 1 = 1
+        <if test="p.goodsId!=null and p.goodsId!=''">
+            and
+            (
+            tb.goods_name like CONCAT(CONCAT('%',#{p.goodsId}),'%')
+
+            )
+        </if>
+        order by tb.create_time desc
+    </select>
+
+
+    <select id="countMap" parameterType="Map" resultType="Long">
+        select count(1) as totalCount
+        from sys_repertory tb
+        where 1 = 1
+        <if test="p.goodsId!=null and p.goodsId!=''">
+            and
+            (
+            tb.goods_name like CONCAT(CONCAT('%',#{p.goodsId}),'%')
+            )
+        </if>
+        order by tb.create_time desc
+    </select>
+
+    <update id = "updateRepertoryInfoById"  parameterType="com.tdh.pojo.Repertory" flushCache="true"
+            statementType="PREPARED">
+        update sys_repertory a set
+        <if test="goodsId!=null">a.goods_id = #{goodsId},</if>
+        <if test="goodsName!=null">a.goods_name = #{goodsName},</if>
+        <if test="total!=null">a.total = #{total},</if>
+        <if test="warningNum!=null">a.warning_num= #{warningNum},</if>
+        <if test="remark!=null">a.remark = #{remark},</if>
+        a.update_user = #{updateUser},
+        a.update_time = sysdate
+        where a.repertory_id = #{repertoryId}
+    </update>
+
+
+    <select id = "queryRepertoryDetailById" parameterType="String" resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+        select
+         (select b.factory_name from sys_goods a
+          left join sys_factory b on b.factory_id  = a.factory_id
+        where a.goods_id = t.goods_id
+        ) as factory_name,
+            (select b.factory_id from sys_goods a
+          left join sys_factory b on b.factory_id  = a.factory_id
+        where a.goods_id = t.goods_id
+        ) as factory_id,
+      t.repertory_id,
+       t.goods_id,
+       t.goods_name,
+       t.total,
+       t.warning_num,
+       t.create_user,
+       t.create_time,
+       t.update_user,
+       t.update_time,
+       t.remark
+        from sys_repertory t where t.repertory_id = #{repertoryId}
+    </select>
+
+
+
+    <delete id = "delRepertoryInfoById" parameterType="String" flushCache="true">
+        delete from sys_repertory where repertory_id = #{repertoryId}
+    </delete>
+
+</mapper>
