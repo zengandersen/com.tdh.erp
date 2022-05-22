@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>erp</artifactId>
+        <groupId>com.tdh</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <description>前端项目</description>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.tdh</groupId>
+    <artifactId>com.tdh.erp.web</artifactId>
+    <name>com.tdh.erp.web</name>
+    <packaging>war</packaging>
+    <dependencies>
+        <!--此处添加需要接入启动入口的项目-->
+        <dependency>
+            <groupId>com.tdh</groupId>
+            <artifactId>com.tdh.erp.common</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.tdh</groupId>
+            <artifactId>com.tdh.erp.system</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.tdh</groupId>
+            <artifactId>com.tdh.erp.base</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.tdh</groupId>
+            <artifactId>com.tdh.erp.meal</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.tdh</groupId>
+            <artifactId>com.tdh.erp.repertory</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+            </dependencies>
+</project>

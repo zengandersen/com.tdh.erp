@@ -1,0 +1,267 @@
+/*顶部导航样式*/
+.fl{float:left;}
+.navbar-fixed-top,
+.navbar-static-top {
+    background: #1c84c6;
+}
+.nav.navbar-right > li > a {
+    color: #fff;
+}
+.nav.navbar-left > li > a {
+    color: #fff;
+}
+.nav.navbar-left>li{
+    margin:0 10px;
+}
+.nav.navbar-right > li > a:hover {
+    background: #a87143;
+}
+.nav.navbar-left > li > a:hover {
+    background: #a87143;
+}
+.nav .open > a, .nav .open > a:focus, .nav .open > a:hover {
+    background: #a87143;
+}
+/*选中按钮样式*/
+.tab-cont{
+    overflow: hidden;
+    margin-bottom: 20px;}
+.tab-cont .nav{
+    position: relative;}
+.nav-tab-info{
+    display: block;
+}
+.tab-cont .nav-tab-info > li {
+    float: left;
+    border:1px #329EE2 solid;
+    width: 115px;
+    text-align: center;
+}
+.tab-cont .nav-tab-info > li:nth-child(1),.tab-cont .nav-tab-info > li:nth-child(2),.tab-cont .nav-tab-info>li:nth-child(3){
+    border-right:none;
+}
+.nav > li .active{
+     background-color: #329EE2!important;
+     color: #fff;
+ }
+.nav-tab-info > li > a {
+    display: block;
+    padding: 10px 15px!important;
+    line-height: 1.42857143;
+}
+.versionBar {
+    padding: 5px 15px;
+    background-color: white;
+    border-radius: 2px 3px;
+    -webkit-border-radius: 2px 3px;
+    -moz-border-radius: 2px 3px;
+    font-weight: 700;
+    font-size: 12px;
+}
+.roll-right.J_tabRight {
+    right: 100px;
+}
+.roll-right.btn-group {
+    right: 40px;
+    width: 60px;
+    padding: 0;
+}
+.roll-right.btn-group button {
+    width: 60px;
+}
+.roll-right.J_tabExit {
+    background: #fff;
+    height: 40px;
+    width: 40px;
+    outline: 0;
+}
+.green-bg{
+    background-color: #1ab394;
+    border-color: #1ab394;
+    color: #FFF;
+}
+.BorderR{
+    border-right: 1px solid #D3D6D8;
+}
+.table > tbody > tr:last-child{
+    border-bottom: 1px solid #D3D6D8;
+}
+.upload-box{
+    margin: 20px 0;
+}
+.videoBox{
+    width: 60px;
+    height: 60px;
+    overflow: hidden;
+    display: inline-block;
+}
+.fine-border{
+    border: 1px #ddd solid;
+}
+.upload-file-btn {
+    display: block;
+    height: 100%;
+    position: relative;
+}
+.upload_file {
+    width: 100%;
+    height:100%;
+    border: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    cursor: pointer;
+    filter: alpha(opacity=0);
+    opacity: 0;
+}
+.min-h{
+    min-height: 141px;
+}
+.store-con{
+    overflow: hidden;
+    display: block;
+    margin-bottom: 10px;
+}
+.store-con>span,.store-time>span{
+    margin-right: 20px;
+}
+.store-time{
+   display: block;
+}
+.img-border{
+    border: 1px solid #e7eaec;
+    position: relative;
+    margin-bottom: 10%;
+}
+.imgBox{
+    overflow: hidden;
+    text-align: center;
+}
+.imgBox img{
+    text-align: center;
+    margin: 0 auto;
+    width: 100%;
+}
+.pictureBox{
+    padding:10px;
+    position: relative;
+}
+.picture-text{
+    overflow: hidden;
+}
+.picture-num{
+    float: right;
+}
+.state-con{
+    padding:5px 0
+}
+.state-con>p{
+    padding-top:10px;
+    margin: 0!important;
+}
+.mar-auto{
+    margin: 0 auto;
+}
+.p-t{
+    padding-top:7px;
+}
+.p-b{
+  padding-bottom: 10px;
+}
+.tab-content{
+    overflow: hidden;
+    display: none;
+}
+.settings-btn,.add-btn,.help-btn,.label-btn{
+    overflow: hidden;
+}
+.form-box{
+    padding:30px;
+    overflow: hidden;
+}
+textarea{
+    resize: none;
+}
+.flex-container {
+    display: -webkit-flex;
+    display: flex;
+    margin-bottom: 15px;
+}
+.m-h{
+    min-height: 160px;
+}
+.upload-file-btn {
+    display: block;
+    border: 1px #ddd dashed;
+    width: 160px;
+    height: 120px;
+    position: relative;
+    text-align: center;
+}
+.upload_file {
+    width: 100%;
+    height: 120px;
+    border: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    cursor: pointer;
+    filter: alpha(opacity=0);
+    opacity: 0;
+}
+.f-s{
+    font-size: 25px;
+    margin-top: 38px;
+}
+.b-d{
+    display: block;
+}
+.active-box{
+    border: 1px #dddddd dashed;
+    overflow: hidden;
+    padding:10px;
+}
+.active-list{
+    overflow: hidden;
+    display: block;
+    margin-top: 15px;
+    padding:0;
+    margin-bottom: 0;
+    clear: both;}
+.active-list li{
+    float:left;
+    height: 120px;
+    width: 160px;
+    overflow: hidden;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+.active-list li:last-child{
+    margin-right:0;
+}
+.active-list li img{
+    width: 100%;
+    height: 100%;
+}
+.SecKill-Box{
+   overflow: hidden;
+    display: block;
+}
+.input-radio{
+    overflow: hidden;
+    position: relative;
+    top: 1px;
+    margin-right: 5px!important;
+}
+.min-w{
+    min-width: 110px;
+}
+#warp{
+    margin: 0;
+    padding:0;
+}
+#warp li{
+    list-style-type: none;
+}

@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OrgChart-简单实用的组织结构图表jQuery插件</title>
+<link rel="stylesheet" type="text/css" href="css/jq22.css">
+<link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css">
+<link rel="stylesheet" href="css/jquery.orgchart.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="jq22 center">
+	<h1>OrgChart-简单实用的组织结构图表jQuery插件 </h1>
+	<p>Simple and direct organization chart plugin based on pure DOM and jQuery</p>
+	<a href="index.html" >local-datasource</a> <a href="index2.html" style="color: aqua">ajax-datasource</a> <a href="index3.html">ondemand-loading-data</a> <a href="index4.html">option-createNode</a>
+</div>
+<div id="chart-container">
+</div>
+<script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script> 
+<script type="text/javascript" src="js/jquery.mockjax.min.js"></script> 
+<script type="text/javascript" src="js/html2canvas.js"></script> 
+<script type="text/javascript" src="js/jquery.orgchart.js"></script> 
+<script type="text/javascript">
+      	'use strict';
+		(function($){
+
+		  $(function() {
+
+		    $.mockjax({
+		      url: '/orgchart/initdata',
+		      responseTime: 1000,
+		      contentType: 'application/json',
+		      responseText: {
+		        'id': '1',
+		        'name': 'Lao Lao',
+		        'title': 'general manager',
+		        'relationship': { 'children_num': 8 },
+		        'children': [
+		          { 'id': '2','name': 'Bo Miao', 'title': 'department engineer', 'relationship': { 'children_num': 0, 'parent_num': 1,'sibling_num': 7 }},
+		          { 'id': '3','name': 'Su Miao', 'title': 'department manager', 'relationship': { 'children_num': 2, 'parent_num': 1,'sibling_num': 7 },
+		            'children': [
+		              { 'id': '4', 'name': 'Tie Hua', 'title': 'senior engineer', 'relationship': { 'children_num': 0, 'parent_num': 1,'sibling_num': 1 }},
+		              { 'id': '5', 'name': 'Hei Hei', 'title': 'senior engineer', 'relationship': { 'children_num': 2, 'parent_num': 1,'sibling_num': 1 },
+		                'children': [
+		                  { 'id': '6', 'name': 'Pang Pang', 'title': 'engineer', 'relationship': { 'children_num': 0, 'parent_num': 1,'sibling_num': 1 }},
+		                  { 'id': '7','name': 'Xiang Xiang', 'title': 'UE engineer', 'relationship': { 'children_num': 0, 'parent_num': 1,'sibling_num': 1 }}
+		                ]
+		              }
+		            ]
+		          },
+		          { 'id': '8', 'name': 'Yu Jie', 'title': 'department engineer', 'relationship': { 'children_num': 0, 'parent_num': 1,'sibling_num': 7 }},
+		          { 'id': '9', 'name': 'Yu Li', 'title': 'department engineer', 'relationship': { 'children_num': 0, 'parent_num': 1,'sibling_num': 7 }},
+		          { 'id': '10', 'name': 'Hong Miao', 'title': 'department engineer', 'relationship': { 'children_num': 0, 'parent_num': 1,'sibling_num': 7 }},
+		          { 'id': '11', 'name': 'Yu Wei', 'title': 'department engineer', 'relationship': { 'children_num': 0, 'parent_num': 1,'sibling_num': 7 }},
+		          { 'id': '12', 'name': 'Chun Miao', 'title': 'department engineer', 'relationship': { 'children_num': 0, 'parent_num': 1,'sibling_num': 7 }},
+		          { 'id': '13', 'name': 'Yu Tie', 'title': 'department engineer', 'relationship': { 'children_num': 0, 'parent_num': 1,'sibling_num': 7 }}
+		        ]
+		      }
+		    });
+
+		 $('#chart-container').orgchart({
+		    'data' : '/orgchart/initdata',
+		    'depth': 2,
+		    'nodeTitle': 'name',
+		    'nodeContent': 'title'
+		  });
+
+		  });
+
+		})(jQuery);
+      </script>
+</body>
+</html>

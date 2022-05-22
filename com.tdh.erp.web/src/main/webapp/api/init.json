@@ -1,0 +1,111 @@
+{
+  "menuInfo": [
+    {
+      "id": "d7989b8bfad94a529f3de73e38795720",
+      "title": "平台管理",
+      "icon": "fa fa-lemon-o",
+      "href": "",
+      "target": "_self",
+      "level": "0",
+      "child": [
+        {
+          "id": "da99d38f76344e6590ba883594243398",
+          "parent_id": "d7989b8bfad94a529f3de73e38795720",
+          "title": "患者管理",
+          "icon": "fa fa-dot-circle-o",
+          "target": "_self",
+          "level": "1",
+          "child": [
+            {
+              "id": "f9b9bfeb3f2f4c7884c9759aa6f595a4",
+              "parent_id": "da99d38f76344e6590ba883594243398",
+              "title": "测试栏目",
+              "icon": "平台管理",
+              "href": "error",
+              "target": "_self",
+              "level": "2",
+              "child": []
+            }
+          ]
+        },
+        {
+          "id": "89c13db4bc8546e7904eaa7366e52e0b",
+          "parent_id": "d7989b8bfad94a529f3de73e38795720",
+          "title": "系统管理",
+          "icon": "fa fa-hourglass-end",
+          "target": "_self",
+          "level": "1",
+          "child": [
+            {
+              "id": "7e600323f8774766ba54b4c5007ea03d",
+              "parent_id": "89c13db4bc8546e7904eaa7366e52e0b",
+              "title": "账户管理",
+              "icon": "fa fa-viacoin",
+              "href": "user-list.do",
+              "target": "_self",
+              "level": "2",
+              "child": []
+            },
+            {
+              "id": "f89aafc35cd24ee690520d67d3ce8e8a",
+              "parent_id": "89c13db4bc8546e7904eaa7366e52e0b",
+              "title": "菜单管理",
+              "icon": "fa fa-dashboard",
+              "href": "menu-list.do",
+              "target": "_self",
+              "level": "2",
+              "child": []
+            },
+            {
+              "id": "83a8357f0ba548a482dc9dc3c6a85db7",
+              "parent_id": "89c13db4bc8546e7904eaa7366e52e0b",
+              "title": "子菜单明细",
+              "icon": "fa fa-stumbleupon-circle",
+              "href": "menuchild-list.do",
+              "target": "_self",
+              "level": "2",
+              "child": []
+            },
+            {
+              "id": "1e7c9fa8b78748d9a26f24ca9459d7da",
+              "parent_id": "89c13db4bc8546e7904eaa7366e52e0b",
+              "title": "医院管理",
+              "icon": "fa fa-file-text",
+              "href": "hospital-list.do",
+              "target": "_self",
+              "level": "2",
+              "child": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "4773278c051a4a288b83a056be74d115",
+      "title": "检查预约服务",
+      "icon": "fa fa-home",
+      "href": "",
+      "target": "_self",
+      "level": "0",
+      "child": []
+    },
+    {
+      "id": "df4cd38052f64a7c8eb8a42b74e3f1b2",
+      "title": "床位预约服务",
+      "icon": "fa fa-tachometer",
+      "href": "",
+      "target": "_self",
+      "level": "0",
+      "child": []
+    }
+  ],
+  "homeInfo": {
+    "href": "static/welcome-1.jsp",
+    "title": "首页"
+  },
+  "logoInfo": {
+    "image": "images/logo.png",
+    "href": "/",
+    "title": "数医源"
+  }
+}

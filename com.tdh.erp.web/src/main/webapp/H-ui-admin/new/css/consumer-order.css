@@ -1,0 +1,487 @@
+/*----reset样式---------------------------*/
+*,a,abbr,acronym,address,applet,article,aside,audio,b,big,body,canvas,caption,
+center,cite,code,dd,del,details,dfn,dialog,div,dl,dt,em,embed,fieldset,
+figcaption,figure,font,footer,form,h1,h2,h3,h4,h5,h6,header,hr,html,
+i,iframe,img,ins,kbd,label,legend,li,mark,menu,meter,nav,object,ol,output,
+p,pre,progress,q,rp,rt,ruby,s,samp,section,small,span,strike,
+strong,sub,summary,sup,table,tbody,td,tfoot,th,thead,time,tr,tt,u,ul,
+var,video{border:0;margin:0;padding:0;font-size:100%}
+html,body{height:100%;background:#f9f9f9;}
+article,aside,details,figcaption, figure,footer,header,menu,nav,
+section{display:block;}
+img{color:transparent;font-size:0;vertical-align:middle;-ms-interpolation-mode:bicubic}
+li{display:list-item;}
+table{border-collapse:collapse;border-spacing:0}
+th,td,caption{font-weight:normal;vertical-align:top;text-align:left}
+q{quotes:none}
+sub,sup,small{font-size:75%}
+sub,sup{line-height:0;position:relative;vertical-align:baseline}
+sub{bottom:-0.25em}
+sup{top:-0.5em}
+svg{overflow:hidden}
+ul,li{list-style:none;}
+input,select,textarea{outline:none;}
+html,body{
+    font-size:12px;
+    font-family:"Microsoft Yahei","Helvetica Neue",
+    Helvetica, Arial, sans-serif;
+}
+h1,h2,h3,h4,h5,h6{
+    font-family:"Microsoft Yahei",
+    "Helvetica Neue",
+    Helvetica, Arial, sans-serif;}
+a{text-decoration:none;outline:none; color:#323232; cursor: pointer;}
+a:hover{text-decoration:none;color:#0b549e;}
+a:focus{ outline: none; text-decoration:none}
+.fl{float: left}
+.fr{float: right}
+.clear_fix {*zoom: 1; clear: both }
+.clear_fix:before,
+.clear_fix:after {
+    display:block;
+    content: "";
+    visibility: hidden;
+    clear: both; }
+.clear-fix:after {
+    content: '';
+    display: block;
+    height: 0;
+    visibility: hidden;
+    clear: both }
+.info-box{
+    background:#fcfcfc;
+    border:1px #ddd solid;
+    padding:0;
+}
+.info-title{
+   background:#ebebeb;
+}
+.text-left{
+    margin-left: 5px;
+}
+.text-right{
+    margin-right: 5px;
+    text-align: right;
+}
+.text-left01{
+    padding-left: 0;
+}
+.text-right01{
+    text-align: right;
+    padding-right: 0;
+}
+.push-btn{
+    color: #329EE2;
+    border: 1px solid #329EE2;
+}
+.push-btn:hover{
+    color: #329EE2;
+}
+.group-Btn,.group-Btn01{
+    position: absolute;
+    right: 20px;
+    z-index: 10;
+}
+.search-btn{
+    position: absolute;
+    right: 0;
+    z-index: 10;
+    width: 35px;
+    height: 34px;
+    line-height: 34px;
+    text-align: center;
+    font-size: 20px;
+    color: #afafaf;
+}
+.Btn{
+    display: inline-block;
+    padding: 2px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    border-radius: 4px;
+    margin-top: 4px;
+    margin-right: 5px;
+}
+.th-bottom th{
+    border-bottom: none!important;
+}
+.more{
+    font-size: 60px;
+}
+.group-Btn01{
+    right: 0;
+}
+.orange{
+    color:#ffa74d;
+}
+/*广告样式*/
+.tips{
+    height: 20px;
+    line-height: 20px;
+    display: block;
+}
+.position_fix{
+    position:fixed;
+    bottom:200px;
+    right:17px;
+    height:auto;
+    z-index:400;}
+#rightArrow{
+    width:60px;
+    height:60px;
+    background:url(../images/online_arrow01.png) no-repeat;
+    position:fixed;
+    bottom:139px;
+    right:17px;
+    z-index:400;}
+#rightArrow a{
+    display:block;
+    height:60px;}
+.ad-box{
+    overflow: hidden;
+}
+.ad-box  ul li{
+    height: 60px;
+    text-align: center;
+    width: 60px;
+    border:1px #ddd solid;
+    margin-bottom:5px;
+    background: #fff;
+}
+.ad-box  ul li a{
+    display: block;
+    height: 60px;
+    padding-top: 15px;
+}
+.ad-box  ul li a:hover{
+    background:#68adf8;
+    color:#fff;
+}
+.card-btn {
+    border: 1px #ddd solid;
+    border-radius: 4px 4px;
+    height: 80px;
+    font-size: 16px;
+    display: block;
+    font-weight: 700;
+    cursor: pointer;
+    user-select: none;
+}
+.tabInfo-box{
+    position: relative;
+    margin: 20px auto;
+    width: 990px;
+    font-size: 14px;
+}
+.tab-list{
+    overflow: hidden;
+    margin: 0 auto;
+}
+.tab-list li{
+    float: left;
+    width: 90px;
+    height: 90px;
+    display: block;
+    margin-right: 20px;
+}
+.tab-list li>a{
+    border: 1px #ddd solid;
+    height: 90px;
+    cursor: pointer;
+    user-select: none;
+    display: block;
+    padding-top: 20px;
+}
+.tab-list li>a>span{
+    display: block;
+    margin-top: 5px;
+}
+.tab-list li>a:hover{
+    background: #0269df;
+    color: #fff;
+    display:block;
+    border: 1px #0269df solid;
+}
+.revise-btn{
+    float: right;
+}
+.revise-box{
+    float: right;
+    overflow: hidden;
+    font-size: 16px;
+}
+.revise-text{
+    display: inline-block;
+    padding-right: 10px;
+}
+.revise-box>a{
+    color: #0269df;
+    display: inline-block;
+}
+.revise-box>a:hover{
+    color: #0269df;
+}
+.opt {
+    height: 30px;
+    line-height: 22px;
+    color: #6d6c6c;
+    display: inline-block;}
+.magic-radio, .magic-checkbox {
+    position: absolute;
+    display: none;
+}
+.magic-radio + label, .magic-checkbox + label {
+    position: relative;
+    padding-left: 25px;
+    cursor: pointer;
+    font-size: 14px;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.magic-checkbox + label:after {
+    top: 3px;
+    left: 6px;
+    box-sizing: border-box;
+    width: 8px;
+    height: 12px;
+    transform: rotate(45deg);
+    border-width: 2px;
+    border-style: solid;
+    border-color: #fff;
+    border-top: 0;
+    border-left: 0;
+}
+.magic-checkbox + label:before {
+    border-radius: 3px;
+}
+.magic-radio + label:before, .magic-checkbox + label:before {
+    position: absolute;
+    top: 1px;
+    left: 0;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    content: '';
+    background: #fff;
+    border: 1px solid #ddd;
+}
+.magic-checkbox:checked + label:before {
+    border:1px  #3e97eb solid;
+    background: #3e97eb;
+}
+.magic-radio:checked + label:before, .magic-checkbox:checked + label:before {
+    animation-name: none;
+}
+.magic-radio + label:hover:before, .magic-checkbox + label:hover:before {
+    animation-duration: 0.4s;
+    animation-fill-mode: both;
+    animation-name: hover-color;
+}
+.magic-radio + label:after, .magic-checkbox + label:after {
+    position: absolute;
+    display: none;
+    content: '';
+}
+.magic-radio:checked + label:after, .magic-checkbox:checked + label:after {
+    display: block;
+}
+.table>thead{
+    background: #f2f5fc;
+}
+.input-group01 {
+    position: relative;
+    border-collapse: separate;
+    margin-right: 30px;
+    display: inline-block;
+}
+.input-list{
+    position: relative;
+    border-collapse: separate;
+    margin-bottom: 10px;
+    display: inline-block;
+}
+.input-list>span{
+    margin-right: 5px;
+}
+.line-bottom{
+    border-bottom: 1px #ddd solid;
+}
+/*颜色*/
+.yellow-bg:hover{
+    color: #fff;
+}
+.gray-bg{
+    background: #b9b9b9;
+    color: #fff;
+}
+.center-timeline {
+    position: relative;
+    padding: 0;
+    margin-bottom: 2em;
+}
+.line-icon {
+    position: absolute;
+    top: -50px;
+    right:300px;
+    width: 60px;
+    height: 60px;
+    line-height: 55px;
+    border-radius: 50%;
+    font-size: 12px;
+    border: 2px solid #f1f1f1;
+    text-align: center;
+}
+.center-timeline.light-timeline:before {
+    background: #e7eaec;
+}
+.center-timeline::before {
+    content: '';
+    position: absolute;
+    top:-24px;
+    right:0;
+    height:4px;
+    width:320px;
+    background: #f1f1f1;
+}
+.center-timeline-block {
+     position: relative;
+    margin: 2em 0;
+}
+/*结算清单样式*/
+.Account-con{
+    overflow: hidden;
+    text-align: center;
+    font-size: 16px;
+}
+.Account-con h2 {
+    display:block;
+    font-size: 20px;
+    margin-bottom:5px;
+}
+.Account-con p{
+    line-height: 30px;
+}
+.mar-bot{
+    margin-bottom: 5px;
+}
+.form-Date{
+    position: relative;
+}
+.Date-icon{
+    position: absolute;
+    top: 10px;
+    right: 5px;
+    font-size: 15px;
+    color: red;
+}
+.service-class{
+    padding-top: 7px;
+    margin-bottom: 0;
+    text-align: left;
+}
+.service-class a{
+    color:#0269df;
+}
+.table{
+    margin-bottom: 0 !important;
+}
+.font-weight{
+    font-weight: 700;
+    color: #666;
+}
+/*选中按钮样式*/
+.icheckbox_square-green,
+.iradio_square-green {
+    display: inline-block;
+    *display: inline;
+    vertical-align: middle;
+    margin: 0;
+    padding: 0;
+    width: 22px;
+    height: 22px;
+    background: url(../images/green.png) no-repeat;
+    border: none;
+    cursor: pointer;
+}
+
+.icheckbox_square-green {
+    background-position: 0 0;
+}
+.icheckbox_square-green.hover {
+    background-position: -24px 0;
+}
+.icheckbox_square-green.checked {
+    background-position: -48px 0;
+}
+.icheckbox_square-green.disabled {
+    background-position: -72px 0;
+    cursor: default;
+}
+.icheckbox_square-green.checked.disabled {
+    background-position: -96px 0;
+}
+
+.iradio_square-green {
+    background-position: -120px 0;
+}
+.iradio_square-green.hover {
+    background-position: -144px 0;
+}
+.iradio_square-green.checked {
+    background-position: -168px 0;
+}
+.iradio_square-green.disabled {
+    background-position: -192px 0;
+    cursor: default;
+}
+.iradio_square-green.checked.disabled {
+    background-position: -216px 0;
+}
+
+/* HiDPI support */
+@media (-o-min-device-pixel-ratio: 5/4), (-webkit-min-device-pixel-ratio: 1.25), (min-resolution: 120dpi) {
+    .icheckbox_square-green,
+    .iradio_square-green {
+        background-image: url(green@2x.png);
+        -webkit-background-size: 240px 24px;
+        background-size: 240px 24px;
+    }
+}
+/*选中按钮样式*/
+.tab-cont{
+    overflow: hidden;
+    margin-bottom: 20px;}
+.tab-cont .nav{
+    position: relative;}
+.nav-tab-info{
+    display: block;
+}
+.tab-cont .nav-tab-info > li {
+    float: left;
+    border:1px #329EE2 solid;
+    width: 115px;
+    text-align: center;
+}
+.tab-cont .nav-tab-info > li:nth-child(2),.tab-cont .nav-tab-info>li:nth-child(3){
+    border-right:none;
+}
+.nav > li .active{
+    background-color: #329EE2;
+    color: #fff;
+}
+.nav > li > a {
+    color: #555555;
+    display: block;
+    padding: 10px 15px;
+    line-height: 1.42857143;
+}
+.nav > li > a:hover{
+    background-color: #329EE2;
+    color: #fff;
+}

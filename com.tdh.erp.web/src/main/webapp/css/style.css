@@ -1,0 +1,29 @@
+.div_message{border: 1px solid #4079E7;color:#4079E7;margin: 15px;text-align: center;height: 100px;line-height: 100px;font-weight: bold;font-size: 18px;}
+
+/* footer */
+.bottomdiv{clear:both; height:60px;line-height: 60px;}
+.footer{ height:65px; bottom:0;position:fixed; background:url(../images/qt/bottombg.png) repeat-x; width:100%; min-width:1280px;}
+.footer ul.footer_nav{ margin:0 auto; width:1260px;  background:url(../images/qt/bottombg.png) repeat-x;padding-top:2px; }
+.footer ul.footer_nav li{float:left;text-align: center;}
+.footer ul.footer_nav li a:link,
+.footer ul.footer_nav li a:visited{width:112px; height:63px; line-height:63px;text-align:center; display:block; float:left; color:#DDDDDD; font-size:18px; font-family:'Î¢ÈíÑÅºÚ';font-weight:bold;  border-left:1px #008800 solid; border-right:1px #008800 solid;}
+.footer ul.footer_nav li.cur a:link,
+.footer ul.footer_nav li.cur a:visited{color:#FFFFFF;text-decoration:none;  background:url(../images/qt/curbg.png) no-repeat;}
+.footer ul.footer_nav li a:hover{ color:#FFF;text-decoration:none;  background:url(../images/qt/curbg.png) no-repeat;}
+
+/* footer1 */
+.bottomdiv{ height:85px;}
+
+.footer1{ height:52px; bottom:0;position:fixed; background:#FFFFFF; width:100%; }
+.footer1 .footer_div{margin-top: 6px;}
+.footer1 .footer_div a:link,
+.footer1 .footer_div a:visited{width:115px;height:35px; line-height:35px;text-align:center; display:inline-block; color:#323232; font-size:15px; font-family:'Î¢ÈíÑÅºÚ/ËÎÌå';font-weight:bold;  border-radius: 4px;
+background-color: #0a6999; margin-right: 5px; color:#FFF;}
+.footer1 .footer_div a:hover{ color:#000000;text-decoration:none;  background-color:#5a98de ; color:#FFF;}
+
+.footer2{ height:65px; bottom:0;position:fixed; background:url(../images/qt/bottombg.png) repeat-x; width:100%; }
+.footer2 .footer_div{margin-top: 12px;}
+.footer2 .footer_div a:link,
+.footer2 .footer_div a:visited{width:125px;height:43px; line-height:43px;text-align:center; display:inline-block; color:#323232; font-size:18px; font-family:'Î¢ÈíÑÅºÚ';font-weight:bold;  background:url(../images/qt/graybtn01.png) no-repeat;margin-right: 15px;}
+.footer2 .footer_div a:hover{ color:#000000;text-decoration:none;  background:url(../images/qt/graybtn01_cur.png) no-repeat;}
+
