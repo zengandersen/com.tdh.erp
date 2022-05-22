@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tdh.mapper.MenuMapper">
+
+    <insert id="insert" parameterType="com.tdh.pojo.Menu" flushCache="true"
+            statementType="PREPARED">
+        insert into SYS_MENU(
+        <if test="id!=null">id,</if>
+        <if test="parent_id!=null">parent_id,</if>
+        <if test="title_name!=null">title_name,</if>
+        <if test="href!=null">href,</if>
+        <if test="image!=null">image,</if>
+        <if test="icon!=null">icon,</if>
+        <if test="target!=null">target,</if>
+        <if test="create_by!=null">create_by,</if>
+        <if test = "level_flag!=null">level_flag,</if>
+        <if test="status!=null">status,</if>
+        create_time
+        )values(
+        <if test="id!=null">#{id},</if>
+        <if test="parent_id!=null">#{parent_id},</if>
+        <if test="title_name!=null">#{title_name},</if>
+        <if test="href!=null">#{href},</if>
+        <if test="image!=null">#{image},</if>
+        <if test="icon!=null">#{icon},</if>
+        <if test="target!=null">#{target},</if>
+        <if test="create_by!=null">#{create_by},</if>
+        <if test = "level_flag!=null">#{level_flag},</if>
+        <if test="status!=null">#{status},</if>
+        sysdate
+        )
+    </insert>
+
+    <select id="selectMap" parameterType="com.tdh.pojo.Menu" resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+        select  t.id,
+        t.title_name,
+        t.href,
+        t.image,
+        t.icon,
+        t.target,
+        t.status,
+        t.create_by,
+        t.create_time,
+        t.update_by,
+        t.update_time
+        from SYS_MENU t
+        where 1=1
+        <if test="p.status!=null and p.status!=''">and  t.status = #{p.status}</if>
+
+    </select>
+
+    <select id="countMap" parameterType="Map" resultType="Long">
+        select count(1) as totalCount
+        from SYS_MENU t
+        where 1=1
+        <if test="p.title_name!=null and p.title_name!=''">
+            and
+            (
+            t.title_name like CONCAT(CONCAT('%',#{p.title_name}),'%')
+            or
+            t.href like CONCAT(CONCAT('%',#{p.title_name}),'%')
+            )
+        </if>
+    </select>
+
+    <select id="findById" parameterType="java.lang.String" resultType="com.tdh.pojo.Menu">
+        select t.*,(select a.title_name from sys_menu a where a.id = t.parent_id)  as parent_title_code from sys_menu t where id = #{id}
+    </select>
+
+    <update id="update" parameterType="com.tdh.pojo.Menu" flushCache="true" statementType="PREPARED">
+        update sys_menu
+        <set>
+            <if test="title_name!=null">title_name=#{title_name},</if>
+            <if test="href!=null">href=#{href},</if>
+            <if test="image!=null">image=#{image},</if>
+            <if test="icon!=null">icon=#{icon},</if>
+            <if test="target!=null">target=#{target},</if>
+            <if test="parent_id!=null">parent_id=#{parent_id},</if>
+            <if test="level_flag!=null">level_flag=#{level_flag},</if>
+            <if test="update_by!=null">update_by=#{update_by},</if>
+
+            <if test="status!=null">status=#{status},</if>
+            update_time=sysdate
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+
+    <delete id="deleteById" parameterType="String"
+            flushCache="true">
+        delete from sys_menu where  id = #{id}
+    </delete>
+
+    <select id="queryMenuInfoByHref" parameterType="java.lang.String" resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+        select  count(id) from sys_menu where href = #{href}
+    </select>
+
+    <update id="updateStatusById" parameterType="java.lang.String" flushCache="true" statementType="PREPARED">
+        update sys_menu
+        <set>
+            <if test="update_by!=null">update_by=#{update_by},</if>
+            <if test="status!=null">status=#{status},</if>
+            update_time=sysdate
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+    <select id="queryParentInfoByStatus" parameterType="java.lang.String" resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+        select  id,title_name from sys_menu_child where status = '1' and level_flag = #{level_flag}
+    </select>
+
+    <select id="queryMenuInfo" parameterType="java.lang.String" resultType="com.tdh.pojo.Menu">
+      select
+       t.id,
+       t.parent_id,
+       a.dict_name as title_name,
+       t.href,
+       t.image,
+       t.icon,
+       t.target,
+       t.create_by,
+       t.create_time,
+       t.update_by,
+       t.update_time,
+       t.status,
+       t.level_flag
+        from sys_menu t
+        left join sys_dict a on a.dict_type_code = 'MENU_INFO' and t.title_name = a.dict_code
+        where a.status = '1'
+    </select>
+
+
+    <select id="queryMenuInfoIndex" parameterType="java.lang.String" resultType="com.tdh.pojo.Menu">
+        select
+        t.id,
+        t.parent_id,
+        (select t.title_name from sys_menu b where b.parent_id = t.id group by t.title_name) as parent_title_code,
+        t.title_name,
+        t.href,
+        t.image,
+        t.icon,
+        t.target,
+        t.create_by,
+        t.create_time,
+        t.update_by,
+        t.update_time,
+        t.status,
+        t.level_flag
+        from sys_menu t
+        left join sys_dict a on a.dict_type_code = 'MENU_INFO' and t.title_name = a.dict_code
+        where a.status = '1'
+    </select>
+
+
+
+    <select id = "queryMenuNameByMenuStatus" parameterType="java.lang.String" resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+      select
+        title_name,
+        id
+        from sys_menu
+        where status ='1'
+    </select>
+
+    <select id = "queryMenuLevelById" parameterType="java.lang.String" resultType="com.tdh.pojo.Menu">
+        select * from sys_menu where id = #{id}
+    </select>
+
+
+    <select id = "queryMenuInfoByName" parameterType="java.lang.String" resultType="com.tdh.pojo.Menu">
+        select t.id,t.level_flag from sys_menu t where t.title_name = #{title_name}
+    </select>
+
+</mapper>

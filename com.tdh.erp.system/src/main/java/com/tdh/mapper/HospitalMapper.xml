@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tdh.mapper.HospitalMapper">
+	<insert id="insert" parameterType="com.tdh.pojo.Hospital" flushCache="true"
+		statementType="PREPARED">
+		insert into SYS_HOSPITAL(
+			hospital_id,
+			<if test="hospital_code!=null">hospital_code,</if>
+			<if test="hospital_name!=null">hospital_name,</if>
+			<if test="contacts!=null">contacts,</if>
+			<if test="contact_tel!=null">contact_tel,</if>
+			<if test="contact_addr!=null">contact_addr,</if>
+			<if test="create_by!=null">create_by,</if>
+			create_date
+		)values(
+			#{hospital_id},
+			<if test="hospital_code!=null">#{hospital_code},</if>
+			<if test="hospital_name!=null">#{hospital_name},</if>
+			<if test="contacts!=null">#{contacts},</if>
+			<if test="contact_tel!=null">#{contact_tel},</if>
+			<if test="contact_addr!=null">#{contact_addr},</if>
+			<if test="create_by!=null">#{create_by},</if>
+			sysdate
+		)
+	</insert>
+	
+
+	
+
+	
+	<select id="selectMap" parameterType="Map"
+		resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+		select tb.*,
+			   (select u.user_name from sys_user u where u.user_id=tb.create_user) as create_by_transformation,
+		       (select u.user_name from sys_user u where u.user_id=tb.update_user) as update_by_transformation
+		from SYS_HOSPITAL tb
+		where 1 = 1
+		<if test="p.hospital_id!=null and p.hospital_id!=''">and tb.hospital_id=#{p.hospital_id}</if>
+		<if test="p.hospital_code!=null and p.hospital_code!=''">
+			and
+			(
+			tb.hospital_code like CONCAT(CONCAT('%',#{p.hospital_code}),'%')
+			or
+			tb.hospital_name like CONCAT(CONCAT('%',#{p.hospital_code}),'%')
+			)
+		</if>
+		order by tb.update_time DESC
+	</select>
+
+	<select id="countMap" parameterType="Map" resultType="Long">
+		select count(1) as totalCount
+		from SYS_HOSPITAL tb
+		where 1 = 1
+		<if test="p.hospital_id!=null and p.hospital_id!=''">and tb.hospital_id=#{p.hospital_id}</if>
+		<if test="p.hospital_code!=null and p.hospital_code!=''">
+			and
+			(
+			tb.hospital_code like CONCAT(CONCAT('%',#{p.hospital_code}),'%')
+			or
+			tb.hospital_name like CONCAT(CONCAT('%',#{p.hospital_code}),'%')
+			)
+		</if>
+		order by tb.update_time DESC
+	</select>
+
+	<update id = "mergeData" parameterType="com.tdh.pojo.Hospital" flushCache="true"
+			statementType="PREPARED">
+		merge into sys_hospital a
+        using (select #{hospital_id} as hospital_id from dual) c
+        on (c.hospital_id = a.hospital_id)
+        when MATCHED then
+        update set
+        a.hospital_code = #{hospital_code},
+        a.hospital_name = #{hospital_name},
+        a.contacts = #{contacts},
+        a.contact_tel = #{contact_tel},
+        a.contact_addr =#{contact_addr},
+        a.status =#{status},
+        a.update_by = #{update_by},
+        a.update_time = sysdate
+        where a.hospital_id = #{hospital_id}
+        when NOT  MATCHED then
+        insert (a.hospital_id,a.hospital_code,a.hospital_name,a.contacts,a.contact_tel,a.contact_addr,a.status,a.create_by,a.create_time)
+        values(#{hospital_id},#{hospital_code},#{hospital_name},#{contacts},#{contact_tel},#{contact_addr},#{status},#{create_by},sysdate)
+	</update>
+
+
+	<delete id="deleteHospitalInfoById" parameterType="String" flushCache="true">
+		delete from sys_hospital t where t.hospital_id = #{hospital_id}
+	</delete>
+
+
+
+	<select id = "queryHospitalEmunInfo" parameterType="String" resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+		select hospital_name as name,hospital_id as id from sys_hospital where hospital_id = #{hospital_id} and status = #{status}
+	</select>
+
+
+</mapper>

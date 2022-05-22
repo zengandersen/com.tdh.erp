@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tdh.mapper.DeptMapper">
+
+
+    <delete id ="deleteDeptInfoById" parameterType="String" flushCache="true">
+          delete from sys_dept t where t.dept_id = #{dept_id}
+    </delete>
+
+    <select id="selectMap" parameterType="Map"
+            resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+        select tb.*,
+        (select u.user_name from sys_user u where u.user_id=tb.create_user) as create_by_transformation,
+        (select u.user_name from sys_user u where u.user_id=tb.update_user) as update_by_transformation
+        from sys_dept tb
+        where 1 = 1
+        <if test="p.hospital_id!=null and p.hospital_id!=''">and tb.hospital_id=#{p.hospital_id}</if>
+        <if test="p.dept_name!=null and p.dept_name!=''">
+            and
+            (
+            tb.dept_name like CONCAT(CONCAT('%',#{p.dept_name}),'%')
+            )
+        </if>
+        order by tb.order_num desc
+    </select>
+
+
+    <select id="countMap" parameterType="Map" resultType="Long">
+        select count(1) as totalCount
+        from sys_dept tb
+        where 1 = 1
+        <if test="p.hospital_id!=null and p.hospital_id!=''">and tb.hospital_id=#{p.hospital_id}</if>
+        <if test="p.dept_name!=null and p.dept_name!=''">
+            and
+            (
+            tb.dept_name like CONCAT(CONCAT('%',#{p.dept_name}),'%')
+            )
+        </if>
+        order by tb.order_num DESC
+    </select>
+
+
+
+    <select id = "queryCount" resultType="org.apache.commons.collections.map.CaseInsensitiveMap" parameterType="java.lang.String">
+        select count(*) as count from sys_dept where hospital_id = #{hospital_id}
+    </select>
+
+
+
+    <update id = "mergeData"  parameterType="com.tdh.pojo.Dept" flushCache="true"
+            statementType="PREPARED">
+         merge into sys_dept a
+        using (select #{dept_id} as dept_id from dual) c
+        on (c.dept_id = a.dept_id)
+        when MATCHED then
+          update set
+        a.hospital_id = #{hospital_id},
+        a.compound_id = #{compound_id},
+        a.area_id = #{area_id},
+        a.dept_code = #{dept_code},
+        a.dept_name = #{dept_name},
+        a.order_num =#{order_num},
+        a.status = #{status},
+        a.update_user = #{update_user},
+        a.update_time = sysdate
+          where a.dept_id = #{dept_id}
+        when NOT  MATCHED then
+        insert (a.hospital_id,a.compound_id,a.area_id,a.dept_id,a.dept_code,a.dept_name,a.order_num,a.status,a.create_user,a.create_time)
+        values(#{hospital_id},#{compound_id},#{area_id},#{dept_id},#{dept_code},#{dept_name},#{order_num},#{status},#{create_user},sysdate)
+    </update>
+
+
+    <select id = "queryDeptEmunInfo" parameterType="String" resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+        select dept_name as name,dept_id as id from sys_dept where hospital_id = #{hospital_id} and status = #{status}
+    </select>
+</mapper>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tdh.mapper.UserMapper">
+
+    <insert id="insert" parameterType="com.tdh.pojo.User" flushCache="true"
+            statementType="PREPARED">
+        insert into sys_user(
+        <if test="hospital_id!=null">hospital_id,</if>
+        <if test="user_id!=null">user_id,</if>
+        <if test="user_code!=null">user_code,</if>
+        <if test="user_name!=null">user_name,</if>
+        <if test="user_pwd!=null">user_pwd,</if>
+        <if test="status!=null">status,</if>
+        <if test="sex!=null">sex,</if>
+        <if test="job_number!=null">job_number,</if>
+        <if test="photo!=null">photo,</if>
+        <if test="user_class!=null">user_class,</if>
+        <if test="create_by!=null">create_by,</if>
+        create_time
+        )values(
+        <if test="hospital_id!=null">#{hospital_id},</if>
+        <if test="user_id!=null">#{user_id},</if>
+        <if test="user_code!=null">#{user_code},</if>
+        <if test="user_name!=null">#{user_name},</if>
+        <if test="user_pwd!=null">#{user_pwd},</if>
+        <if test="status!=null">#{status},</if>
+        <if test="sex!=null">#{sex},</if>
+        <if test="job_number!=null">#{job_number},</if>
+        <if test="photo!=null">#{photo},</if>
+        <if test="user_class!=null">#{user_class},</if>
+        <if test="create_by!=null">#{create_by},</if>
+        sysdate
+        )
+    </insert>
+	<select id="queryUserObjectByUserCode" resultType="com.tdh.pojo.User" parameterType="java.lang.String">
+		select * from SYS_USER t where user_code = #{user_code} and user_pwd = #{user_pwd}
+	</select>
+
+
+    <select id="selectMap" parameterType="com.tdh.pojo.User" resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+        select t.hospital_id,
+        t.user_id,
+        t.user_code,
+        t.user_name,
+        t.user_pwd,
+        t.status,
+        t.create_by,
+        t.create_time,
+        t.update_time,
+        t.update_by,
+        t.sex,
+        t.job_number,
+        t.role_id,
+        t.compound_id,
+        (select u.user_name from sys_user u where u.user_id=t.create_by) as create_by_transformation,
+        (select u.user_name from sys_user u where u.user_id=t.update_by) as update_by_transformation
+        from sys_user t
+        where 1=1
+        <if test="p.status!=null and p.status!=''">
+            and t.status=${p.status}
+        </if>
+        <if test="p.user_code!=null and p.user_code!=''">
+            and
+            (
+            t.user_name like CONCAT(CONCAT('%',#{p.user_code}),'%')
+            or
+            t.user_code like CONCAT(CONCAT('%',#{p.user_code}),'%')
+            )
+        </if>
+        <if test="p.role_id!=null and p.role_id!=''">
+            and t.role_id=#{p.role_id}
+        </if>
+        and t.hospital_id=#{p.hospital_id}
+    </select>
+
+    <select id="countMap" parameterType="Map" resultType="Long">
+        select count(1) as totalCount
+        from sys_user t
+        where 1=1
+        <if test="p.status!=null and p.status!=''">
+            and t.status=#{p.status}
+        </if>
+        <if test="p.user_code!=null and p.user_code!=''">
+            and
+            (
+            t.user_name like CONCAT(CONCAT('%',#{p.user_code}),'%')
+            or
+            t.user_code like CONCAT(CONCAT('%',#{p.user_code}),'%')
+            )
+        </if>
+        <if test="p.role_id!=null and p.role_id!=''">
+            and t.role_id=#{p.role_id}
+        </if>
+        and t.hospital_id=#{p.hospital_id}
+    </select>
+
+    <select id="findById" resultType="com.tdh.pojo.User" parameterType="java.lang.String">
+        select * from sys_user t where t.user_id=#{value}
+    </select>
+
+
+    <update id = "mergeData" parameterType="com.tdh.pojo.User" flushCache="true"
+            statementType="PREPARED">
+       merge into sys_user a
+        using (select #{user_id} as user_id from dual) c
+        on (c.user_id = a.user_id)
+        when MATCHED then
+        update set
+        a.user_code = #{user_code},
+        a.user_name = #{user_name},
+        a.user_pwd = #{user_pwd},
+        a.sex = #{sex},
+        a.status =#{status},
+        a.job_number =#{job_number},
+        a.compound_id = #{compound_id},
+        a.role_id =#{role_id},
+        a.update_by = #{update_by},
+        a.update_time = sysdate
+        where a.user_id = #{user_id}
+        when NOT  MATCHED then
+        insert (a.hospital_id,a.user_id,a.user_code,a.user_name,a.user_pwd,a.status,a.sex,a.role_id,a.job_number, a.compound_id ,a.create_by,a.create_time)
+        values(#{hospital_id},#{user_id},#{user_code},#{user_name},#{user_pwd},#{status},#{sex},#{role_id},#{job_number},#{compound_id},#{create_by},sysdate)
+    </update>
+
+    <delete id="deleteDeptInfoById" parameterType="String" flushCache="true">
+        delete from sys_user t where t.user_id = #{user_id}
+    </delete>
+
+
+    <select id="queryUserLikeAdmin" resultType="org.apache.commons.collections.map.CaseInsensitiveMap" parameterType="java.lang.String">
+        select * from SYS_USER t where  t.user_code like '%admin%'
+        AND t.hospital_id = #{hosptial_id} and t.compount_id =#{compound_id}
+    </select>
+
+    <select id="queryLoginUserOfRoleInfoById" resultType="org.apache.commons.collections.map.CaseInsensitiveMap" parameterType="java.lang.String">
+        select t.role_id from SYS_USER t where  t.user_code = #{user_code}
+    </select>
+</mapper>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tdh.mapper.RoleBindMapper">
+
+    <insert id="insert" parameterType="com.tdh.pojo.RoleBind" flushCache="true"
+            statementType="PREPARED">
+        insert into sys_role_menu_bind(
+        <if test="id!=null">id,</if>
+        <if test="role_id!=null">role_id,</if>
+        <if test="menu_id!=null">menu_id,</if>
+        <if test="create_user!=null">create_user,</if>
+        create_time
+        )values(
+        <if test="id!=null">#{id},</if>
+        <if test="role_id!=null">#{role_id},</if>
+        <if test="menu_id!=null">#{menu_id},</if>
+        <if test="create_user!=null">#{create_user},</if>
+        sysdate
+        )
+    </insert>
+
+
+	<select id="findBindInfoById" resultType="com.tdh.pojo.RoleBind" parameterType="java.lang.String">
+		select * from sys_role_menu_bind  where role_id = #{role_id}
+	</select>
+
+
+    <delete id="deleteBindInfoByRoleId" parameterType="String" flushCache="true">
+        delete from sys_role_menu_bind t where t.role_id = #{role_id}
+    </delete>
+
+
+
+</mapper>

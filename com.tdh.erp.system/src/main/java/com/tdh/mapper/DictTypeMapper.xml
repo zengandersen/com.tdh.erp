@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tdh.mapper.DictTypeMapper">
+
+    <insert id="insert" parameterType="com.tdh.pojo.DictType" flushCache="true"
+            statementType="PREPARED">
+        insert into sys_dict_type(
+        hospital_id,
+        <if test="dict_type_code!=null">dict_type_code,</if>
+        <if test="dict_type_name!=null">dict_type_name,</if>
+        <if test="order_num!=null">order_num,</if>
+        <if test="create_by!=null">create_by,</if>
+        <if test="status!=null">status,</if>
+        create_time
+        )values(
+        #{hospital_id},
+        <if test="dict_type_code!=null">#{dict_type_code},</if>
+        <if test="dict_type_name!=null">#{dict_type_name},</if>
+        <if test="order_num!=null">#{order_num},</if>
+        <if test="create_by!=null">#{create_by},</if>
+        <if test="status!=null">#{status},</if>
+        sysdate
+        )
+    </insert>
+
+
+    <select id="selectMap" parameterType="Map"
+            resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+        select tb.*,
+        (select u.user_name from sys_user u where u.user_id=tb.create_by) as create_by_transformation,
+        (select u.user_name from sys_user u where u.user_id=tb.update_by) as update_by_transformation
+        from sys_dict_type tb
+        where 1 = 1
+        <if test="p.hospital_id!=null and p.hospital_id!=''">and tb.hospital_id=#{p.hospital_id}</if>
+        <if test="p.dict_type_name!=null and p.dict_type_name!=''">
+            and
+            (
+            tb.dict_type_name like CONCAT(CONCAT('%',#{p.dict_type_name}),'%')
+            or
+            tb.dict_type_code like CONCAT(CONCAT('%',#{p.dict_type_name}),'%')
+            )
+        </if>
+        order by tb.order_num
+    </select>
+
+    <select id="countMap" parameterType="Map" resultType="Long">
+        select count(1) as totalCount
+        from sys_dict_type tb
+        where 1 = 1
+        <if test="p.hospital_id!=null and p.hospital_id!=''">and tb.hospital_id=#{p.hospital_id}</if>
+        <if test="p.dict_type_name!=null and p.dict_type_name!=''">
+            and
+            (
+            tb.dict_type_name like CONCAT(CONCAT('%',#{p.dict_type_name}),'%')
+            or
+            tb.dict_type_code like CONCAT(CONCAT('%',#{p.dict_type_name}),'%')
+            )
+        </if>
+        order by tb.update_time DESC
+    </select>
+
+    <select id = "queryCount" resultType="org.apache.commons.collections.map.CaseInsensitiveMap" parameterType="java.lang.String">
+        select count(*) as count from sys_dict_type where hospital_id = #{hospital_id}
+    </select>
+
+
+
+
+    <delete id ="delete" parameterType="String" flushCache="true">
+        delete from sys_dict_type t where t.dict_type_code = #{dict_type_code} and hospital_id = #{hospital_id}
+    </delete>
+
+    <delete id = "deleteDetail" parameterType="String" flushCache="true">
+        delete from sys_dict t where t.dict_type_code =#{dict_type_code} and hospital_id =#{hospital_id}
+    </delete>
+
+    <update id = "mergeData"  parameterType="com.tdh.pojo.DictType" flushCache="true"
+            statementType="PREPARED">
+        merge into sys_dict_type a
+        using (select #{id} as id from dual) c
+        on (c.id = a.id)
+        when MATCHED then
+          update set
+        a.hospital_id = #{hospital_id},
+        a.dict_type_code = #{dict_type_code},
+        a.dict_type_name = #{dict_type_name},
+        a.order_num =#{order_num},
+        a.update_by = #{update_by},
+        a.update_time = sysdate
+          where a.id = #{id}
+        when NOT  MATCHED then
+        insert (a.hospital_id,a.id,a.dict_type_code,a.dict_type_name,a.order_num,a.create_by,a.create_time)
+        values(#{hospital_id},#{id},#{dict_type_code},#{dict_type_name},#{order_num},#{create_by},sysdate)
+    </update>
+
+</mapper>

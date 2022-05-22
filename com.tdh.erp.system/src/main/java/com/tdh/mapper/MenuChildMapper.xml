@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tdh.mapper.MenuChildMapper">
+
+    <insert id="insert" parameterType="com.tdh.pojo.MenuChild" flushCache="true"
+            statementType="PREPARED">
+        insert into sys_menu_child(
+        <if test="id!=null">id,</if>
+        <if test="parent_id!=null">parent_id,</if>
+        <if test="title_name!=null">title_name,</if>
+        <if test="href!=null">href,</if>
+        <if test="icon!=null">icon,</if>
+        <if test="target!=null">target,</if>
+        <if test="level_flag!=null">level_flag,</if>
+        <if test="create_by!=null">create_by,</if>
+        <if test="status!=null">status,</if>
+        create_time
+        )values(
+        <if test="id!=null">#{id},</if>
+        <if test="parent_id!=null">#{parent_id},</if>
+        <if test="title_name!=null">#{title_name},</if>
+        <if test="href!=null">#{href},</if>
+        <if test="icon!=null">#{icon},</if>
+        <if test="target!=null">#{target},</if>
+        <if test="level_flag!=null">#{level_flag},</if>
+
+        <if test="create_by!=null">#{create_by},</if>
+        <if test="status!=null">#{status},</if>
+        sysdate
+        )
+    </insert>
+
+    <select id="selectMap" parameterType="com.tdh.pojo.MenuChild" resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+        select  t.id,
+       t.parent_id,
+       t.title_name,
+       t.href,
+       t.icon,
+       t.target,
+        t.level_flag,
+       t.create_by,
+       t.create_time,
+       t.update_by,
+       t.update_time,
+       t.status
+        from sys_menu_child t
+        where 1=1
+        <if test="p.status!=null and p.status!=''">and  t.status = #{p.status}</if>
+    </select>
+
+    <select id="countMap" parameterType="Map" resultType="Long">
+        select count(1) as totalCount
+        from sys_menu_child t
+        where 1=1
+        <if test="p.title_name!=null and p.title_name!=''">
+            and
+            (
+            t.title_name like CONCAT(CONCAT('%',#{p.title_name}),'%')
+            or
+            t.href like CONCAT(CONCAT('%',#{p.title_name}),'%')
+            )
+        </if>
+    </select>
+
+    <select id="findById" parameterType="java.lang.String" resultType="com.tdh.pojo.MenuChild">
+        select  * from sys_menu_child where id = #{id}
+    </select>
+
+    <update id="update" parameterType="com.tdh.pojo.MenuChild" flushCache="true" statementType="PREPARED">
+        update sys_menu_child
+        <set>
+            <if test="parent_id!=null">parent_id=#{parent_id},</if>
+            <if test="title_name!=null">title_name=#{title_name},</if>
+            <if test="href!=null">href=#{href},</if>
+            <if test="icon!=null">icon=#{icon},</if>
+            <if test="target!=null">target=#{target},</if>
+            <if test="level_flag!=null">level_flag=#{level_flag},</if>
+            <if test="update_by!=null">update_by=#{update_by},</if>
+            <if test="status!=null">status=#{status},</if>
+            update_time=sysdate
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+
+    <delete id="deleteById" parameterType="String"
+            flushCache="true">
+        delete from sys_menu_child where  id = #{id}
+    </delete>
+
+    <select id="queryMenuInfoByHref" parameterType="java.lang.String" resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+        select  count(id) from sys_menu_child where href = #{href}
+    </select>
+
+    <update id="updateStatusById" parameterType="java.lang.String" flushCache="true" statementType="PREPARED">
+        update sys_menu_child
+        <set>
+            <if test="update_by!=null">update_by=#{update_by},</if>
+            <if test="status!=null">status=#{status},</if>
+            update_time=sysdate
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+
+    <select id="queryMenuChild" parameterType="java.lang.String" resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+        select  count(id) from sys_menu_child where href = #{href}
+    </select>
+
+    <select id="queryMenuInfoNotBind" parameterType="java.lang.String" resultType="com.tdh.pojo.MenuChild">
+        select
+        a.id,
+        a.parent_id,
+        a.title_name,
+        a.href,
+        a.icon,
+        a.target,
+        a.level_flag,
+        a.create_by,
+        a.create_time,
+        a.update_by,
+        a.update_time,
+        a.status,
+        a.level_flag
+        from sys_menu_child a
+        where parent_id is null and level_flag = '1' and status = '1'
+    </select>
+
+    <select id="queryMenuInfoBind" parameterType="java.lang.String" resultType="com.tdh.pojo.MenuChild">
+        select
+        a.id,
+        a.parent_id,
+        a.title_name,
+        a.href,
+        a.icon,
+        a.target,
+        a.level_flag,
+        a.create_by,
+        a.create_time,
+        a.update_by,
+        a.update_time,
+        a.status,
+        a.level_flag
+        from sys_menu_child a
+        where 1=1
+         and a.parent_id=#{parent_id}
+    </select>
+
+    <update id="updateParentIdById" parameterType="java.lang.String" flushCache="true" statementType="PREPARED">
+        update sys_menu_child
+        <set>
+            <if test="update_by!=null">update_by=#{update_by},</if>
+            <if test="parent_id!=null">parent_id=#{parent_id},</if>
+            update_time=sysdate
+        </set>
+        <where>
+            id IN
+            <foreach collection="arr" item="req_id" separator="," open="(" close=")">
+                #{req_id}
+            </foreach>
+        </where>
+    </update>
+
+    <update id="deleteParentIdById" parameterType="java.lang.String" flushCache="true" statementType="PREPARED">
+       update sys_menu_child  t set
+      t.update_by = #{update_by},
+      t.parent_id = '',
+      t.update_time=sysdate
+    where t.parent_id = #{parent_id}
+    </update>
+
+    <select id="queryMenuChildInfo" parameterType="java.lang.String" resultType="com.tdh.pojo.MenuChild">
+        select
+       *
+        from sys_menu_child
+        where status ='1'
+    </select>
+
+
+
+</mapper>

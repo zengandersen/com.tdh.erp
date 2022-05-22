@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tdh.mapper.AreaMapper">
+
+
+
+
+    <delete id ="deleteAreaInfoById" parameterType="String" flushCache="true">
+          delete from sys_area t where t.area_id = #{area_id}
+    </delete>
+
+    <select id="selectMap" parameterType="Map"
+            resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+        select tb.*,
+        (select u.user_name from sys_user u where u.user_id=tb.create_user) as create_by_transformation,
+        (select u.user_name from sys_user u where u.user_id=tb.update_user) as update_by_transformation
+        from sys_area tb
+        where 1 = 1
+        <if test="p.hospital_id!=null and p.hospital_id!=''">and tb.hospital_id=#{p.hospital_id}</if>
+        <if test="p.area_name!=null and p.area_name!=''">
+            and
+            (
+            tb.area_name like CONCAT(CONCAT('%',#{p.area_name}),'%')
+            )
+        </if>
+        order by tb.order_num desc
+    </select>
+
+
+    <select id="countMap" parameterType="Map" resultType="Long">
+        select count(1) as totalCount
+        from sys_area tb
+        where 1 = 1
+        <if test="p.hospital_id!=null and p.hospital_id!=''">and tb.hospital_id=#{p.hospital_id}</if>
+        <if test="p.area_name!=null and p.area_name!=''">
+            and
+            (
+            tb.area_name like CONCAT(CONCAT('%',#{p.area_name}),'%')
+            )
+        </if>
+        order by tb.order_num DESC
+    </select>
+
+
+
+    <select id = "queryCount" resultType="org.apache.commons.collections.map.CaseInsensitiveMap" parameterType="java.lang.String">
+        select count(*) as count from sys_area where hospital_id = #{hospital_id}
+    </select>
+
+
+
+
+    <update id = "mergeData"  parameterType="com.tdh.pojo.Area" flushCache="true"
+            statementType="PREPARED">
+         merge into sys_area a
+        using (select #{area_id} as area_id from dual) c
+        on (c.area_id = a.area_id)
+        when MATCHED then
+          update set
+        a.hospital_id = #{hospital_id},
+        a.compound_id = #{compound_id},
+        a.area_name = #{area_name},
+        a.area_code = #{area_code},
+        a.order_num =#{order_num},
+        a.status = #{status},
+        a.update_user = #{update_user},
+        a.update_time = sysdate
+          where a.area_id = #{area_id}
+        when NOT  MATCHED then
+        insert (a.hospital_id,a.compound_id,a.area_id,a.area_code,a.area_name,a.order_num,a.status,a.create_user,a.create_time)
+        values(#{hospital_id},#{compound_id},#{area_id},#{area_code},#{area_name},#{order_num},#{status},#{create_user},sysdate)
+    </update>
+
+
+    <select id = "queryAreaEmunInfo" parameterType="String" resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+        select area_name as name,area_id as id from sys_area where hospital_id = #{hospital_id} and status = #{status}
+    </select>
+
+
+    <select id = "queueFindAreaId" parameterType="String" resultType="com.tdh.pojo.Area">
+        select * from sys_area where area_id = #{area_id}
+    </select>
+</mapper>

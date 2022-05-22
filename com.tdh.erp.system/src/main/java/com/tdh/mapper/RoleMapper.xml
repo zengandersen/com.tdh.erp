@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tdh.mapper.RoleMapper">
+    <select id="selectMap" parameterType="com.tdh.pojo.Role" resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+        select
+        t.hospital_id,
+        t.compound_id,
+        t.role_id,
+        t.role_code,
+        t.role_name,
+        t.order_num,
+        t.status,
+        (select u.user_name from sys_user u where u.user_id=t.create_user) as create_by_transformation,
+        (select u.user_name from sys_user u where u.user_id=t.update_user) as update_by_transformation
+        from sys_role t
+        where 1=1
+        <if test="p.status!=null and p.status!=''">
+            and t.status=${p.status}
+        </if>
+        <if test="p.role_code!=null and p.role_code!=''">
+            and
+            (
+            t.role_name like CONCAT(CONCAT('%',#{p.role_code}),'%')
+            or
+            t.role_code like CONCAT(CONCAT('%',#{p.role_code}),'%')
+            )
+        </if>
+        and t.hospital_id=#{p.hospital_id}
+    </select>
+
+    <select id="countMap" parameterType="Map" resultType="Long">
+        select count(1) as totalCount
+        from sys_role t
+        where 1=1
+        <if test="p.status!=null and p.status!=''">
+            and t.status=${p.status}
+        </if>
+        <if test="p.role_code!=null and p.role_code!=''">
+            and
+            (
+            t.role_name like CONCAT(CONCAT('%',#{p.role_code}),'%')
+            or
+            t.role_code like CONCAT(CONCAT('%',#{p.role_code}),'%')
+            )
+        </if>
+    </select>
+
+    <update id = "mergeData"  parameterType="com.tdh.pojo.Role" flushCache="true"
+            statementType="PREPARED">
+    merge into sys_role a
+    using (select #{role_id} as role_id from dual) c
+    on (c.role_id = a.role_id)
+    when MATCHED then
+    update set
+    a.hospital_id = #{hospital_id},
+    a.compound_id = #{compound_id},
+    a.role_name = #{role_name},
+    a.role_code = #{role_code},
+    a.order_num =#{order_num},
+    a.status = #{status},
+    a.update_user = #{update_user},
+    a.update_time = sysdate
+    where a.role_id = #{role_id}
+    when NOT  MATCHED then
+    insert (a.hospital_id,a.compound_id,a.role_id,a.role_code,a.role_name,a.order_num,a.status,a.create_user,a.create_time)
+    values(#{hospital_id},#{compound_id},#{role_id},#{role_code},#{role_name},#{order_num},#{status},#{create_user},sysdate)
+    </update>
+
+
+    <delete id="deleteRoleInfoById" parameterType="String" flushCache="true">
+        delete from sys_role t where t.role_id = #{role_id}
+    </delete>
+
+    <select id="queryCount" resultType="org.apache.commons.collections.map.CaseInsensitiveMap"
+            parameterType="java.lang.String">
+        select count(t.role_id) as count  from sys_role t where t.hospital_id = #{hospital_id}
+    </select>
+
+
+    <select id="queryRoleEnumById" resultType="org.apache.commons.collections.map.CaseInsensitiveMap"
+            parameterType="java.lang.String">
+              select role_id as id ,role_name as name from sys_role where hospital_id = #{hospital_id}
+              and compound_id = #{compound_id}
+    </select>
+
+
+
+</mapper>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tdh.mapper.DictMapper">
+
+    <insert id="insert" parameterType="com.tdh.pojo.Dict" flushCache="true"
+            statementType="PREPARED">
+        insert into sys_dict(
+        hospital_id,
+        <if test="dict_type_code!=null">dict_type_code,</if>
+        <if test="dict_id!=null">dict_id,</if>
+        <if test="dict_name!=null">dict_name,</if>
+        <if test="dict_code!=null">dict_code,</if>
+        <if test="order_num!=null">order_num,</if>
+        <if test="status!=null">status,</if>
+        <if test="create_by!=null">create_by,</if>
+        create_time
+        )values(
+        #{hospital_id},
+        <if test="dict_type_code!=null">#{dict_type_code},</if>
+        <if test="dict_id!=null">#{dict_id},</if>
+        <if test="dict_name!=null">#{dict_name},</if>
+        <if test="dict_code!=null">#{dict_code},</if>
+        <if test="order_num!=null">#{order_num},</if>
+        <if test="status!=null">#{status},</if>
+        <if test="create_by!=null">#{create_by},</if>
+        sysdate
+        )
+    </insert>
+
+    <select id="selectMap" parameterType="Map"
+            resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+        select tb.*,
+        (select u.user_name from sys_user u where u.user_id=tb.create_by) as create_by_transformation,
+        (select u.user_name from sys_user u where u.user_id=tb.update_by) as update_by_transformation
+        from sys_dict tb
+        where 1 = 1
+        <if test="p.hospital_id!=null and p.hospital_id!=''">and tb.hospital_id=#{p.hospital_id}</if>
+        <if test="p.dict_type_code!=null and p.dict_type_code!=''">and tb.dict_type_code=#{p.dict_type_code}</if>
+        <if test="p.dict_name!=null and p.dict_name!=''">
+            and
+            (
+            tb.dict_name like CONCAT(CONCAT('%',#{p.dict_name}),'%')
+            or
+            tb.dict_code like CONCAT(CONCAT('%',#{p.dict_name}),'%')
+            )
+        </if>
+        order by tb.order_num DESC
+    </select>
+
+    <select id="countMap" parameterType="Map" resultType="Long">
+        select count(1) as totalCount
+        from sys_dict tb
+        where 1 = 1
+        <if test="p.hospital_id!=null and p.hospital_id!=''">and tb.hospital_id=#{p.hospital_id}</if>
+        <if test="p.dict_type_code!=null and p.dict_type_code!=''">and tb.dict_type_code=#{p.dict_type_code}</if>
+        <if test="p.dict_name!=null and p.dict_name!=''">
+            and
+            (
+            tb.dict_name like CONCAT(CONCAT('%',#{p.dict_name}),'%')
+            or
+            tb.dict_code like CONCAT(CONCAT('%',#{p.dict_name}),'%')
+            )
+        </if>
+        order by tb.update_time DESC
+    </select>
+
+
+
+
+    <update id = "mergeData" parameterType="com.tdh.pojo.Dict" flushCache="true"
+            statementType="PREPARED">
+        merge into sys_dict a
+        using (select #{dict_id} as dict_id from dual) c
+        on (c.dict_id = a.dict_id)
+        when MATCHED then
+        update set
+        a.hospital_id = #{hospital_id},
+        a.dict_type_code = #{dict_type_code},
+        a.dict_code = #{dict_code},
+        a.dict_name = #{dict_name},
+        a.status = #{status},
+        a.order_num =#{order_num},
+        a.update_by = #{update_by},
+        a.update_time = sysdate
+        where a.dict_id = #{dict_id}
+        when NOT  MATCHED then
+        insert (a.hospital_id,a.dict_type_code,a.dict_id,a.dict_name,a.dict_code,a.status,a.order_num,a.create_by,a.create_time)
+        values(#{hospital_id},#{dict_type_code},#{dict_id},#{dict_name},#{dict_code},#{status},#{order_num},#{create_by},sysdate)
+    </update>
+
+
+
+    <select id = "queryCount" resultType="org.apache.commons.collections.map.CaseInsensitiveMap" parameterType="java.lang.String">
+        select count(*) as count from sys_dict where hospital_id = #{hospital_id}
+    </select>
+
+    <delete id ="delete" parameterType="String" flushCache="true">
+        delete from sys_dict t where t.dict_id = #{dict_id}
+    </delete>
+
+
+    <select id = "queryDictDetailByDeptTypeCode" parameterType="String" resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+        select
+                t.dict_code as id,
+                t.dict_name as name,
+                t.dict_type_code as type
+        from sys_dict t where t.hospital_id = #{hospital_id} and t.status = ${status} and t.dict_type_code IN
+        <foreach collection="dict_type_code_arr" item="req_id" separator="," open="(" close=")">
+            #{req_id}
+        </foreach>
+        </select>
+
+    <select id = "queryDictEnumInfo" resultType="org.apache.commons.collections.map.CaseInsensitiveMap" parameterType="java.lang.String">
+        select dict_name,dict_code from sys_dict where hospital_id = #{hospital_id} and dict_code = #{dict_code} and dict_type_code IN
+        <foreach collection="dict_type_code_arr" item="req_id" separator="," open="(" close=")">
+            #{req_id}
+        </foreach>
+    </select>
+
+
+</mapper>

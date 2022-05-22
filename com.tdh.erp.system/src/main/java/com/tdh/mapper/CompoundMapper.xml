@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tdh.mapper.CompoundMapper">
+
+    <delete id ="deleteCompoundInfoById" parameterType="String" flushCache="true">
+          delete from sys_compound t where t.compound_id = #{compound_id}
+    </delete>
+
+    <select id="selectMap" parameterType="Map"
+            resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+        select tb.*,
+        (select u.user_name from sys_user u where u.user_id=tb.create_user) as create_by_transformation,
+        (select u.user_name from sys_user u where u.user_id=tb.update_user) as update_by_transformation
+        from sys_compound tb
+        where 1 = 1
+        <if test="p.compound_name!=null and p.compound_name!=''">
+            and
+            (
+            tb.compound_name like CONCAT(CONCAT('%',#{p.compound_name}),'%')
+            )
+        </if>
+        order by tb.order_num desc
+    </select>
+
+
+    <select id="countMap" parameterType="Map" resultType="Long">
+        select count(1) as totalCount
+        from sys_compound tb
+        where 1 = 1
+        <if test="p.compound_name!=null and p.compound_name!=''">
+            and
+            (
+            tb.compound_name like CONCAT(CONCAT('%',#{p.compound_name}),'%')
+            )
+        </if>
+        order by tb.order_num DESC
+    </select>
+
+
+
+    <select id = "queryCount" resultType="org.apache.commons.collections.map.CaseInsensitiveMap" parameterType="java.lang.String">
+        select count(*) as count from sys_compound where hospital_id = #{hospital_id}
+    </select>
+
+
+
+
+    <update id = "mergeData"  parameterType="com.tdh.pojo.Compound" flushCache="true"
+            statementType="PREPARED">
+         merge into sys_compound a
+        using (select #{compound_id} as compound_id from dual) c
+        on (c.compound_id = a.compound_id)
+        when matched then
+          update set
+        a.hospital_id = #{hospital_id},
+        a.compound_code = #{compound_code},
+        a.compound_name = #{compound_name},
+        a.contacts = #{contacts},
+        a.contact_tel =#{contact_tel},
+        a.contact_addr =#{contact_addr},
+        a.status = #{status},
+        a.order_num = #{order_num},
+        a.update_user = #{update_user},
+        a.update_time = sysdate
+          where a.compound_id = #{compound_id}
+        when not  matched then
+        insert (a.hospital_id,a.compound_id,a.compound_code,a.compound_name,a.contacts,a.contact_tel,a.contact_addr,a.status,a.order_num,a.create_user,a.create_time)
+        values(#{hospital_id},#{compound_id},#{compound_code},#{compound_name},#{contacts},#{contact_tel},#{contact_addr},#{status},#{order_num},#{create_user},sysdate)
+    </update>
+
+
+    <select id = "queryCompoundEmunInfo" parameterType="String" resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+        select Compound_name as name,Compound_id as id from sys_Compound where hospital_id = #{hospital_id} and status = #{status}
+    </select>
+</mapper>
