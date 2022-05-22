@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tdh.mapper.FactoryMapper">
+
+    <insert id="insert" parameterType="com.tdh.pojo.Factory" flushCache="true"
+            statementType="PREPARED">
+        insert into sys_factory(
+        <if test="factoryId!=null">factory_id,</if>
+        <if test="factoryName!=null">factory_name,</if>
+        <if test="factoryCode!=null">factory_code,</if>
+        <if test="pinyin!=null">pinyin,</if>
+        <if test="Ename!=null">ename,</if>
+        <if test="factoryTel!=null">factory_tel,</if>
+        <if test="factoryAddr!=null">factory_addr,</if>
+        <if test="factoryUrl!=null">factory_url,</if>
+        <if test="orderNum!=null">order_num,</if>
+        <if test="remark!=null">remark,</if>
+        <if test="createUser!=null">create_user,</if>
+        create_time
+        )values(
+        <if test="factoryId!=null">#{factoryId},</if>
+        <if test="factoryName!=null">#{factoryName},</if>
+        <if test="factoryCode!=null">#{factoryCode},</if>
+        <if test="pinyin!=null">#{pinyin},</if>
+        <if test="Ename!=null">#{Ename},</if>
+        <if test="factoryTel!=null">#{factoryTel},</if>
+        <if test="factoryAddr!=null">#{factoryAddr},</if>
+        <if test="factoryUrl!=null">#{factoryUrl},</if>
+        <if test="orderNum!=null">#{orderNum},</if>
+        <if test="remark!=null">#{remark},</if>
+        <if test="createUser!=null">#{createUser},</if>
+        sysdate
+        )
+    </insert>
+
+
+    <select id="selectMap" parameterType="Map"
+            resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+        select tb.*,
+        (select u.user_name from sys_user u where u.user_id=tb.create_user) as create_by_transformation,
+        (select u.user_name from sys_user u where u.user_id=tb.update_user) as update_by_transformation
+        from sys_factory tb
+        where 1 = 1
+        <if test="p.factoryName!=null and p.factoryName!=''">
+            and
+            (
+            tb.factory_name like CONCAT(CONCAT('%',#{p.factoryName}),'%')
+            or
+            tb.factory_code like CONCAT(CONCAT('%',#{p.factoryName}),'%')
+            or
+            tb.pinyin like CONCAT(CONCAT('%',#{p.factoryName}),'%')
+            or
+            tb.Ename like CONCAT(CONCAT('%',#{p.factoryName}),'%')
+            )
+        </if>
+        order by tb.order_num desc
+    </select>
+
+
+    <select id="countMap" parameterType="Map" resultType="Long">
+        select count(1) as totalCount
+        from sys_factory tb
+        where 1 = 1
+        <if test="p.factoryName!=null and p.factoryName!=''">
+            and
+            (
+            tb.factory_name like CONCAT(CONCAT('%',#{p.factoryName}),'%')
+            or
+            tb.factory_code like CONCAT(CONCAT('%',#{p.factoryName}),'%')
+            or
+            tb.pinyin like CONCAT(CONCAT('%',#{p.factoryName}),'%')
+            or
+            tb.Ename like CONCAT(CONCAT('%',#{p.factoryName}),'%')
+            )
+        </if>
+        order by tb.order_num DESC
+    </select>
+
+    <select id = "queryCount" resultType="org.apache.commons.collections.map.CaseInsensitiveMap" parameterType="java.lang.String">
+        select count(*) as count from sys_factory where 1=1
+    </select>
+
+
+    <select id = "queryFactoryDetailById" resultType="org.apache.commons.collections.map.CaseInsensitiveMap" parameterType="java.lang.String">
+            select t.factory_id,
+       t.factory_name,
+       t.factory_code,
+       t.pinyin,
+       t.ename,
+       t.factory_tel,
+       t.factory_addr,
+       t.factory_url,
+       t.order_num,
+       t.remark,
+       t.create_user,
+       t.create_time,
+       t.update_user,
+       t.update_time  from sys_factory t
+       where t.factory_id  = #{factoryId}
+    </select>
+
+    <update id = "mergeData"  parameterType="com.tdh.pojo.Factory" flushCache="true"
+            statementType="PREPARED">
+       update sys_factory a set
+        a.factory_name = #{factoryName},
+        a.factory_code = #{factoryCode},
+        a.pinyin = #{pinyin},
+        a.ename = #{ename},
+        a.factory_url = #{factoryUrl},
+        a.factory_addr= #{factoryAddr},
+        a.update_user = #{updateUser},
+        a.update_time = sysdate
+        where a.factory_id = #{factoryId}
+    </update>
+
+
+    <update id = "updateFactoryDetailById"  parameterType="com.tdh.pojo.Factory" flushCache="true"
+            statementType="PREPARED">
+    update sys_factory a set
+        a.factory_name = #{factoryName},
+        a.factory_code = #{factoryCode},
+        a.pinyin = #{pinyin},
+        a.ename = #{ename},
+        a.factory_url = #{factoryUrl},
+        a.factory_addr= #{factoryAddr},
+        a.factory_tel = #{factoryTel},
+        a.remark = #{remark},
+        a.update_user = #{updateUser},
+        a.update_time = sysdate
+        where a.factory_id = #{factoryId}
+    </update>
+
+    <delete id ="deleteFactoryInfoById" parameterType="String" flushCache="true">
+        delete from sys_factory t where t.factory_id = #{factoryId}
+    </delete>
+
+    <select  id = "queryFactoryInfoEnum" parameterType="String"  resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+        select t.factory_id as id , t.factory_name  as name  from sys_factory t
+    </select>
+</mapper>

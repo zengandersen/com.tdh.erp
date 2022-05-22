@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tdh.mapper.GoodsMapper">
+    <insert id="insert" parameterType="com.tdh.pojo.Goods" flushCache="true"
+            statementType="PREPARED">
+        insert into sys_goods(
+        <if test="goodsId!=null">goods_id,</if>
+        <if test="factoryId!=null">factory_id,</if>
+        <if test="goodsName!=null">goods_name,</if>
+        <if test="goodsCode!=null">goods_code,</if>
+        <if test="pinyin!=null">pinyin,</if>
+        <if test="Ename!=null">Ename,</if>
+        <if test="unit!=null">unit,</if>
+        <if test="goodsImg!=null">goods_img,</if>
+        <if test="purchPrice!=null">purch_price,</if>
+        <if test="unitPrice!=null">unit_price,</if>
+        <if test="remark!=null">remark,</if>
+        <if test="status!=null">status,</if>
+        <if test="createUser!=null">create_user,</if>
+        create_time
+        )values(
+        <if test="goodsId!=null">#{goodsId},</if>
+        <if test="factoryId!=null">#{factoryId},</if>
+        <if test="goodsName!=null">#{goodsName},</if>
+        <if test="goodsCode!=null">#{goodsCode},</if>
+        <if test="pinyin!=null">#{pinyin},</if>
+        <if test="Ename!=null">#{ename},</if>
+        <if test="unit!=null">#{unit},</if>
+        <if test="goodsImg!=null">#{goodsImg},</if>
+        <if test="purchPrice!=null">#{purchPrice},</if>
+        <if test="unitPrice!=null">#{unitPrice},</if>
+        <if test="remark!=null">#{remark},</if>
+        <if test="status!=null">${status},</if>
+        <if test="createUser!=null">#{createUser},</if>
+        sysdate
+        )
+    </insert>
+
+    <update id = "updateGoodsById"  parameterType="com.tdh.pojo.Goods" flushCache="true"
+            statementType="PREPARED">
+        update sys_goods a set
+        <if test="goodsName!=null">a.goods_name = #{goodsName},</if>
+        <if test="goodsCode!=null">a.goods_code = #{goodsCode},</if>
+        <if test="pinyin!=null">a.pinyin= #{pinyin},</if>
+        <if test="ename!=null">a.ename= #{ename},</if>
+        <if test="unit!=null">a.unit =#{unit},</if>
+        <if test="goodsImg!=null">a.goods_img = #{goodsImg},</if>
+        <if test="purchPrice!=null">a.purch_price = #{purchPrice},</if>
+        <if test="unitPrice!=null">a.unit_price = #{unitPrice},</if>
+        <if test="remark!=null">a.remark = #{remark},</if>
+        <if test="status!=null">a.status = ${status},</if>
+        a.update_user = #{updateUser},
+        a.update_time = sysdate
+          where a.goods_id = #{goodsId}
+    </update>
+
+    <delete id = "delGoodsById" parameterType="String" flushCache="true">
+        delete from sys_goods where goods_id = #{goodsId}
+    </delete>
+
+    <select id = "queryGoodsInfoById" parameterType="String" resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+        select t.goods_id,
+       t.factory_id,
+       t.goods_name,
+       t.goods_code,
+       t.pinyin,
+       t.ename,
+       t.unit,
+       t.goods_img,
+       t.purch_price,
+       t.unit_price,
+       t.create_user,
+       t.create_time,
+       t.update_user,
+       t.update_time,
+       t.remark,
+       t.status
+       from sys_goods t where t.goods_id = #{goodsId}
+    </select>
+
+
+    <select id="selectMap" parameterType="Map"
+            resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+        select
+        tb.goods_id,
+        tb.factory_id,
+        tb.goods_name,
+        tb.goods_code,
+        tb.pinyin,
+        tb.ename,
+        tb.unit,
+        tb.purch_price,
+        tb.unit_price,
+        tb.remark,
+        tb.status,
+        (select u.user_name from sys_user u where u.user_id=tb.create_user) as create_by_transformation,
+        (select u.user_name from sys_user u where u.user_id=tb.update_user) as update_by_transformation,
+        tb.goods_img
+        from sys_goods tb
+        where 1 = 1
+        <if test="p.goodsName!=null and p.goodsName!=''">
+            and
+            (
+            tb.goods_name like CONCAT(CONCAT('%',#{p.goodsName}),'%')
+            or
+            tb.goods_code like CONCAT(CONCAT('%',#{p.goodsName}),'%')
+            or
+            tb.pinyin like CONCAT(CONCAT('%',#{p.goodsName}),'%')
+            or
+            tb.Ename like CONCAT(CONCAT('%',#{p.goodsName}),'%')
+            )
+        </if>
+        order by tb.create_time desc
+    </select>
+
+
+    <select id="countMap" parameterType="Map" resultType="Long">
+        select count(1) as totalCount
+        from sys_goods tb
+        where 1 = 1
+        <if test="p.goodsName!=null and p.goodsName!=''">
+            and
+            (
+            tb.goods_name like CONCAT(CONCAT('%',#{p.goodsName}),'%')
+            or
+            tb.goods_code like CONCAT(CONCAT('%',#{p.goodsName}),'%')
+            or
+            tb.pinyin like CONCAT(CONCAT('%',#{p.goodsName}),'%')
+            or
+            tb.Ename like CONCAT(CONCAT('%',#{p.goodsName}),'%')
+            )
+        </if>
+        order by tb.create_time DESC
+    </select>
+
+    <select id="queryGoodsInfoEnum" parameterType="String" resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+      select t.goods_id as id ,t.goods_name as name from sys_goods t where t.status = #{status}
+    </select>
+
+
+    <select id = "queryGoodsEnumByFactoryId" parameterType="String" resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+        select t.goods_id as id,t.goods_name as name from sys_goods t where t.status = ${status} and t.factory_id = #{factoryId}
+    </select>
+
+
+    <select id = "verifyRepeatParam" parameterType="String" resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+            select count(t.goods_id) as count from sys_goods t
+            where t.goods_name = #{goodsName} or t.goods_code = #{goodsCode}
+    </select>
+
+    <select id = "queryGoodsEnumById" parameterType="String" resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+        select t.goods_id as id ,t.goods_name as name from sys_goods t where t.factory_id in (
+        select factory_id from sys_factory a where t.factory_id = a.factory_id
+ ) and t.goods_id = #{goodsId}
+
+    </select>
+
+
+</mapper>
