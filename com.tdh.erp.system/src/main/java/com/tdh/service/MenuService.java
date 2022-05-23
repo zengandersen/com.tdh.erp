@@ -214,10 +214,9 @@ public class MenuService extends BaseService<Menu,MenuMapper> {
         homeInfo.put("title",Config.tableClass.index);
         homeInfo.put("href","static/welcome-1.jsp");
         Map<String ,Object> logoInfo = new HashMap<>();
-        logoInfo.put("title",Config.tableClass.adh);
-//        logoInfo.put("image","images/logo.png");
-        logoInfo.put("image","");
-        logoInfo.put("href","/");
+        logoInfo.put("title",Config.tableClass.title);
+        logoInfo.put("image",Config.tableClass.logo);
+        logoInfo.put("href",Config.tableClass.url);
         List<Map<String ,Object>>menuInfo = new ArrayList<>();
         String menuChildId = "";
         List<SubLeveLTable> rootMenu  = new ArrayList<>();
@@ -231,7 +230,6 @@ public class MenuService extends BaseService<Menu,MenuMapper> {
                 subLeveLMenu.add(sub);
             }
         }
-
         Collections.sort(rootMenu, order());
 
         for (SubLeveLTable nav : rootMenu) {

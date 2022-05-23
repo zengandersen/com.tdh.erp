@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tdh.mapper.MealMapper">
+
+    <insert id="insert" parameterType="com.tdh.pojo.Meal" flushCache="true"
+            statementType="PREPARED">
+        insert into sys_meal(
+        <if test="mealId!=null">meal_id,</if>
+        <if test="mealCode!=null">meal_code,</if>
+        <if test="mealName!=null">meal_name,</if>
+        <if test="mealSpec!=null">meal_spec,</if>
+        <if test="mealPrice!=null">meal_price,</if>
+        <if test="repTotle!=null">rep_totle,</if>
+        <if test="remark!=null">remark,</if>
+        <if test="createUser!=null">create_user,</if>
+        create_time
+        )values(
+        <if test="mealId!=null">#{mealId},</if>
+        <if test="mealCode!=null">#{mealCode},</if>
+        <if test="mealName!=null">#{mealName},</if>
+        <if test="mealSpec!=null">#{mealSpec},</if>
+        <if test="mealPrice!=null">${mealPrice},</if>
+        <if test="repTotle!=null">${repTotle},</if>
+        <if test="remark!=null">#{remark},</if>
+        <if test="createUser!=null">#{createUser},</if>
+        sysdate
+        )
+    </insert>
+
+    <select id="selectMap" parameterType="Map"
+            resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+        select tb.*,
+        (select u.user_name from sys_user u where u.user_id=tb.create_user) as create_by_transformation,
+        (select u.user_name from sys_user u where u.user_id=tb.update_user) as update_by_transformation
+        from sys_meal tb
+        where 1 = 1
+        <if test="p.mealName!=null and p.mealName!=''">
+            and
+            (
+            tb.meal_code like CONCAT(CONCAT('%',#{p.mealName}),'%')
+            OR
+            tb.meal_name like CONCAT(CONCAT('%',#{p.mealName}),'%')
+
+            )
+        </if>
+        order by tb.create_time desc
+    </select>
+
+
+    <select id="countMap" parameterType="Map" resultType="Long">
+        select count(1) as totalCount
+        from sys_meal tb
+        where 1 = 1
+        <if test="p.mealName!=null and p.mealName!=''">
+            and
+            (
+            tb.meal_code like CONCAT(CONCAT('%',#{p.mealName}),'%')
+            OR
+            tb.meal_name like CONCAT(CONCAT('%',#{p.mealName}),'%')
+
+            )
+        </if>
+        order by tb.create_time desc
+    </select>
+
+    <select id="queryMealInfoById" parameterType="String"
+            resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+        select
+       t.meal_id,
+       t.meal_code,
+       t.meal_name,
+       t.meal_spec,
+       t.meal_price,
+       t.rep_totle,
+       t.remark
+        from sys_meal t where t.meal_id = #{mealId}
+    </select>
+
+
+    <update id="updateMealById" parameterType="com.tdh.pojo.Meal" flushCache="true"
+            statementType="PREPARED">
+        update sys_meal a set
+        <if test="mealCode!=null">a.meal_code = #{mealCode},</if>
+        <if test="mealName!=null">a.meal_name = #{mealName},</if>
+        <if test="mealSpec!=null">a.meal_spec= #{mealSpec},</if>
+        <if test="mealPrice!=null">a.meal_price = ${mealPrice},</if>
+        <if test="repTotle!=null">a.rep_totle= ${repTotle},</if>
+        a.update_user = #{updateUser},
+        a.update_time = sysdate
+        where a.meal_id = #{mealId}
+    </update>
+
+    <delete id="delMealById" parameterType="String" flushCache="true">
+        delete from sys_meal where meal_id = #{mealId}
+    </delete>
+
+
+</mapper>

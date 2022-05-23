@@ -131,6 +131,7 @@
         from sys_menu t
         left join sys_dict a on a.dict_type_code = 'MENU_INFO' and t.title_name = a.dict_code
         where a.status = '1'
+        order by  t.create_time
     </select>
 
 

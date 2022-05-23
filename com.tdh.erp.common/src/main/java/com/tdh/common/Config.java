@@ -41,8 +41,10 @@ public class Config {
     }
 
     public static class tableClass{
-        public static final String adh="";
+        public static final String title="柒丫头棉袜铺";
         public static final String index = "首页";
+        public static final String logo = "images/logo.jpg";
+        public static final String url = "https://mms.pinduoduo.com/home/";
     }
 
     public static class levelCnClass{
