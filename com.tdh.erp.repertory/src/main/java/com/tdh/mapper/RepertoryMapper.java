@@ -17,4 +17,8 @@ public interface RepertoryMapper extends BaseMapper<Repertory> {
         public Map<String ,Object> queryRepertoryDetailById(@Param("repertoryId") String repertoryId);
 
         public void delRepertoryInfoById(@Param("repertoryId") String repertoryId);
+
+
+
+        public List<Map<String ,Object>> queryRepertoryBindInfoById(@Param("repertoryIds") String [] repertoryIds);
 }

@@ -29,19 +29,9 @@
             <legend>搜索信息</legend>
             <div style="margin: 10px 10px 10px 10px">
                 <form class="layui-form layui-form-pane" action="">
-                    <div class="layui-form-item">
-                        <div class="layui-inline"><label class="layui-form-label">查询信息</label>
-                            <div class="layui-input-inline"><input value="" type="text" placeholder="套餐名称/套餐编码"
-                                                                   id="meal_name" name="meal_name"
-                                                                   autocomplete="off" class="layui-input"></div>
-                        </div>
                         <div class="layui-inline">
-                            <button type="button" class="layui-btn layui-btn-primary" data-type="getInfo" id="btnQuery"
-                                    name="btnQuery"><i class="layui-icon"></i> 搜 索
-                            </button>
-
-                            <button type="button" name="btnAdd" class="layui-btn layui-btn-normal" data-type="add"><i
-                                    class="layui-icon layui-icon-ok-circle"></i>新增套餐
+                            <button type="button" name="btnAdd" class="layui-btn layui-btn-normal" data-type="bind"><i
+                                    class="layui-icon layui-icon-ok-circle"></i>绑定商品
                             </button>
                         </div>
                     </div>
@@ -64,7 +54,10 @@
 </body>
 
 <script type="text/javascript"> /*枚举对象*/
-var PWD = document.getElementById("LAY-user-login-password");
+var url = window.location.href;
+var count = url.indexOf("=");
+var index = url.substring(count+1);
+var param = decodeURI(index);
 var compound_enum;
 var role_enum;
 /*layui 模块化引用*/
@@ -77,25 +70,29 @@ layui.use(['jquery', 'table', 'layer'], function () {
     var tableIns = table.render({
         id: layTableId,
         elem: '#dataTable',
-        url: '/query-meal-list.do',
+        url: '/query-meal-bind-list.do',
         toolbar: '#toolbarDemo',
         method: 'post',
-        page: true,
         limits: [50, 100, 200],
         limit: 50,
         loading: true,
+        where:{
+            meal_id: param
+        },
         end: '没有更多数据展示啦', /*没有数据之后的提示语*/
         cols: [[{title: '序号', type: 'numbers'},
-            {field: 'meal_name', title: '套餐名称'},
-            {field: 'meal_code', title: '套餐编码'},
-            {field: 'meal_spec', title: '套餐规格'},
-            {field: 'meal_price', title: '套餐价格'},
-            {field: 'rep_totle', title: '套餐剩余数量'},
-
-            {field: 'type', title: '操作',width:215 ,templet: function (d) {
-                return '<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del" lay-id="\' + d.factory_id + \'"><i class="layui-icon layui-icon-delete"></i>移除</a>' +
-                    '<a class="layui-btn layui-btn-xs layui-btn-checked" lay-event="bind" lay-id="\' + d.repertory_id + \'"><i class="layui-icon layui-icon-layouts"></i>绑定信息</a>'+
-                    '<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit" lay-id="\' + d.repertory_id + \'"><i class="layui-icon layui-icon-edit"></i>修改</a>';
+            {field: 'factory_name', title: '厂家名称'},
+            {field: 'factory_code', title: '厂家编码'},
+            {field: 'goods_name', title: '商品名称'},
+            {field: 'goods_code', title: '商品编码'},
+            {field: 'goods_img', title: '商品图片',templet: function(d){
+                    return ' <div><img src="'+d.goods_img+'" style="width: 50px; height: 50px;" onclick="showBigImage(this)"></div>';
+                }},
+            {field: 'total', title: '库存剩余数量'},
+            {field: 'purch_price', title: '套餐进货单价'},
+            {field: 'unit_price', title: '商品单价'},
+            {field: 'type', title: '操作',templet: function (d) {
+                return '<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del" lay-id="\' + d.factory_id + \'"><i class="layui-icon layui-icon-delete"></i>移除</a>';
             }
         }]],
         done: function (res, curr, count) {
@@ -103,7 +100,17 @@ layui.use(['jquery', 'table', 'layer'], function () {
             layer.closeAll();
         }
     });
-
+    showBigImage = function (e) {
+        console.log(e);
+        layer.open({
+            type: 1,
+            title: false,
+            closeBtn: 1,
+            shadeClose: true, //点击阴影关闭
+            area: [$(e).width + 'px', $(e).height + 'px'], //宽高
+            content: "<img src=" + $(e).attr('src') + " />"
+        });
+    }
     /*定义事件集合*/
     var active = {
         getInfo: function () {
@@ -116,15 +123,15 @@ layui.use(['jquery', 'table', 'layer'], function () {
                 tableIns.reload({page: {curr: 1}, where: {name: ""}});
                 layer.close(index);
             }
-        }, add: function () {
+        }, bind: function () {
             var index = layer.open({
                 type: 2,
-                title: "新增",
-                content: '/to-meal-info.do',
+                title: "绑定商品",
+                content: '/to-meal-notBind-list.do?meal_id='+param,
                 maxmin: true,
                 success: function (layer, index) {
-                    var iframe = window['layui-layer-iframe' + index];
-                    iframe.child("")
+                    // var iframe = window['layui-layer-iframe' + index];
+                    // iframe.child("")
                 }
             });
             layer.full(index);
@@ -179,19 +186,6 @@ layui.use(['jquery', 'table', 'layer'], function () {
                 });
                 layer.full(index);
                 break;
-            case "bind":
-                var index = layer.open({
-                    type: 2,
-                    title: "绑定信息",
-                    content: '/to-meal-bind.do?meal_id='+data.meal_id,
-                    maxmin: true,
-                    success: function (layer, index) {
-                        // var iframe = window['layui-layer-iframe' + index];
-                        // iframe.child(data);
-                    }
-                });
-                layer.full(index);
-                break;
 
             case "del":
                 layer.confirm('真的删除行么？', function (index) {
@@ -200,9 +194,9 @@ layui.use(['jquery', 'table', 'layer'], function () {
                     layer.close(index);
                     /* activeByType('removeEmptyTableCache');*/
                     $.ajax({
-                        url: '/del-meal.do',
+                        url: '/del-bind.do',
                         type: 'POST',
-                        data: {"meal_id": data.meal_id}
+                        data: {"meal_bind_id": data.meal_bind_id}
                     }).done(function (message) {
                         var json = eval("(" + message + ")")
                         if (json.code == "success") {

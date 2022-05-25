@@ -163,6 +163,24 @@ public class GoodsService extends BaseService<Goods, GoodsMapper> {
     }
 
 
+
+
+    /**
+     *
+     * @param list
+     * @return
+     * @throws Exception
+     */
+    public List<Map<String, Object>> handleListImageData(List<Map<String, Object>> list) throws Exception{
+        if(!CollectionUtils.isEmpty(list)){
+            for(Map<String ,Object> map : list){
+                map.put("goods_img",this.handleImageObject(map));
+                System.out.println();
+            }
+        }
+        return list;
+    }
+
     /**
      *
      * @param map

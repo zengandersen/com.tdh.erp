@@ -6,6 +6,7 @@ import com.tdh.common.*;
 
 import com.tdh.pojo.Meal;
 import com.tdh.pojo.User;
+import com.tdh.service.MealBindService;
 import com.tdh.service.MealService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +25,8 @@ public class MealController extends BaseController {
     @Resource
     private MealService mealService;
 
-
+    @Resource
+    private MealBindService mealBindService;
     /**
      * 获取列表信息
      *
@@ -98,6 +100,7 @@ public class MealController extends BaseController {
     public String del(HttpServletRequest request) {
         try {
             mealService.delInfoServ(request.getParameter("meal_id"));
+            mealBindService.delMealBindByIdServ(request.getParameter("meal_id"));
             return ReturnUtils.ReturnObj(ReturnUtils.ReturnParam.success, ReturnUtils.ReturnParam.success_msg, "");
         } catch (Exception e) {
             return ReturnUtils.ReturnObj(ReturnUtils.ReturnParam.fail, ReturnUtils.ReturnParam.exception_msg, "");

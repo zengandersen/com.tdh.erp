@@ -107,4 +107,14 @@
         delete from sys_repertory where repertory_id = #{repertoryId}
     </delete>
 
+
+
+
+    <select id = "queryRepertoryBindInfoById" parameterType="String" resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+      select repertory_id,goods_id from sys_repertory where repertory_id in
+        <foreach collection="repertoryIds" item="req_id" separator="," open="(" close=")">
+            #{req_id}
+        </foreach>
+    </select>
+
 </mapper>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tdh.mapper.MealBindResMapper">
+
+    <select id="queryRepertoryInfoAll" parameterType="String" resultType="com.tdh.pojo.MealBindRes">
+        select * from (select (select b.factory_name
+        from sys_goods a
+        left join sys_factory b
+        on b.factory_id = a.factory_id
+        where a.goods_id = t.goods_id) as factory_name,
+        (select b.factory_id
+        from sys_goods a
+        left join sys_factory b
+        on b.factory_id = a.factory_id
+        where a.goods_id = t.goods_id) as factory_id,
+        t.repertory_id,
+        t.goods_id,
+        t.goods_name,
+        (select a.goods_img from sys_goods a where a.goods_id = t.goods_id) as goods_img,
+        (select a.goods_code from sys_goods a where a.goods_id = t.goods_id) as goods_code,
+        t.total,
+        t.warning_num,
+        t.create_user,
+        t.create_time,
+        t.update_user,
+        t.update_time,
+        t.remark
+        from sys_repertory t
+        where 1 = 1)
+        where 1=1
+        <if test="searchName!=null and searchName!=''">
+            and
+            (
+            factory_name like CONCAT(CONCAT('%',#{searchName}),'%')
+            OR
+            goods_name like CONCAT(CONCAT('%',#{searchName}),'%')
+            )
+        </if>
+        order by factory_name
+    </select>
+</mapper>

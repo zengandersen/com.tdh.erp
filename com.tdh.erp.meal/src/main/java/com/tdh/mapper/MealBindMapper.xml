@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tdh.mapper.MealBindMapper">
+    <insert id="insert" parameterType="com.tdh.pojo.Meal" flushCache="true"
+            statementType="PREPARED">
+        insert into sys_meal_bind(
+        <if test="mealBindId!=null">meal_bind_id,</if>
+        <if test="mealId!=null">meal_id,</if>
+        <if test="repertoryId!=null">repertory_id,</if>
+        <if test="goodsId!=null">goods_id,</if>
+        <if test="createUser!=null">create_user,</if>
+        create_time
+        )values(
+        <if test="mealBindId!=null">#{mealBindId},</if>
+        <if test="mealId!=null">#{mealId},</if>
+        <if test="repertoryId!=null">#{repertoryId},</if>
+        <if test="goodsId!=null">#{goodsId},</if>
+        <if test="createUser!=null">#{createUser},</if>
+        sysdate
+        )
+    </insert>
+
+    <select id="queryMealBindInfoById" parameterType="String"
+            resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+        select t.meal_bind_id,
+       t.meal_id,
+       t.repertory_id,
+       (select a.total from sys_repertory a where a.repertory_id = t.repertory_id) as total,
+       t.goods_id,
+       (select c.factory_name from sys_goods b
+        left join sys_factory c on c.factory_id = b.factory_id
+        where b.goods_id = t.goods_id) as factory_name,
+            (select c.factory_code from sys_goods b
+        left join sys_factory c on c.factory_id = b.factory_id
+        where b.goods_id = t.goods_id) as factory_code,
+       (select b.goods_name from sys_goods b where b.goods_id = t.goods_id) as goods_name,
+       (select b.goods_code from sys_goods b where b.goods_id = t.goods_id) as goods_code,
+       (select b.goods_img from sys_goods b where b.goods_id = t.goods_id) as goods_img,
+       (select b.purch_price from sys_goods b where b.goods_id = t.goods_id) as purch_price,
+       (select b.unit_price from sys_goods b where b.goods_id = t.goods_id) as unit_price,
+       t.create_time,
+       t.create_user,
+       t.update_time,
+       t.update_user
+       from sys_meal_bind t
+       where meal_id = #{mealId}
+    </select>
+
+    <delete id="delMealBindById" parameterType="String" flushCache="true">
+        delete from sys_meal_bind where meal_id = #{mealId}
+    </delete>
+
+    <delete id="delMealBindInfoByBindId" parameterType="String" flushCache="true">
+                delete from sys_meal_bind where meal_bind_id = #{mealBindId}
+    </delete>
+
+    <select id="queryBindComplateDataByMealId" parameterType="String"
+            resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+        select repertory_id from sys_meal_bind where meal_id = #{mealId}
+    </select>
+
+</mapper>
