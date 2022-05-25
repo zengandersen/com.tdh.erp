@@ -13,6 +13,7 @@ import org.springframework.util.CollectionUtils;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Clob;
+import java.time.Clock;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -111,7 +112,7 @@ public class GoodsService extends BaseService<Goods, GoodsMapper> {
     public Map<String ,Object> queryGoodsDetailByIdServ(String goodsId) throws Exception{
         Map<String ,Object> result = goodsMapper.queryGoodsInfoById(goodsId);
         if(StringUtils.isNotEmpty(String.valueOf(result.get("goods_img")))){
-            String strImg = this.handleImageObject(result);
+            String strImg = ClobUtils.handleGoodsImageObject(result);
             result.put("goods_img",strImg);
         }
         if(CollectionUtils.isEmpty(result)){
@@ -155,7 +156,7 @@ public class GoodsService extends BaseService<Goods, GoodsMapper> {
         List<Map<String ,Object>> list = pageList.getDataList();
         if(!CollectionUtils.isEmpty(list)){
             for(Map<String ,Object> map : list){
-                map.put("goods_img",this.handleImageObject(map));
+                map.put("goods_img",ClobUtils.handleGoodsImageObject(map));
                 System.out.println();
             }
         }
@@ -174,23 +175,14 @@ public class GoodsService extends BaseService<Goods, GoodsMapper> {
     public List<Map<String, Object>> handleListImageData(List<Map<String, Object>> list) throws Exception{
         if(!CollectionUtils.isEmpty(list)){
             for(Map<String ,Object> map : list){
-                map.put("goods_img",this.handleImageObject(map));
+                map.put("goods_img",ClobUtils.handleGoodsImageObject(map));
                 System.out.println();
             }
         }
         return list;
     }
 
-    /**
-     *
-     * @param map
-     * @return
-     * @throws Exception
-     */
-    public String handleImageObject(Map<String ,Object> map )throws Exception{
-        String goods_img = ImgUtils.clobToString((Clob) map.get("goods_img"));
-        return goods_img;
-    }
+
 
 
     /**

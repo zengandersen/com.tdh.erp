@@ -41,4 +41,7 @@ public class Meal extends QueryBean {
 
     @JsonProperty("remark")
     private String remark;
+
+    @JsonProperty("meal_img")
+    private String mealImg;
 }

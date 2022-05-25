@@ -89,6 +89,9 @@ layui.use(['jquery', 'table', 'layer'], function () {
             {field: 'meal_name', title: '套餐名称'},
             {field: 'meal_code', title: '套餐编码'},
             {field: 'meal_spec', title: '套餐规格'},
+            {field: 'goods_img', title: '套餐图片',templet: function(d){
+                    return ' <div><img src="'+d.meal_img+'" style="width: 50px; height: 50px;" onclick="showBigImage(this)"></div>';
+                }},
             {field: 'meal_price', title: '套餐价格'},
             {field: 'rep_totle', title: '套餐剩余数量'},
 
@@ -103,7 +106,17 @@ layui.use(['jquery', 'table', 'layer'], function () {
             layer.closeAll();
         }
     });
-
+    showBigImage = function (e) {
+        console.log(e);
+        layer.open({
+            type: 1,
+            title: false,
+            closeBtn: 1,
+            shadeClose: true, //点击阴影关闭
+            area: [$(e).width + 'px', $(e).height + 'px'], //宽高
+            content: "<img src=" + $(e).attr('src') + " />"
+        });
+    }
     /*定义事件集合*/
     var active = {
         getInfo: function () {

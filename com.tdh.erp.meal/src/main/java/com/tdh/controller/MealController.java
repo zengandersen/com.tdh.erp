@@ -6,6 +6,7 @@ import com.tdh.common.*;
 
 import com.tdh.pojo.Meal;
 import com.tdh.pojo.User;
+import com.tdh.service.GoodsService;
 import com.tdh.service.MealBindService;
 import com.tdh.service.MealService;
 import org.apache.commons.lang.StringUtils;
@@ -27,6 +28,9 @@ public class MealController extends BaseController {
 
     @Resource
     private MealBindService mealBindService;
+
+    @Resource
+    private GoodsService goodsService;
     /**
      * 获取列表信息
      *
@@ -43,6 +47,7 @@ public class MealController extends BaseController {
             params.setCurPage(CommonUtil.getPage(request));
             params.setPageSize(CommonUtil.getLimit(request));
             PageList<Map<String, Object>> pageList = mealService.selectPageMap(params);
+            mealService.handlePageListImageData(pageList);
             String result = ReturnUtils.ReturnPageObj(pageList.getDataList(), pageList.getCount());
             return result;
         } catch (Exception e) {

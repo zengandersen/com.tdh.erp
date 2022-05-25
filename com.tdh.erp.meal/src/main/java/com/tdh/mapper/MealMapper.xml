@@ -12,6 +12,7 @@
         <if test="mealPrice!=null">meal_price,</if>
         <if test="repTotle!=null">rep_totle,</if>
         <if test="remark!=null">remark,</if>
+        <if test="mealImg!=null">meal_img,</if>
         <if test="createUser!=null">create_user,</if>
         create_time
         )values(
@@ -22,6 +23,7 @@
         <if test="mealPrice!=null">${mealPrice},</if>
         <if test="repTotle!=null">${repTotle},</if>
         <if test="remark!=null">#{remark},</if>
+        <if test="mealImg!=null">#{mealImg},</if>
         <if test="createUser!=null">#{createUser},</if>
         sysdate
         )
@@ -72,6 +74,7 @@
        t.meal_spec,
        t.meal_price,
        t.rep_totle,
+       t.meal_img,
        t.remark
         from sys_meal t where t.meal_id = #{mealId}
     </select>
@@ -85,6 +88,7 @@
         <if test="mealSpec!=null">a.meal_spec= #{mealSpec},</if>
         <if test="mealPrice!=null">a.meal_price = ${mealPrice},</if>
         <if test="repTotle!=null">a.rep_totle= ${repTotle},</if>
+        <if test="mealImg!=null">a.meal_img= #{mealImg},</if>
         a.update_user = #{updateUser},
         a.update_time = sysdate
         where a.meal_id = #{mealId}
