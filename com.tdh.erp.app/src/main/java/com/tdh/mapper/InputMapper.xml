@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tdh.mapper.InputMapper">
+    <insert id="insert" parameterType="com.tdh.pojo.Input" flushCache="true"
+            statementType="PREPARED">
+        insert into app_input(
+        <if test="appId!=null">app_id,</if>
+        <if test="factoryId!=null">factory_id,</if>
+        <if test="goodsId!=null">goods_id,</if>
+        <if test="mealId!=null">meal_id,</if>
+        <if test="repertoryId!=null">repertory_id,</if>
+        <if test="goodsName!=null">goods_name,</if>
+        <if test="goodsCode!=null">goods_code,</if>
+        <if test="mealName!=null">meal_name,</if>
+        <if test="mealCode!=null">meal_code,</if>
+        <if test="inputDate!=null">input_date,</if>
+        <if test="inputNum!=null">input_num,</if>
+        <if test="inputPrice!=null">input_price,</if>
+        <if test="isSupplement!=null">is_supplement,</if>
+        <if test="isReturned!=null">is_returned,</if>
+        <if test="consumerId!=null">consumer_id,</if>
+        <if test="remark!=null">remark,</if>
+        <if test="createUser!=null">create_user,</if>
+        create_time
+        )values(
+        <if test="appId!=null">#{appId},</if>
+        <if test="factoryId!=null">#{factoryId},</if>
+        <if test="goodsId!=null">#{goodsId},</if>
+        <if test="mealId!=null">#{mealId},</if>
+        <if test="repertoryId!=null">#{repertoryId},</if>
+        <if test="goodsName!=null">#{goodsName},</if>
+        <if test="goodsCode!=null">#{goodsCode},</if>
+        <if test="mealName!=null">#{mealName},</if>
+        <if test="mealCode!=null">#{mealCode},</if>
+        <if test="inputDate!=null">to_date(&apos;${inputDate}&apos;,'yyyy-mm-dd hh24:mi:ss')</if>
+        <if test="inputNum!=null">${inputNum},</if>
+        <if test="inputPrice!=null">${inputPrice},</if>
+        <if test="isSupplement!=null">${isSupplement},</if>
+        <if test="isReturned!=null">${isReturned},</if>
+        <if test="consumerId!=null">#{consumer_id},</if>
+        <if test="remark!=null">#{remark},</if>
+        <if test="createUser!=null">#{create_user},</if>
+        sysdate
+        )
+    </insert>
+
+    <select id="selectMap" parameterType="Map"
+            resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+        select tb.*,
+        (select u.user_name from sys_user u where u.user_id=tb.create_user) as create_by_transformation,
+        (select u.user_name from sys_user u where u.user_id=tb.update_user) as update_by_transformation
+        from app_input tb
+        where 1 = 1
+        <if test="p.goodsName!=null and p.goodsName!=''">
+            and
+            (
+            tb.meal_code like CONCAT(CONCAT('%',#{p.goodsName}),'%')
+            OR
+            tb.meal_name like CONCAT(CONCAT('%',#{p.goodsName}),'%')
+            OR
+            tb.goods_code like CONCAT(CONCAT('%',#{p.goodsName}),'%')
+            OR
+            tb.goods_name like CONCAT(CONCAT('%',#{p.goodsName}),'%')
+            )
+        </if>
+        order by tb.create_time desc
+    </select>
+
+
+    <select id="countMap" parameterType="Map" resultType="Long">
+        select count(1) as totalCount
+        from app_input tb
+        where 1 = 1
+        <if test="p.goodsName!=null and p.goodsName!=''">
+            and
+            (
+            tb.meal_code like CONCAT(CONCAT('%',#{p.goodsName}),'%')
+            OR
+            tb.meal_name like CONCAT(CONCAT('%',#{p.goodsName}),'%')
+            OR
+            tb.goods_code like CONCAT(CONCAT('%',#{p.goodsName}),'%')
+            OR
+            tb.goods_name like CONCAT(CONCAT('%',#{p.goodsName}),'%')
+            )
+        </if>
+        order by tb.create_time desc
+    </select>
+
+
+    <update id="updateInputById" parameterType="com.tdh.pojo.Input" flushCache="true"
+            statementType="PREPARED">
+        update app_input a set
+        <if test="factoryId!=null">a.factory_id = #{factoryId},</if>
+        <if test="goodsId!=null">a.goods_id = #{goodsId},</if>
+        <if test="mealId!=null">a.mealId= #{mealId},</if>
+        <if test="repertoryId!=null">a.repertory_id = #{repertoryId},</if>
+        <if test="goodsName!=null">a.goods_name= #{goodsName},</if>
+        <if test="goodsCode!=null">a.goods_code= #{goodsCode},</if>
+        <if test="mealName!=null">a.meal_name= #{mealName},</if>
+        <if test="mealCode!=null">a.meal_code= #{mealCode},</if>
+        <if test="inputDate!=null">a.input_date= to_date(&apos;${inputDate}&apos;,'yyyy-mm-dd hh24:mi:ss'),</if>
+        <if test="inputNum!=null">a.input_num= ${inputNum},</if>
+        <if test="inputPrice!=null">a.input_price= ${inputPrice},</if>
+        <if test="isSupplement!=null">a.is_supplement= ${isSupplement},</if>
+        <if test="isReturned!=null">a.is_returned= ${isReturned},</if>
+        <if test="consumerId!=null">a.consumer_id= #{consumerId},</if>
+        <if test="remark!=null">a.remark= #{remark},</if>
+        a.update_user = #{updateUser},
+        a.update_time = sysdate
+        where a.app_id = #{appId}
+    </update>
+
+
+    <delete id="delInputById" parameterType="String" flushCache="true">
+        delete from app_input where app_id in
+        <foreach collection="appIdArr" item="req_id" separator="," open="(" close=")">
+            #{req_id}
+    </foreach>
+    </delete>
+
+    <select id="queryInputDetailInfoById" parameterType="String"  resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+        select t.app_id,
+       t.factory_id,
+       t.goods_id,
+       t.meal_id,
+       t.repertory_id,
+       t.goods_name,
+       t.goods_code,
+       t.meal_name,
+       t.meal_code,
+       t.input_date,
+       t.input_num,
+       t.input_price,
+       t.is_supplement,
+       t.is_returned,
+       t.consumer_id,
+       t.remark,
+       t.create_time,
+       t.create_user,
+       t.update_time,
+       t.update_user from app_input t
+       where t.app_id = #{app_id}
+    </select>
+</mapper>
