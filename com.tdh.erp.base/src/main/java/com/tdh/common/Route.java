@@ -26,6 +26,7 @@ public class Route {
         public static final String QUERY_DETAIL = "/query-goods-detail.do";
         public static final String UPLOAD_GOODS = "/upload-goods.do";
         public static final String QUERY_GOODS_BY_FACOTRY = "/query-goods-by-factory.do";
+        public static final String QUERY_GOODS_BY_FACTORY_PAGELIST = "/query-goods-by-factory-pageList.do";
         public static final String QUERY_GOODSENUM_BY_ID = "/query-goodsenum-by-id.do";
         public static final String TO_GOODS_URL = "base/goods/goods-list";
         public static final String TO_GOODS_DETAIL_URL = "base/goods/goods-edit";

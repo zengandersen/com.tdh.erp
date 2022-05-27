@@ -131,7 +131,7 @@ public class GoodsController extends BaseController {
     }
 
     @RequestMapping(value = Route.GoodsUrl.QUERY_GOODS_BY_FACOTRY,method = {RequestMethod.POST})
-    public String queryGoodsByFactory(HttpServletRequest request){
+    public String queryGoodsByFactoryPageList(HttpServletRequest request){
         try{
             List<Map<String ,Object>> result = goodsService.queryGoodsEnumByFactoryInfo(Config.integerClass.one,request.getParameter("factoryId"));
             return ReturnUtils.ReturnObj(ReturnUtils.ReturnParam.success, ReturnUtils.ReturnParam.success_msg, result);
@@ -139,6 +139,21 @@ public class GoodsController extends BaseController {
             return ReturnUtils.ReturnObj(ReturnUtils.ReturnParam.fail, ReturnUtils.ReturnParam.exception_msg, "");
         }
     }
+
+
+    @RequestMapping(value = Route.GoodsUrl.QUERY_GOODS_BY_FACTORY_PAGELIST,method = {RequestMethod.POST})
+    public String queryGoodsByFactory(HttpServletRequest request){
+        try{
+            List<Map<String ,Object>> result = goodsService.queryGoodsEnumAndImgByFactoryIdServ(Config.integerClass.one,request.getParameter("factoryId"));
+            goodsService.handleListImageData(result);
+            return ReturnUtils.ReturnPageObj(result,result.size());
+        }catch(Exception e){
+            return ReturnUtils.ReturnObj(ReturnUtils.ReturnParam.fail, ReturnUtils.ReturnParam.exception_msg, "");
+        }
+    }
+
+
+
 
 
     @RequestMapping(value = Route.GoodsUrl.QUERY_GOODSENUM_BY_ID,method = {RequestMethod.POST})

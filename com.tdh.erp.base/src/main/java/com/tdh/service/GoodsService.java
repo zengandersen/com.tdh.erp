@@ -147,6 +147,21 @@ public class GoodsService extends BaseService<Goods, GoodsMapper> {
     }
 
     /**
+     * 通过厂商获取对应的商品信息
+     * @param status
+     * @param factoryId
+     * @return
+     * @throws Exception
+     */
+    public List<Map<String ,Object>> queryGoodsEnumAndImgByFactoryIdServ(int status,String factoryId) throws Exception{
+        List<Map<String ,Object>> result = goodsMapper.queryGoodsEnumAndImgByFactoryId(status,factoryId);
+        if(CollectionUtils.isEmpty(result)){
+            result = new ArrayList<>();
+        }
+        return result;
+    }
+
+    /**
      *
      * @param pageList
      * @return
