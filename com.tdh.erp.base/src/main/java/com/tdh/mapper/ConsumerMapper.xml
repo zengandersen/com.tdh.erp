@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tdh.mapper.ConsumerMapper">
+
+    <insert id="insert" parameterType="com.tdh.pojo.Consumer" flushCache="true"
+            statementType="PREPARED">
+        insert into sys_consumer(
+        <if test="consumerId!=null">consumer_id,</if>
+        <if test="name!=null">name,</if>
+        <if test="sex!=null">sex,</if>
+        <if test="tel!=null">tel,</if>
+        <if test="province!=null">province,</if>
+        <if test="addr!=null">addr,</if>
+        <if test="repeatPurchaseRate!=null">repeat_purchase_rate,</if>
+        <if test="isReturn!=null">is_return,</if>
+        <if test="isFriend!=null">is_friend,</if>
+        <if test="isBlack!=null">is_black,</if>
+        <if test="remark!=null">remark,</if>
+        <if test="createUser!=null">create_user,</if>
+        create_time
+        )values(
+        <if test="consumerId!=null">#{consumerId},</if>
+        <if test="name!=null">#{name},</if>
+        <if test="sex!=null">${sex},</if>
+        <if test="tel!=null">#{tel},</if>
+        <if test="province!=null">#{province},</if>
+        <if test="addr!=null">#{addr},</if>
+        <if test="repeatPurchaseRate!=null">${repeatPurchaseRate},</if>
+        <if test="isReturn!=null">${isReturn},</if>
+        <if test="isFriend!=null">${isFriend},</if>
+        <if test="isBlack!=null">${isBlack},</if>
+        <if test="remark!=null">#{remark},</if>
+        <if test="createUser!=null">#{createUser},</if>
+        sysdate
+        )
+    </insert>
+
+
+    <select id="selectMap" parameterType="Map"
+            resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+        select tb.*,
+        (select u.user_name from sys_user u where u.user_id=tb.create_user) as create_by_transformation,
+        (select u.user_name from sys_user u where u.user_id=tb.update_user) as update_by_transformation
+        from sys_consumer tb
+        where 1 = 1
+        <if test="p.name!=null and p.name!=''">
+            and
+            (
+            tb.name like CONCAT(CONCAT('%',#{p.name}),'%')
+            or
+            tb.province like CONCAT(CONCAT('%',#{p.name}),'%')
+            )
+        </if>
+        order by tb.create_time desc
+    </select>
+
+
+    <select id="countMap" parameterType="Map" resultType="Long">
+        select count(1) as totalCount
+        from sys_consumer tb
+        where 1 = 1
+        <if test="p.name!=null and p.name!=''">
+            and
+            (
+            tb.name like CONCAT(CONCAT('%',#{p.name}),'%')
+            or
+            tb.province like CONCAT(CONCAT('%',#{p.name}),'%')
+            )
+        </if>
+        order by tb.create_time DESC
+    </select>
+
+    <select id="queryConsumerDetailById" parameterType="String"  resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+        select * from sys_consumer where consumer_id = #{consumerId}
+    </select>
+
+    <select id="queryConsumerEnumAll" parameterType="String" resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+        select consumer_id,name,addr,is_return,is_black,is_friend from sys_consumer where 1=1
+    </select>
+
+
+
+    <update id = "updateConsumerInfoById"  parameterType="com.tdh.pojo.Consumer" flushCache="true"
+            statementType="PREPARED">
+        update sys_consumer a set
+        <if test="name!=null">a.name = #{name},</if>
+        <if test="sex!=null">a.sex = ${sex},</if>
+        <if test="tel!=null">a.tel = #{tel},</if>
+        <if test="province!=null">a.province = #{province},</if>
+        <if test="addr!=null">a.addr = #{addr},</if>
+        <if test="repeatPurchaseRate!=null">a.repeat_purchase_rate = ${repeatPurchaseRate},</if>
+        <if test="isReturn!=null">a.is_return=${isReturn},</if>
+        <if test="isFriend!=null">a.is_friend=${isFriend},</if>
+        <if test="isBlack!=null">a.is_black = ${isBlack},</if>
+        <if test="remark!=null">a.remark = #{remark},</if>
+        a.update_user = #{updateUser},
+        a.update_time = sysdate
+        where a.consumer_id = #{consumerId}
+    </update>
+
+
+    <delete id = "deleteConsumerInfoById" parameterType="String" flushCache="true">
+        delete from sys_consumer where consumer_id = #{consumerId}
+    </delete>
+</mapper>

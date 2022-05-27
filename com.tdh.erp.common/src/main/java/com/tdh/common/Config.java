@@ -137,4 +137,12 @@ public class Config {
         public static final String INSERT = "insert";
     }
 
+
+    public static class checkBoxStatus{
+        public static final String on = "on";
+        public static final String off = "off";
+        public static final int open = 1;
+        public static final int close = 2;
+    }
+
 }

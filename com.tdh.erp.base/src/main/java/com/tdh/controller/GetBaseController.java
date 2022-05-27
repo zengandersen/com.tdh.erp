@@ -30,4 +30,13 @@ public class GetBaseController {
 
     @RequestMapping(value = Route.GoodsUrl.TO_GOODS_ADD,method = {RequestMethod.GET})
     public String toGoodsAdd(){return Route.GoodsUrl.TO_GOODS_ADD_URL;}
+
+    @RequestMapping(value =Route.ConsumerUrl.TO_CONSUMER,method = {RequestMethod.GET})
+    public String toConsumerList(){return Route.ConsumerUrl.TO_CONSUMER_URL;}
+
+    @RequestMapping(value =Route.ConsumerUrl.TO_CONSUMER_ADD,method = {RequestMethod.GET})
+    public String toConsumerAdd(){return Route.ConsumerUrl.TO_CONSUMER_ADD_URL;}
+
+    @RequestMapping(value =Route.ConsumerUrl.TO_CONSUMER_EDIT,method = {RequestMethod.GET})
+    public String toConsumerEdit(){return Route.ConsumerUrl.TO_CONSUMER_EDIT_URL;}
 }
