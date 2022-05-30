@@ -40,6 +40,9 @@ public class InputService extends BaseService<Input, InputMapper> {
     @Resource
     private LogMovingPinMapper logMovingPinMapper;
 
+    @Resource
+    private LogMovingMealMapper logMovingMealMapper;
+
 
 
     /**
@@ -172,7 +175,7 @@ public class InputService extends BaseService<Input, InputMapper> {
             }
             Map<String ,Object> map = new HashMap<>();
             map.put("meal_id",str);
-            map.put("rep_total",index);
+            map.put("rep_totle",index);
             result.add(map);
         }
         return result;
@@ -218,9 +221,10 @@ public class InputService extends BaseService<Input, InputMapper> {
                 logMovingPinMapper.insert(lp);
                 //判断该入库动账记录的商品是否有套餐， 有套餐则录入套餐记录表
                 for (Map<String ,Object> mealDeMap : mealDetailList){
-                    if(String.valueOf(map.get("goods_id")).equals(mealDeMap.get("goods_id"))){
+                    if(String.valueOf(map.get("goods_id")).equals(String.valueOf(mealDeMap.get("goods_id")))){
                         //如果有符合条件的套餐信息 则将信息写入动账套餐信息表
-                        handleMovingMealParam(map,user,inputId,"",pinId);
+                        LogMovingMeal lm = handleMovingMealParam(mealDeMap,user,inputId,"",pinId);
+                        logMovingMealMapper.insert(lm);
                     }
                 }
             }
@@ -243,30 +247,30 @@ public class InputService extends BaseService<Input, InputMapper> {
         input.setRepertoryId(String.valueOf(map.get("repertory_id")));
         input.setGoodsName(String.valueOf(map.get("goods_name")));
         input.setGoodsCode(String.valueOf(map.get("goods_code")));
-        input.setInputDate(new SimpleDateFormat("yyyy-mm-dd").parse(String.valueOf(object.get("input_date"))));
+        input.setInputDate(String.valueOf(object.get("input_date")));
         input.setInputNum(Integer.parseInt(String.valueOf(object.get("input_num"))));
         input.setInputPrice(Integer.parseInt(String.valueOf(object.get("input_price"))));
-        if(StringUtils.isNotEmpty(String.valueOf(object.get("supplement")))&&
+        if(null!=object.get("supplement")&&
                 Config.checkBoxStatus.on.equals(String.valueOf(object.get("supplement")))){
             input.setIsSupplement(Config.appStatus.yes);
         }else{
             input.setIsSupplement(Config.appStatus.no);
         }
 
-        if(StringUtils.isNotEmpty(String.valueOf(object.get("returned")))&&
+        if(null!=object.get("returned")&&
                 Config.checkBoxStatus.on.equals(String.valueOf(object.get("returned")))){
-            input.setIsSupplement(Config.appStatus.yes);
+            input.setIsReturned(Config.appStatus.yes);
         }else{
-            input.setIsSupplement(Config.appStatus.no);
+            input.setIsReturned(Config.appStatus.no);
         }
 
-        if(StringUtils.isNotEmpty(String.valueOf(object.get("consumer_id")))){
+        if(null!=object.get("consumer_id")){
             input.setConsumerId(String.valueOf(object.get("consumer_id")));
         }else{
             input.setConsumerId("");
         }
 
-        if(StringUtils.isNotEmpty(String.valueOf(object.get("remark")))){
+        if(null!=object.get("remark")){
             input.setRemark(String.valueOf(object.get("remark")));
         }else{
             input.setRemark("");
@@ -292,51 +296,55 @@ public class InputService extends BaseService<Input, InputMapper> {
         LogMovingPin lp = new LogMovingPin();
         lp.setId(pinId);
         if(StringUtils.isEmpty(inputId)){
-            lp.setInputId(inputId);
-        }else{
             lp.setInputId("");
+        }else{
+            lp.setInputId(inputId);
         }
         if(StringUtils.isEmpty(outputId)){
-            lp.setInputId(outputId);
+            lp.setOutputId("");
         }else{
-            lp.setInputId("");
+            lp.setOutputId(outputId);
         }
         lp.setFactoryId(String.valueOf(map.get("factory_id")));
         lp.setGoodsId(String.valueOf(map.get("goods_id")));
         lp.setGoodsName(String.valueOf(map.get("goods_name")));
         lp.setGoodsCode(String.valueOf(map.get("goods_code")));
-        lp.setGoodsImg(String.valueOf(map.get("goods_img")));
-        if(StringUtils.isNotEmpty(String.valueOf(object.get("consumer_id")))){
+        String goodsImg = ClobUtils.handleGoodsImageObject(map);
+        lp.setGoodsImg(goodsImg);
+        if(null!=object.get("consumer_id")){
             lp.setConsumerId(String.valueOf(object.get("consumer_id")));
         }else{
             lp.setConsumerId("");
         }
         lp.setIsInput(Config.appStatus.yes);
         lp.setIsOutput(Config.appStatus.no);
-        if(StringUtils.isNotEmpty(String.valueOf(object.get("is_returned")))){
+        if(null != object.get("returned")){
             lp.setIsReturned(Config.appStatus.yes);
         }else{
             lp.setIsReturned(Config.appStatus.no);
         }
-        if(StringUtils.isNotEmpty(String.valueOf(object.get("is_supplement")))){
+        if(null != object.get("supplement")){
             lp.setIsSupplement(Config.appStatus.yes);
         }else{
             lp.setIsSupplement(Config.appStatus.no);
         }
-        if(StringUtils.isNotEmpty(String.valueOf(object.get("is_gift")))){
-            lp.setIsSupplement(Config.appStatus.yes);
+        if(null != object.get("is_gift")){
+            lp.setIsGift(Config.appStatus.yes);
         }else{
-            lp.setIsSupplement(Config.appStatus.no);
+            lp.setIsGift(Config.appStatus.no);
         }
-        if(StringUtils.isNotEmpty(String.valueOf(object.get("is_click_farming")))){
-            lp.setIsSupplement(Config.appStatus.yes);
+        if(null != object.get("is_click_farming")){
+            lp.setIsClickFarming(Config.appStatus.yes);
         }else{
-            lp.setIsSupplement(Config.appStatus.no);
+            lp.setIsClickFarming(Config.appStatus.no);
         }
-        lp.setPinDate(new SimpleDateFormat("yyyy-mm-dd").parse(String.valueOf(object.get("input_date"))));
+        lp.setPinDate(String.valueOf(object.get("input_date")));
         lp.setPinPrice(new BigDecimal(String.valueOf(object.get("input_price"))));
-        lp.setRemark(String.valueOf(object.get("remark")));
-        lp.setCreateUser(user.getUser_code());
+        if(null!=object.get("remark")){
+            lp.setRemark(String.valueOf(object.get("remark")));
+        }else{
+            lp.setRemark("");
+        }        lp.setCreateUser(user.getUser_code());
         return lp;
     }
 
@@ -349,7 +357,7 @@ public class InputService extends BaseService<Input, InputMapper> {
      * @param pinId
      * @return
      */
-    public LogMovingMeal handleMovingMealParam(Map<String ,Object> map , User user, String inputId, String outputId,String pinId){
+    public LogMovingMeal handleMovingMealParam(Map<String ,Object> map , User user, String inputId, String outputId,String pinId) throws Exception{
         LogMovingMeal lm = new LogMovingMeal();
         lm.setId(CommonUtil.createUUIDNoFlag());
         lm.setPinId(pinId);
@@ -359,14 +367,15 @@ public class InputService extends BaseService<Input, InputMapper> {
             lm.setInputId(inputId);
         }
         if(StringUtils.isEmpty(outputId)){
-            lm.setInputId("");
+            lm.setOutputId("");
         }else{
-            lm.setInputId(outputId);
+            lm.setOutputId(outputId);
         }
         lm.setMealId(String.valueOf(map.get("meal_id")));
         lm.setMealName(String.valueOf(map.get("meal_name")));
         lm.setMealCode(String.valueOf(map.get("meal_code")));
-        lm.setMealImg(String.valueOf(map.get("meal_img")));
+        String mealImg = ClobUtils.handleMealmageObject(map);
+        lm.setMealImg(mealImg);
         lm.setCreateUser(user.getUser_code());
         return lm;
     }

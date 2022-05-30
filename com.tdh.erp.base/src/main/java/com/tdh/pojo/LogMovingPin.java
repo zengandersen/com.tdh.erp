@@ -16,6 +16,9 @@ public class LogMovingPin extends QueryBean{
     @JsonProperty("input_id")
     private String inputId;
 
+    @JsonProperty("output_id")
+    private String outputId;
+
     @JsonProperty("factory_id")
     private String factoryId;
 
@@ -55,7 +58,7 @@ public class LogMovingPin extends QueryBean{
     private int isClickFarming;
 
     @JsonProperty("pin_date")
-    private Date pinDate;
+    private String pinDate;
 
     @JsonProperty("pin_price")
     private BigDecimal pinPrice;

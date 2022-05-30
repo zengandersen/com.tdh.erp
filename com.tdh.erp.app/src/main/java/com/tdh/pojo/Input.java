@@ -37,7 +37,7 @@ public class Input  extends QueryBean {
     private String mealCode;
 
     @JsonProperty("input_date")
-    private Date inputDate;
+    private String inputDate;
 
     @JsonProperty("input_num")
     private int inputNum;

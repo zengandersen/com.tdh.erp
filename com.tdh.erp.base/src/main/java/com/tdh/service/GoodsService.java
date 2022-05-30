@@ -182,7 +182,7 @@ public class GoodsService extends BaseService<Goods, GoodsMapper> {
 
 
     /**
-     *
+     * 将list集合中存在的商品信息 从object
      * @param list
      * @return
      * @throws Exception

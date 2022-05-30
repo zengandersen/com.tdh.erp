@@ -16,13 +16,13 @@
         create_time
         )values(
         <if test="id!=null">#{id},</if>
-        <if test="pinId!=null">#{pin_id},</if>
-        <if test="inputId!=null">#{input_id},</if>
-        <if test="outputId!=null">#{output_id},</if>
-        <if test="mealId!=null">#{meal_id},</if>
-        <if test="mealName!=null">#{meal_name},</if>
-        <if test="mealCode!=null">#{meal_code},</if>
-        <if test="mealImg!=null">#{meal_img},</if>
+        <if test="pinId!=null">#{pinId},</if>
+        <if test="inputId!=null">#{inputId},</if>
+        <if test="outputId!=null">#{outputId},</if>
+        <if test="mealId!=null">#{mealId},</if>
+        <if test="mealName!=null">#{mealName},</if>
+        <if test="mealCode!=null">#{mealCode},</if>
+        <if test="mealImg!=null">#{mealImg},</if>
         sysdate
         )
     </insert>

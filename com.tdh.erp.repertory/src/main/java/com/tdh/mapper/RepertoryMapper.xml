@@ -127,6 +127,9 @@
         (select a.goods_code
         from sys_goods a
         where a.goods_id = t.goods_id) as goods_code,
+        (select a.goods_img
+        from sys_goods a
+        where a.goods_id = t.goods_id) as goods_img,
         t.goods_name,
         t.total,
         t.warning_num,
@@ -134,7 +137,7 @@
         t.create_time,
         t.update_user,
         t.update_time,
-        t.remark from sys_repertory where goods_id IN
+        t.remark from sys_repertory t where goods_id IN
         <foreach collection="goodsIds" item="req_id" separator="," open="(" close=")">
             #{req_id}
         </foreach>

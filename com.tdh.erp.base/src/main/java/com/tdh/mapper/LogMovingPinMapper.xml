@@ -41,7 +41,7 @@
         <if test="isSupplement!=null">${isSupplement},</if>
         <if test="isGift!=null">${isGift},</if>
         <if test="isClickFarming!=null">${isClickFarming},</if>
-        <if test="pinDate!=null">#{pinDate},</if>
+        <if test="pinDate!=null">to_date(&apos;${pinDate}&apos;,'yyyy-mm-dd hh24:mi:ss'),</if>
         <if test="pinPrice!=null">${pinPrice},</if>
         <if test="remark!=null">#{remark},</if>
         <if test="createUser!=null">#{createUser},</if>

@@ -37,6 +37,8 @@ public class ReturnUtils {
         public static final String input_price_can_not_zero_msg = "入库价格不能为0";
         public static final String missing_input_data = "missing_input_data";
         public static final String missing_input_data_msg = "缺少入库日期";
+        public static final String missing_property = "missing_property";
+        public static final String missing_property_msg ="缺少属性标注,请选择对应的入库方式";
     }
     /**
      * 写入日志信息

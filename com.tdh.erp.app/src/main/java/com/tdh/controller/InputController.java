@@ -103,8 +103,11 @@ public class InputController extends BaseController {
         if(StringUtils.isEmpty(String.valueOf(object.get("input_price")))){
             return ReturnUtils.ReturnObj(ReturnUtils.ReturnParam.input_num_can_not_zero, ReturnUtils.ReturnParam.input_price_can_not_zero_msg, "");
         }
-        if(StringUtils.isNotEmpty((String.valueOf(object.get("returned"))))&&StringUtils.isEmpty(String.valueOf(object.get("consumer_id")))){
+        if(null != object.get("returned")&&StringUtils.isEmpty(String.valueOf(object.get("consumer_id")))){
             return ReturnUtils.ReturnObj(ReturnUtils.ReturnParam.missing_consumer, ReturnUtils.ReturnParam.missing_consumer_msg, "");
+        }
+        if(null == object.get("returned") && null == object.get("supplement")){
+            return ReturnUtils.ReturnObj(ReturnUtils.ReturnParam.missing_property, ReturnUtils.ReturnParam.missing_property_msg, "");
         }
         if(StringUtils.isEmpty(String.valueOf(object.get("input_num")))){
             return ReturnUtils.ReturnObj(ReturnUtils.ReturnParam.input_num_can_not_zero, ReturnUtils.ReturnParam.input_price_can_not_zero_msg, "");
