@@ -31,4 +31,6 @@ public interface GoodsMapper extends BaseMapper<Goods> {
 
     public List<Map<String ,Object>> queryGoodsEnumAndImgByFactoryId(@Param("status") int status,
                                                                      @Param("factoryId") String factoryId);
+
+
 }

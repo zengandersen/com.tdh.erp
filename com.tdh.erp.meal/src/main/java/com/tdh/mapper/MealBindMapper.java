@@ -22,4 +22,8 @@ public interface MealBindMapper extends BaseMapper<MealBind> {
 
     public List<Map<String ,Object>> queryBindComplateDataByMealId(@Param("mealId") String mealId);
 
+    public List<Map<String ,Object>> queryMealInfoByGoodsId(@Param("goodsIds")  String [] goodsIds);
+
+    public List<Map<String ,Object>> queryMealInfoAndTotalByMealIdArr(@Param("mealIdArr") String []mealIdArr);
+
 }

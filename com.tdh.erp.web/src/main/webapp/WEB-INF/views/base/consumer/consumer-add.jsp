@@ -67,7 +67,7 @@
 		<div class="layui-input-inline">
 			<input type="text" name="addr"  autocomplete="off" placeholder="请输入地址" class="layui-input">
 		</div>
-		<div class="layui-form-mid layui-word-aux">请务必输入"XX省"信息,以便系统自动获取省份数据</div>
+		<div class="layui-form-mid layui-word-aux">请务必输入"XX省XX市"信息,以便系统自动获取省份数据</div>
 	</div>
 
 	<div class="layui-form-item">

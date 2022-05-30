@@ -59,4 +59,43 @@
         select repertory_id from sys_meal_bind where meal_id = #{mealId}
     </select>
 
+    <select id="queryMealInfoByGoodsId" parameterType="String"
+            resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+        select * from sys_meal_bind where goods_id in
+        <foreach collection="goodsIds" item="req_id" separator="," open="(" close=")">
+            #{req_id}
+        </foreach>
+    </select>
+
+
+    <select id="queryMealInfoAndTotalByMealIdArr" parameterType="String"
+            resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+        select
+        t.meal_bind_id,
+        t.meal_id,
+        (select a.rep_totle from sys_meal a where a.meal_id = t.meal_id) as rep_totle,
+        (select a.meal_img from sys_meal a where a.meal_id = t.meal_id) as meal_img,
+        (select a.meal_code from sys_meal a where a.meal_id = t.meal_id) as meal_code,
+        (select a.meal_name from sys_meal a where a.meal_id = t.meal_id) as meal_name,
+        t.repertory_id,
+        (select b.total from sys_repertory b where b.repertory_id = t.repertory_id) as total,
+        (select b.repertory_id from sys_repertory b where b.repertory_id = t.repertory_id) as repertory_id,
+        t.goods_id,
+        (select c.goods_name from sys_goods c where c.goods_id = t.goods_id) as goods_name,
+        (select c.goods_code from sys_goods c where c.goods_id = t.goods_id) as goods_code,
+        (select c.goods_img from sys_goods c where c.goods_id = t.goods_id) as goods_img,
+        (select c.factory_id from sys_goods c where c.goods_id = t.goods_id) as factory_id,
+        t.create_time,
+        t.create_user,
+        t.update_time,
+        t.update_user
+        from sys_meal_bind t
+        where t.meal_id in
+        <foreach collection="mealIdArr" item="req_id" separator="," open="(" close=")">
+            #{req_id}
+        </foreach>
+    </select>
+
+
+
 </mapper>

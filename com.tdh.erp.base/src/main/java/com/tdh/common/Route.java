@@ -40,7 +40,7 @@ public class Route {
         public static final String DEL = "/del-consumer.do";
         public static final String QUERY_LIST ="/query-consumer-list.do";
         public static final String QUERY_DETAIL = "/query-consumer-detail.do";
-        public static final String QEURY_ENUM = "/query-consumer-enum.do";
+        public static final String QUERY_ENUM = "/query-consumer-enum.do";
         public static final String TO_CONSUMER_EDIT = "/to-consumer-edit.do";
         public static final String TO_CONSUMER_ADD = "/to-consumer-add.do";
         public static final String TO_CONSUMER_EDIT_URL = "base/consumer/consumer-edit";

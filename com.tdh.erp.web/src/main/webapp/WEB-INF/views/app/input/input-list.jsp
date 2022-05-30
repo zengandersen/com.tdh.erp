@@ -46,7 +46,7 @@
                             </button>
 
                             <button type="button" name="btnAdd" class="layui-btn layui-btn-normal" data-type="add"><i
-                                    class="layui-icon layui-icon-add-circle"></i>单一商品入库
+                                    class="layui-icon layui-icon-add-circle"></i>商品入库
                             </button>
                         </div>
                     </div>

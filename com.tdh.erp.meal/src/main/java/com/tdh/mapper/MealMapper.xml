@@ -99,4 +99,19 @@
     </delete>
 
 
+    <select id="queryMealInfoByArr" parameterType="String"
+            resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+        select *
+        from sys_meal
+        where meal_id in (select meal_id from sys_meal_bind where goods_id in
+        <foreach collection="goodsIds" item="req_id" separator="," open="(" close=")">
+            #{req_id}
+        </foreach>
+        )
+    </select>
+
+
+
+
+
 </mapper>

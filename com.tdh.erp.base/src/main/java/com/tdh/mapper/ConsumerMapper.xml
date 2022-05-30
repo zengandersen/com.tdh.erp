@@ -102,4 +102,6 @@
     <delete id = "deleteConsumerInfoById" parameterType="String" flushCache="true">
         delete from sys_consumer where consumer_id = #{consumerId}
     </delete>
+
+
 </mapper>

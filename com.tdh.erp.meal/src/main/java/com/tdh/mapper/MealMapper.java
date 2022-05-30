@@ -18,4 +18,7 @@ public interface MealMapper extends BaseMapper<Meal> {
     public void updateMealById(Meal meal);
 
     public void delMealById(@Param("mealId") String mealId);
+
+    public List<Map<String ,Object>> queryMealInfoByArr(@Param("goodsIds") String [] goodsIds);
+
 }

@@ -145,4 +145,9 @@ public class Config {
         public static final int close = 2;
     }
 
+    public static class appStatus{
+        public static final int yes = 1;
+        public static final int no =0;
+    }
+
 }

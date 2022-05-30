@@ -198,8 +198,6 @@ public class GoodsService extends BaseService<Goods, GoodsMapper> {
     }
 
 
-
-
     /**
      *
      * @param text
@@ -210,5 +208,8 @@ public class GoodsService extends BaseService<Goods, GoodsMapper> {
     public static String replaceLast(String text, String strToReplace, String replaceWithThis) {
         return text.replaceFirst("(?s)" + strToReplace + "(?!.*?" + strToReplace + ")", replaceWithThis);
     }
+
+
+
 
 }

@@ -26,6 +26,20 @@
             <artifactId>com.tdh.erp.system</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-       
+        <dependency>
+            <groupId>com.tdh</groupId>
+            <artifactId>com.tdh.erp.base</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.tdh</groupId>
+            <artifactId>com.tdh.erp.repertory</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.tdh</groupId>
+            <artifactId>com.tdh.erp.meal</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 </project>

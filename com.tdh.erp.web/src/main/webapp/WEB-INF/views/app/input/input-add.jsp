@@ -36,35 +36,35 @@
 </head>
 <body>
 <form class="layui-form layui-form-pane" action="" lay-filter="example">
-	<input type="text" name="meal_id"  style="display: none">
-	<input type="text" name="meal_img" id = "meal_img" style="display: none">
+	<input type="text" name="goods_ids" id = "goods_ids" value=""  style="display: none">
+	<input type="text" name="consumer_ids" id = "consumer_ids" value=""  style="display: none">
 
 	<div class="layui-form-item">
 		<label class="layui-form-label">所属厂商</label>
 		<div class="layui-input-inline" id = "factory_id">
 
 		</div>
-
 	</div>
 
 	<div class="layui-form-item">
-		<label class="layui-form-label">多选</label>
+		<label class="layui-form-label">商品选择</label>
 		<div class="layui-input-inline">
-			<input type="text" name="" placeholder="请输入" autocomplete="off" class="layui-input" id="goods_id" value="" ts-selected="">
-		</div>
-		<div class="layui-form-mid layui-word-aux">本地演示数据，分页选中和其他页一样，这不是BUG</div>
-	</div>
-
-	<div class="layui-form-item">
-		<label class="layui-form-label">入库时间</label>
-		<div class="layui-input-inline">
-			<input type="text" name="input_date" placeholder="请输入套餐编码"  class="layui-input">
+			<input type="text" name="goods_id" placeholder="请输入" autocomplete="off" class="layui-input" id="goods_id" value="" ts-selected="">
 		</div>
 	</div>
+
 	<div class="layui-form-item">
+	<div class="layui-inline">
+		<label class="layui-form-label">入库日期</label>
+		<div class="layui-input-inline">
+			<input type="text" name="input_date" id="input_date" lay-verify="input_date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+		</div>
+	</div>
+	</div>
+		<div class="layui-form-item">
 		<label class="layui-form-label">入库数量</label>
 		<div class="layui-input-inline">
-			<input type="number" name="input_num" placeholder="请输入套餐规格"  class="layui-input">
+			<input type="number" name="input_num" placeholder="0"  class="layui-input">
 		</div>
 	</div>
 
@@ -76,6 +76,19 @@
 	</div>
 
 
+	<div class="layui-form-item">
+		<label class="layui-form-label">属性选择</label>
+		<div class="layui-input-block" id="nature">
+			<input type="checkbox" name="supplement" title="补货入库">
+			<input type="checkbox" name="returned" title="退货入库">
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">退货人信息</label>
+		<div class="layui-input-inline">
+			<input type="text" name="consumer_id" placeholder="请输入" autocomplete="off" class="layui-input" id="consumer_id" value="" ts-selected="">
+		</div>
+	</div>
 	<div class="layui-form-item layui-form-text">
 		<label class="layui-form-label">备注</label>
 		<div class="layui-input-block">
@@ -87,6 +100,7 @@
 	<div class="layui-form-item">
 		<div class="layui-input-block">
 			<button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+			<button class="layui-btn" lay-submit="" lay-filter="demo2">添加退货人信息</button>
 			<button type="reset" class="layui-btn layui-btn-primary">重置</button>
 		</div>
 	</div>
@@ -118,7 +132,9 @@
                                 "input_date":"",
                                 "input_num": "",
                                 "input_price": "",
-                                "remark":""
+                                "remark":"",
+								"goods_id":"",
+								"consumer_id":""
                             })
                             form.render();
 						}
@@ -136,7 +152,13 @@
 		 form = layui.form;
 		  tableSelect = layui.tableSelect;
 		  table = layui.table;
-		//厂商下拉监听
+     //日期
+     laydate.render({
+         elem: '#input_date'
+     });
+
+
+		//消费者下拉监听监听
         form.on('select(factory_id)',function(data){
             var selectId = data.value;
             console.log(selectId);
@@ -153,7 +175,6 @@
                     url: '/query-goods-by-factory-pageList.do?factoryId=' + selectId,
                     cols: [[
                         { type: 'checkbox' },
-                        {field: 'id', title: 'ID'},
                                        {field: 'name', title: '商品名称'},
                                        {field: 'goods_img', title: '商品图片',templet: function(d){
                                                return ' <div><img src="'+d.goods_img+'" style="width: 60px; height: 60px;" onclick="showBigImage(this)"></div>';
@@ -161,11 +182,44 @@
                     ]]
                 },
                 done: function (elem, data) {
-                    var NEWJSON = []
+                    var NEWJSON = [];
+                    var id = [];
                     layui.each(data.data, function (index, item) {
-                        NEWJSON.push(item.name)
+                        NEWJSON.push(item.name);
+                        id.push(item.id)
                     })
                     elem.val(NEWJSON.join(","))
+                    $("#goods_ids").attr('value',id);
+
+                }
+            })
+
+            tableSelect.render({
+                elem: '#consumer_id',
+                searchKey: 'name',
+                checkedKey: 'id',
+                searchPlaceholder: '自定义文字和name',
+                table: {
+                    page:false,
+                    limits: [50, 100, 200],
+                    limit: 50,
+                    method:'post',
+                    url: '/query-consumer-enum.do',
+                    cols: [[
+                        { type: 'radio' },
+                        {field: 'name', title: '客户名称'},
+                        {field: 'addr', title: '客户地址'}
+                    ]]
+                },
+                done: function (elem, data) {
+                    var NEWJSON = [];
+                    var id = [];
+                    layui.each(data.data, function (index, item) {
+                        NEWJSON.push(item.name);
+                        id.push(item.consumer_id)
+                    })
+                    elem.val(NEWJSON.join(","))
+                    $("#consumer_ids").attr('value',id);
                 }
             })
         });
@@ -175,7 +229,7 @@
             // var reqData =  JSON.stringify([data.field], null, 2);
 			var reqData = JSON.stringify(data.field, null, 2);
 			$.ajax({
-                url: '/add-meal.do',
+                url: '/add-single-goods.do',
                 type: 'POST',
                 data:{"data": reqData},
                 async: false
@@ -208,6 +262,8 @@
          content: "<img src=" + $(e).attr('src') + " />"
      });
  }
+
+
 </script>
 </body>
 </html>

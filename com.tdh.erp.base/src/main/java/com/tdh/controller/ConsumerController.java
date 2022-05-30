@@ -118,6 +118,23 @@ public class ConsumerController extends BaseController {
         }
     }
 
+    /**
+     * 获取明细数据
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = Route.ConsumerUrl.QUERY_ENUM, method = {RequestMethod.POST})
+    public String queryEnum(HttpServletRequest request){
+        try{
+            List<Map<String ,Object>> result = consumerService.queryConsumerEnumAll();
+            return ReturnUtils.ReturnPageObj(result,result.size());
+        }catch(Exception e){
+            return ReturnUtils.ReturnObj(ReturnUtils.ReturnParam.fail, ReturnUtils.ReturnParam.exception_msg, "");
+        }
+    }
+
+
 }
 
 

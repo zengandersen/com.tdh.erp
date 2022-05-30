@@ -88,7 +88,7 @@ layui.use(['jquery', 'table', 'layer'], function () {
         cols: [[{title: '序号', type: 'numbers'},
 
             {field: 'name', title: '姓名'},
-            {field: 'sex', title: '单位', templet: function(d){
+            {field: 'sex', title: '性别', templet: function(d){
                     return viewObj.renderSelectOptions(sex_enum, {valueField: "id", textField: "name", selectedValue: d.sex});
                 }},
             {field: 'tel', title: '电话'},
@@ -128,8 +128,8 @@ layui.use(['jquery', 'table', 'layer'], function () {
     /*定义事件集合*/
     var active = {
         getInfo: function () {
-            var fileName = $('#goods_name').val();
-            if ($('#goods_name').val()) {
+            var fileName = $('#name').val();
+            if ($('#name').val()) {
                 var index = layer.msg('处理中，请稍候...', {icon: 16, time: false, shade: 0});
                 tableIns.reload({page: {curr: 1}, where: {name: fileName}});
                 layer.close(index);

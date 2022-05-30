@@ -21,4 +21,6 @@ public interface RepertoryMapper extends BaseMapper<Repertory> {
 
 
         public List<Map<String ,Object>> queryRepertoryBindInfoById(@Param("repertoryIds") String [] repertoryIds);
+
+        public List<Map<String,Object>> queryRepertoryInfoByGoodsId(@Param("goodsIds") String []goodsIds);
 }

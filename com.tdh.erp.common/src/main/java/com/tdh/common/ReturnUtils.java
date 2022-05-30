@@ -29,8 +29,34 @@ public class ReturnUtils {
         public static final String repeat_number = "repeat_number";
         public static final String repeat_number_msg = "号源已存在,中止操作";
         public static final String missing_season_detail = "missing_season_detail";
+        public static final String missing_consumer ="missing_consumer";
+        public static final String missing_consumer_msg = "当前产品为退货入库，请添加退货人信息";
+        public static final String input_num_can_not_zero = "input_num_can_not_zero";
+        public static final String Input_num_can_not_zero_msg = "入库数量不能为0";
+        public static final String input_price_can_not_zero = "input_price_can_not_zero";
+        public static final String input_price_can_not_zero_msg = "入库价格不能为0";
+        public static final String missing_input_data = "missing_input_data";
+        public static final String missing_input_data_msg = "缺少入库日期";
     }
-
+    /**
+     * 写入日志信息
+     * @param sysTrackCode
+     * @param event
+     * @param msg
+     */
+    public static void logger(String type,String sysTrackCode, String event, String msg)  {
+        File file = null;
+        try {
+            file = FileUtils.createFiletxt(PropertiesUtils.getProperties("log.path") + "\\"+ DateUtils.getYYYYMMDD()+"\\" + PropertiesUtils.getProperties( "log.format"));
+            boolean logStatus = Boolean.parseBoolean(PropertiesUtils.getProperties("log.status"));
+            if (logStatus) {
+                FileUtils.info(file, DateUtils.getYYYYMMDDHHMISS(),sysTrackCode,event,msg);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            ReturnUtils.logger(Config.logClass.error,sysTrackCode,"-日志写入，异常处理 :", JSON.toJSONString(e.getMessage()));
+        }
+    }
     /**
      * 处理返回对象
      * @param list

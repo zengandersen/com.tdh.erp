@@ -127,5 +127,16 @@ public class MealBindService extends BaseService<MealBind, MealBindMapper> {
         return mealBindMapper.queryBindComplateDataByMealId(mealId);
     }
 
+    /**
+     * 通过商品id获取套餐绑定信息
+     * @param goodsIds
+     * @return
+     * @throws Exception
+     */
+    public List<Map<String ,Object>> queryMealBindInfoByGoodsIds(String []goodsIds)throws Exception {
+        List<Map<String ,Object >> result = mealBindMapper.queryMealInfoByGoodsId(goodsIds);
+        return result;
+    }
+
 
 }

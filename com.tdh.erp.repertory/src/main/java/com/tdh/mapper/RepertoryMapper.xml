@@ -117,4 +117,27 @@
         </foreach>
     </select>
 
+    <select id = "queryRepertoryInfoByGoodsId" parameterType="String" resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+      select
+        t.repertory_id,
+        (select a.factory_id
+        from sys_goods a
+        where a.goods_id = t.goods_id) as factory_id,
+        t.goods_id,
+        (select a.goods_code
+        from sys_goods a
+        where a.goods_id = t.goods_id) as goods_code,
+        t.goods_name,
+        t.total,
+        t.warning_num,
+        t.create_user,
+        t.create_time,
+        t.update_user,
+        t.update_time,
+        t.remark from sys_repertory where goods_id IN
+        <foreach collection="goodsIds" item="req_id" separator="," open="(" close=")">
+            #{req_id}
+        </foreach>
+    </select>
+
 </mapper>
