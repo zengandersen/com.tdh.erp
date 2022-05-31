@@ -4,6 +4,12 @@ public class Config {
 
     public static final String loginUser ="loginUser";
     public static final String searchField = "name";
+    public static final String searchStartDate = "start_date";
+    public static final String searchEndDate = "end_date";
+    public static final String searchSelectOne = "select_one";
+    public static final String searchSelectTwo = "select_two";
+    public static final String searchSelectThree = "select_three";
+
     public static final String sysTrackCode = "sysTrackCode";
     public static final String page = "page";
     public static final String limit = "limit";

@@ -46,10 +46,10 @@ public class Input  extends QueryBean {
     private int inputPrice;
 
     @JsonProperty("is_supplement")
-    private int isSupplement;
+    private Integer isSupplement;
 
     @JsonProperty("is_returned")
-    private int isReturned;
+    private Integer isReturned;
 
     @JsonProperty("consumer_id")
     private String consumerId;
@@ -68,4 +68,10 @@ public class Input  extends QueryBean {
 
     @JsonProperty("update_user")
     private String updateUser;
+
+    @JsonProperty("start_date")
+    private String startDate;
+
+    @JsonProperty("end_date")
+    private String endDate;
 }

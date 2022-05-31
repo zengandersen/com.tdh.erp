@@ -35,21 +35,58 @@
             <div style="margin: 10px 10px 10px 10px">
                 <form class="layui-form layui-form-pane" action="">
                     <div class="layui-form-item">
-                        <div class="layui-inline"><label class="layui-form-label">查询信息</label>
-                            <div class="layui-input-inline"><input value="" type="text" placeholder="商品名称/商品编码/套餐名称/套餐编码"
-                                                                   id="goods_name" name="goods_name"
-                                                                   autocomplete="off" class="layui-input"></div>
-                        </div>
                         <div class="layui-inline">
-                            <button type="button" class="layui-btn layui-btn-primary" data-type="getInfo" id="btnQuery"
-                                    name="btnQuery"><i class="layui-icon"></i> 搜 索
-                            </button>
-
-                            <button type="button" name="btnAdd" class="layui-btn layui-btn-normal" data-type="add"><i
-                                    class="layui-icon layui-icon-add-circle"></i>商品入库
-                            </button>
+                            <label class="layui-form-label">查询信息</label>
+                            <div class="layui-input-inline">
+                                <input value="" type="text" placeholder="商品名称/商品编码/套餐名称/套餐编码" id="goods_name" name="goods_name" autocomplete="off" class="layui-input">
+                            </div>
                         </div>
                     </div>
+
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                <label class="layui-form-label">所属厂商</label>
+                                <div class="layui-input-inline" id = "select_one">
+
+                                </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">是否为补单</label>
+                                    <div class="layui-input-inline" id = "select_two">
+
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">是否为退货</label>
+                                    <div class="layui-input-inline" id = "select_three">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-inline"><label class="layui-form-label"
+                                                             style="width : 120px">入库日期区间</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="input_date_start" id="input_date_start"
+                                           lay-verify="input_date_start" placeholder="开始日期" autocomplete="off"
+                                           class="layui-input">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="input_date_end" id="input_date_end" lay-verify="input_date_end"
+                                           placeholder="结束日期" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                                <div class="layui-inline">
+                                    <button type="button" class="layui-btn layui-btn-primary" data-type="getInfo"
+                                            id="btnQuery"
+                                            name="btnQuery"><i class="layui-icon"></i> 搜 索
+                                    </button>
+
+                                    <button type="button" name="btnAdd" class="layui-btn layui-btn-normal"
+                                            data-type="add"><i
+                                            class="layui-icon layui-icon-add-circle"></i>商品入库
+                                    </button>
+                                </div>
+
                 </form>
             </div>
         </fieldset>
@@ -73,12 +110,19 @@ var PWD = document.getElementById("LAY-user-login-password");
 var compound_enum;
 var role_enum;
 /*layui 模块化引用*/
-layui.use(['jquery', 'table', 'layer'], function () {
-    var $ = layui.$, table = layui.table, form = layui.form, layer = layui.layer;
+layui.use(['jquery', 'table', 'layer', 'laydate'], function () {
+    var $ = layui.$, table = layui.table, form = layui.form, layer = layui.layer, laydate = layui.laydate;
     var flow = layui.flow;
     /*数据表格实例化*/
     var tbWidth = $("#tableRes").width();
     var layTableId = "layTable";
+    laydate.render({
+        elem: '#input_date_start'
+    });
+
+    laydate.render({
+        elem: '#input_date_end'
+    });
     var tableIns = table.render({
         id: layTableId,
         elem: '#dataTable',
@@ -93,24 +137,19 @@ layui.use(['jquery', 'table', 'layer'], function () {
         cols: [[{title: '序号', type: 'numbers'},
             {field: 'factory_name', title: '厂商名称'},
             {field: 'goods_name', title: '商品名称'},
-            {field: 'goods_img', title: '商品图片',templet: function(d){
-                    return ' <div><img src="'+d.goods_img+'" style="width: 50px; height: 50px;" onclick="showBigImage(this)"></div>';
-                }},
-            {field: 'meal_name', title: '套餐名称'},
-            {field: 'meal_img', title: '套餐图片',templet: function(d){
-                    return ' <div><img src="'+d.meal_img+'" style="width: 50px; height: 50px;" onclick="showBigImage(this)"></div>';
-                }},
-            {field: 'input_date', title: '入库时间'},
+            {field: 'goods_code', title: '商品编码'},
+            {
+                field: 'goods_img', title: '商品图片', templet: function (d) {
+                    return ' <div><img src="' + d.goods_img + '" style="width: 50px; height: 50px;" onclick="showBigImage(this)"></div>';
+                }
+            },
+            {field: 'input_date_tochar', title: '入库时间'},
             {field: 'input_num', title: '入库数量'},
             {field: 'input_price', title: '入库价格'},
-            {field: 'is_supplement', title: '是否为补单'},
-            {field: 'is_returned', title: '是否为退货'},
-            {field: 'type', title: '操作',width:215 ,templet: function (d) {
-                return '<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del" lay-id="\' + d.factory_id + \'"><i class="layui-icon layui-icon-delete"></i>移除</a>' +
-                    '<a class="layui-btn layui-btn-xs layui-btn-checked" lay-event="bind" lay-id="\' + d.repertory_id + \'"><i class="layui-icon layui-icon-layouts"></i>绑定信息</a>'+
-                    '<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit" lay-id="\' + d.repertory_id + \'"><i class="layui-icon layui-icon-edit"></i>修改</a>';
-            }
-        }]],
+            {field: 'is_supplement_chn', title: '是否为补单'},
+            {field: 'is_returned_chn', title: '是否为退货'}
+
+        ]],
         done: function (res, curr, count) {
             keyboardEvent(event);
             layer.closeAll();
@@ -130,10 +169,19 @@ layui.use(['jquery', 'table', 'layer'], function () {
     /*定义事件集合*/
     var active = {
         getInfo: function () {
-            var fileName = $('#meal_name').val();
-            if ($('#meal_name').val()) {
+            var fileName = $('#goods_name').val();
+            var inputNameStart = $('#input_date_start').val();
+            var inputNameEnd = $('#input_date_end').val();
+            var factoryId =$('#factory_select').val();
+            var isSupplement =$('#is_supplement').val();
+            var isReturned =$('#is_returned').val();
+            if ($('#goods_name').val() || $('#input_date_start').val() || $('#input_date_end').val()
+            ||$('#factory_select').val()||$('#is_supplement').val() || $('#is_returned').val() ) {
                 var index = layer.msg('处理中，请稍候...', {icon: 16, time: false, shade: 0});
-                tableIns.reload({page: {curr: 1}, where: {name: fileName}});
+                tableIns.reload({
+                    page: {curr: 1},
+                    where: {name: fileName, start_date: inputNameStart, end_date: inputNameEnd,select_one:factoryId ,select_two:isSupplement ,select_three: isReturned }
+                });
                 layer.close(index);
             } else {
                 tableIns.reload({page: {curr: 1}, where: {name: ""}});
@@ -147,7 +195,7 @@ layui.use(['jquery', 'table', 'layer'], function () {
                 maxmin: true,
                 success: function (layer, index) {
                     var iframe = window['layui-layer-iframe' + index];
-                    iframe.child("",factory_enum)
+                    iframe.child("", factory_enum)
                 }
             });
             layer.full(index);
@@ -206,7 +254,7 @@ layui.use(['jquery', 'table', 'layer'], function () {
                 var index = layer.open({
                     type: 2,
                     title: "绑定信息",
-                    content: '/to-meal-bind.do?meal_id='+data.meal_id,
+                    content: '/to-meal-bind.do?meal_id=' + data.meal_id,
                     maxmin: true,
                     success: function (layer, index) {
                         // var iframe = window['layui-layer-iframe' + index];
@@ -243,27 +291,59 @@ layui.use(['jquery', 'table', 'layer'], function () {
 });
 
 
-window.viewObj ={
+window.viewObj = {
     //下拉参数构建
-    renderSelectOptions: function(data, settings){
-        return  renderDivHandle(data,settings);
+    renderSelectOptions: function (data, settings) {
+        return renderDivHandle(data, settings);
     }
 };
 //字典变量
 var factory_enum;
 //字典内容初始化
+var is_supplement_enum;
+var is_returned_enum;
 $(document).ready(function () {
+    $.ajax({
+        url: '/query-dict-detail.do',
+        type: 'POST',
+        async: false,
+        data: {"data":'QUERY_STATUS'}
+    })
+        .done(function (message) {
+            var json = eval("(" + message + ")")
+            if (json.code == "success") {
+                for(var i =0 ;i<json.data.length;i++){
+                    var obj = json.data[i];
+                    for(var key in obj){
+                        if('QUERY_STATUS'== key){
+                            is_supplement_enum = json.data[i].QUERY_STATUS;
+                            var supplement = renderSelectHandle(is_supplement_enum, {valueField: "id", textField: "name", selectedValue:""});
+                            $("#select_two").html( '<a lay-event="is_supplement"></a><select name="is_supplement" id = "is_supplement" lay-filter="is_supplement"><option value="">请选择分类</option>' + supplement + '</select> ');
 
+                            is_returned_enum = json.data[i].QUERY_STATUS;
+                            var returned = renderSelectHandle(is_returned_enum, {valueField: "id", textField: "name", selectedValue:""});
+                            $("#select_three").html( '<a lay-event="is_returned"></a><select name="is_returned"  id = "is_returned" lay-filter="is_returned"><option value="">请选择分类</option>' + returned + '</select> ');
+
+                        }
+                    }
+                }
+            }
+            if (json.code == "fail") {
+                layer.msg(json.msg);
+            }
+        })
     $.ajax({
         url: '/enum-factory.do',
         type: 'POST',
-        async:false,
-        data: {"data":""}
+        async: false,
+        data: {"data": ""}
     })
         .done(function (message) {
             var json = eval("(" + message + ")")
             if (json.code == "success") {
                 factory_enum = json.data;
+                var factory_info = renderSelectHandle(factory_enum, {valueField: "id", textField: "name", selectedValue:""});
+                $("#select_one").html( '<a lay-event="factory_select"></a><select name="factory_select" id= "factory_select" lay-filter="factory_select"><option value="">请选择分类</option>' + factory_info + '</select> ');
             }
             if (json.code == "fail") {
                 layer.msg(json.msg);

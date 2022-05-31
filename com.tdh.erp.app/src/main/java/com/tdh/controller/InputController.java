@@ -9,6 +9,7 @@ import com.tdh.pojo.User;
 import com.tdh.service.GoodsService;
 import com.tdh.service.InputService;
 import com.tdh.service.RepertoryService;
+import freemarker.template.utility.StringUtil;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,10 +45,25 @@ public class InputController extends BaseController {
         User user = (User) request.getSession().getAttribute(Config.loginUser);
         try{
             String searchField = request.getParameter(Config.searchField);
-            params.setMealName(searchField);
+            String startDate = request.getParameter(Config.searchStartDate);
+            String endDate = request.getParameter(Config.searchEndDate);
+            String factoryId =request.getParameter(Config.searchSelectOne);
+            String supplement = request.getParameter(Config.searchSelectTwo);
+            String returned = request.getParameter(Config.searchSelectThree);
+            params.setGoodsName(searchField);
+            params.setStartDate(startDate);
+            params.setEndDate(endDate);
+            params.setFactoryId(factoryId);
+            if(StringUtils.isNotEmpty(supplement)){
+                params.setIsSupplement(Integer.parseInt(String.valueOf(supplement)));
+            }
+            if(StringUtils.isNotEmpty(returned)){
+                params.setIsReturned(Integer.parseInt(String.valueOf(returned)));
+            }
             params.setCurPage(CommonUtil.getPage(request));
             params.setPageSize(CommonUtil.getLimit(request));
             PageList<Map<String, Object>> pageList = inputService.selectPageMap(params);
+            goodsService.handlePageListImageData(pageList);
             String result = ReturnUtils.ReturnPageObj(pageList.getDataList(), pageList.getCount());
             return result;
         }catch(Exception e){

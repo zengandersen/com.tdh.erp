@@ -86,14 +86,13 @@ layui.use(['jquery', 'table', 'layer'], function () {
         loading: true,
         end: '没有更多数据展示啦', /*没有数据之后的提示语*/
         cols: [[{title: '序号', type: 'numbers'},
-
             {field: 'goods_name', title: '商品名称'},
             {field: 'goods_code', title: '商品编码'},
             {field: 'goods_img', title: '商品图片',templet: function(d){
                     return ' <div><img src="'+d.goods_img+'" style="width: 50px; height: 50px;" onclick="showBigImage(this)"></div>';
                 }},
             {field: 'unit', title: '单位', templet: function(d){
-                    return viewObj.renderSelectOptions(unit_enum, {valueField: "id", textField: "name", selectedValue: d.unit});;
+                    return viewObj.renderSelectOptions(unit_enum, {valueField: "id", textField: "name", selectedValue: d.unit});
                 }},
             {field: 'purch_price', title: '进货单价(元)'},
             {field: 'unit_price', title: '出售单价(元)'},

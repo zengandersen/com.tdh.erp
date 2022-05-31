@@ -47,6 +47,11 @@
     <select id="selectMap" parameterType="Map"
             resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
         select tb.*,
+        to_char(tb.input_date,'yyyy-mm-dd') as input_date_tochar,
+        (select b.factory_name from sys_factory b where tb.factory_id = b.factory_id) as factory_name,
+        (select a.goods_img from sys_goods a where a.goods_id = tb.goods_id) as goods_img,
+        case tb.is_supplement when 1 then '是' when 0 THEN  '否'  END  as is_supplement_chn,
+        case tb.is_returned when 1 then '是' when 0 THEN  '否'  END  as is_returned_chn,
         (select u.user_name from sys_user u where u.user_id=tb.create_user) as create_by_transformation,
         (select u.user_name from sys_user u where u.user_id=tb.update_user) as update_by_transformation
         from app_input tb
@@ -63,7 +68,38 @@
             tb.goods_name like CONCAT(CONCAT('%',#{p.goodsName}),'%')
             )
         </if>
-        order by tb.create_time desc
+        <if test="p.startDate!=null and p.startDate!=''">
+            and
+            (
+            tb.input_date &gt;= to_date(&apos;${p.startDate}&apos;,'yyyy-mm-dd')
+            )
+        </if>
+        <if test="p.endDate!=null and p.endDate!=''">
+            and
+            (
+            tb.input_date &lt;= to_date(&apos;${p.endDate}&apos;,'yyyy-mm-dd')
+            )
+        </if>
+
+        <if test="p.isSupplement!=null ">
+            and
+            (
+            tb.is_supplement = ${p.isSupplement}
+            )
+        </if>
+        <if test="p.isReturned!=null">
+            and
+            (
+            tb.is_returned = ${p.isReturned}
+            )
+        </if>
+        <if test="p.factoryId!=null and p.factoryId!=''">
+            and
+            (
+            tb.factory_id = #{p.factoryId}
+            )
+        </if>
+        order by tb.input_date desc
     </select>
 
 
