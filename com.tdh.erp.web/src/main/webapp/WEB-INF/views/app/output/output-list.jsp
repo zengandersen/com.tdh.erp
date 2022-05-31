@@ -38,7 +38,7 @@
                         <div class="layui-inline">
                             <label class="layui-form-label">查询信息</label>
                             <div class="layui-input-inline">
-                                <input value="" type="text" placeholder="商品名称/商品编码/套餐名称/套餐编码" id="goods_name" name="goods_name" autocomplete="off" class="layui-input">
+                                <input value="" type="text" placeholder="商品名称/商品编码" id="goods_name" name="goods_name" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                     </div>
@@ -51,27 +51,27 @@
                                 </div>
                                 </div>
                                 <div class="layui-inline">
-                                    <label class="layui-form-label">是否为补单</label>
+                                    <label class="layui-form-label">是否为刷单</label>
                                     <div class="layui-input-inline" id = "select_two">
 
                                     </div>
                                 </div>
                                 <div class="layui-inline">
-                                    <label class="layui-form-label">是否为退货</label>
+                                    <label class="layui-form-label">是否为赠品</label>
                                     <div class="layui-input-inline" id = "select_three">
 
                                     </div>
                                 </div>
                             </div>
                             <div class="layui-inline"><label class="layui-form-label"
-                                                             style="width : 120px">入库日期区间</label>
+                                                             style="width : 120px">出库日期区间</label>
                                 <div class="layui-input-inline">
-                                    <input type="text" name="input_date_start" id="input_date_start"
-                                           lay-verify="input_date_start" placeholder="开始日期" autocomplete="off"
+                                    <input type="text" name="out_date_start" id="out_date_start"
+                                           lay-verify="out_date_start" placeholder="开始日期" autocomplete="off"
                                            class="layui-input">
                                 </div>
                                 <div class="layui-input-inline">
-                                    <input type="text" name="input_date_end" id="input_date_end" lay-verify="input_date_end"
+                                    <input type="text" name="out_date_end" id="out_date_end" lay-verify="out_date_end"
                                            placeholder="结束日期" autocomplete="off" class="layui-input">
                                 </div>
                             </div>
@@ -83,7 +83,7 @@
 
                                     <button type="button" name="btnAdd" class="layui-btn layui-btn-normal"
                                             data-type="add"><i
-                                            class="layui-icon layui-icon-add-circle"></i>商品入库
+                                            class="layui-icon layui-icon-add-circle"></i>商品出库
                                     </button>
                                 </div>
 
@@ -126,7 +126,7 @@ layui.use(['jquery', 'table', 'layer', 'laydate'], function () {
     var tableIns = table.render({
         id: layTableId,
         elem: '#dataTable',
-        url: '/query-input-list.do',
+        url: '/query-output-list.do',
         toolbar: '#toolbarDemo',
         method: 'post',
         page: true,
@@ -143,11 +143,11 @@ layui.use(['jquery', 'table', 'layer', 'laydate'], function () {
                     return ' <div><img src="' + d.goods_img + '" style="width: 50px; height: 50px;" onclick="showBigImage(this)"></div>';
                 }
             },
-            {field: 'input_date_tochar', title: '入库时间'},
-            {field: 'input_num', title: '入库数量'},
-            {field: 'input_price', title: '入库价格'},
-            {field: 'is_supplement_chn', title: '是否为补单'},
-            {field: 'is_returned_chn', title: '是否为退货'}
+            {field: 'output_date_tochar', title: '出库时间'},
+            {field: 'output_num', title: '出库数量'},
+            {field: 'output_price', title: '出库价格'},
+            {field: 'is_click_farming_chn', title: '是否为刷单'},
+            {field: 'is_gift_chn', title: '是否为赠品'}
 
         ]],
         done: function (res, curr, count) {
@@ -170,17 +170,17 @@ layui.use(['jquery', 'table', 'layer', 'laydate'], function () {
     var active = {
         getInfo: function () {
             var fileName = $('#goods_name').val();
-            var inputNameStart = $('#input_date_start').val();
-            var inputNameEnd = $('#input_date_end').val();
+            var inputNameStart = $('#output_date_start').val();
+            var inputNameEnd = $('#output_date_end').val();
             var factoryId =$('#factory_select').val();
-            var isSupplement =$('#is_supplement').val();
-            var isReturned =$('#is_returned').val();
-            if ($('#goods_name').val() || $('#input_date_start').val() || $('#input_date_end').val()
-            ||$('#factory_select').val()||$('#is_supplement').val() || $('#is_returned').val() ) {
+            var isClickFarming =$('#is_click_farming').val();
+            var isGift =$('#is_gift').val();
+            if ($('#goods_name').val() || $('#output_date_start').val() || $('#output_date_end').val()
+            ||$('#factory_select').val()||$('#is_click_farming').val() || $('#is_gift').val() ) {
                 var index = layer.msg('处理中，请稍候...', {icon: 16, time: false, shade: 0});
                 tableIns.reload({
                     page: {curr: 1},
-                    where: {name: fileName, start_date: inputNameStart, end_date: inputNameEnd,select_one:factoryId ,select_two:isSupplement ,select_three: isReturned }
+                    where: {name: fileName, start_date: inputNameStart, end_date: inputNameEnd,select_one:factoryId ,select_two:isClickFarming ,select_three: isGift }
                 });
                 layer.close(index);
             } else {
@@ -190,8 +190,8 @@ layui.use(['jquery', 'table', 'layer', 'laydate'], function () {
         }, add: function () {
             var index = layer.open({
                 type: 2,
-                title: "入库单",
-                content: '/to-input-add.do',
+                title: "出库单",
+                content: '/to-output-add.do',
                 maxmin: true,
                 success: function (layer, index) {
                     var iframe = window['layui-layer-iframe' + index];
@@ -229,65 +229,6 @@ layui.use(['jquery', 'table', 'layer', 'laydate'], function () {
         var type = $(this).data('type');
         activeByType(type);
     });
-
-    /*监听工具条*/
-    table.on('tool(dataTable)', function (obj) {
-        var data = obj.data, event = obj.event, tr = obj.tr;
-        /*获得当前行 tr 的DOM对象;*/
-        console.log(data);
-        switch (event) {
-
-            case "edit":
-                var index = layer.open({
-                    type: 2,
-                    title: "修改",
-                    content: '/to-meal-info-edit.do',
-                    maxmin: true,
-                    success: function (layer, index) {
-                        var iframe = window['layui-layer-iframe' + index];
-                        iframe.child(data);
-                    }
-                });
-                layer.full(index);
-                break;
-            case "bind":
-                var index = layer.open({
-                    type: 2,
-                    title: "绑定信息",
-                    content: '/to-meal-bind.do?meal_id=' + data.meal_id,
-                    maxmin: true,
-                    success: function (layer, index) {
-                        // var iframe = window['layui-layer-iframe' + index];
-                        // iframe.child(data);
-                    }
-                });
-                layer.full(index);
-                break;
-
-            case "del":
-                layer.confirm('真的删除行么？', function (index) {
-                    obj.del();
-                    /*删除对应行（tr）的DOM结构，并更新缓存*/
-                    layer.close(index);
-                    /* activeByType('removeEmptyTableCache');*/
-                    $.ajax({
-                        url: '/del-meal.do',
-                        type: 'POST',
-                        data: {"meal_id": data.meal_id}
-                    }).done(function (message) {
-                        var json = eval("(" + message + ")")
-                        if (json.code == "success") {
-                            layer.msg(json.msg);
-                        }
-                        if (json.code == "fail") {
-                            layer.msg(json.msg);
-                        }
-                    })
-                });
-                break;
-
-        }
-    });
 });
 
 
@@ -300,8 +241,8 @@ window.viewObj = {
 //字典变量
 var factory_enum;
 //字典内容初始化
-var is_supplement_enum;
-var is_returned_enum;
+var is_click_farming_enum;
+var is_gift_enum;
 $(document).ready(function () {
     $.ajax({
         url: '/query-dict-detail.do',
@@ -316,13 +257,13 @@ $(document).ready(function () {
                     var obj = json.data[i];
                     for(var key in obj){
                         if('QUERY_STATUS'== key){
-                            is_supplement_enum = json.data[i].QUERY_STATUS;
-                            var supplement = renderSelectHandle(is_supplement_enum, {valueField: "id", textField: "name", selectedValue:""});
-                            $("#select_two").html( '<a lay-event="is_supplement"></a><select name="is_supplement" id = "is_supplement" lay-filter="is_supplement"><option value="">请选择分类</option>' + supplement + '</select> ');
+                            is_click_farming_enum = json.data[i].QUERY_STATUS;
+                            var clickFarming = renderSelectHandle(is_click_farming_enum, {valueField: "id", textField: "name", selectedValue:""});
+                            $("#select_two").html( '<a lay-event="is_click_farming"></a><select name="is_click_farming" id = "is_click_farming" lay-filter="is_click_farming"><option value="">请选择分类</option>' + clickFarming + '</select> ');
 
-                            is_returned_enum = json.data[i].QUERY_STATUS;
-                            var returned = renderSelectHandle(is_returned_enum, {valueField: "id", textField: "name", selectedValue:""});
-                            $("#select_three").html( '<a lay-event="is_returned"></a><select name="is_returned"  id = "is_returned" lay-filter="is_returned"><option value="">请选择分类</option>' + returned + '</select> ');
+                            is_gift_enum = json.data[i].QUERY_STATUS;
+                            var gift = renderSelectHandle(is_gift_enum, {valueField: "id", textField: "name", selectedValue:""});
+                            $("#select_three").html( '<a lay-event="is_returned"></a><select name="is_gift"  id = "is_gift" lay-filter="is_gift"><option value="">请选择分类</option>' + gift + '</select> ');
 
                         }
                     }

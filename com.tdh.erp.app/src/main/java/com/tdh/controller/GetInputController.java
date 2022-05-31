@@ -17,4 +17,10 @@ public class GetInputController {
     @RequestMapping(value = Route.InputUrl.TO_INPUT_ADD,method = RequestMethod.GET)
     public String toInputAdd(){return Route.InputUrl.TO_INPUT_ADD_URL;}
 
+    @RequestMapping(value = Route.OutUrl.TO_OUTPUT,method = RequestMethod.GET)
+    public String toOutput(){return Route.OutUrl.TO_OUTPUT_URL;}
+
+    @RequestMapping(value = Route.OutUrl.TO_OUTPUT_ADD,method = RequestMethod.GET)
+    public String toOutPutAdd (){return Route.OutUrl.TO_OUTPUT_ADD_URL;}
+
 }

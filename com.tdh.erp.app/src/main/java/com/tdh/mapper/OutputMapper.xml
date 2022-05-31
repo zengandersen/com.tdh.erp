@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tdh.mapper.OutputMapper">
+    <insert id="insert" parameterType="com.tdh.pojo.Output" flushCache="true"
+            statementType="PREPARED">
+        insert into app_output(
+        <if test="appId!=null">app_id,</if>
+        <if test="factoryId!=null">factory_id,</if>
+        <if test="goodsId!=null">goods_id,</if>
+        <if test="repertoryId!=null">repertory_id,</if>
+        <if test="goodsName!=null">goods_name,</if>
+        <if test="goodsCode!=null">goods_code,</if>
+        <if test="outputDate!=null">output_date,</if>
+        <if test="outputNum!=null">output_num,</if>
+        <if test="outputPrice!=null">output_price,</if>
+        <if test="isClickFarming!=null">is_click_farming,</if>
+        <if test="isGift!=null">is_gift,</if>
+        <if test="consumerId!=null">consumer_id,</if>
+        <if test="remark!=null">remark,</if>
+        <if test="createUser!=null">create_user,</if>
+        create_time
+        )values(
+        <if test="appId!=null">#{appId},</if>
+        <if test="factoryId!=null">#{factoryId},</if>
+        <if test="goodsId!=null">#{goodsId},</if>
+        <if test="repertoryId!=null">#{repertoryId},</if>
+        <if test="goodsName!=null">#{goodsName},</if>
+        <if test="goodsCode!=null">#{goodsCode},</if>
+        <if test="outputDate!=null">to_date(&apos;${outputDate}&apos;,'yyyy-mm-dd hh24:mi:ss'),</if>
+        <if test="outputNum!=null">${outputNum},</if>
+        <if test="outputPrice!=null">${outputPrice},</if>
+        <if test="isClickFarming!=null">${isClickFarming},</if>
+        <if test="isGift!=null">${isGift},</if>
+        <if test="consumerId!=null">#{consumerId},</if>
+        <if test="remark!=null">#{remark},</if>
+        <if test="createUser!=null">#{createUser},</if>
+        sysdate
+        )
+    </insert>
+
+
+    <select id="selectMap" parameterType="Map"
+            resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+        select tb.*,
+        to_char(tb.output_date,'yyyy-mm-dd') as output_date_tochar,
+        (select b.factory_name from sys_factory b where tb.factory_id = b.factory_id) as factory_name,
+        (select a.goods_img from sys_goods a where a.goods_id = tb.goods_id) as goods_img,
+        case tb.is_click_farming when 1 then '是' when 0 THEN  '否'  END  as is_click_farming_chn,
+        case tb.is_gift when 1 then '是' when 0 THEN  '否'  END  as is_gift_chn,
+        (select u.user_name from sys_user u where u.user_id=tb.create_user) as create_by_transformation,
+        (select u.user_name from sys_user u where u.user_id=tb.update_user) as update_by_transformation
+        from app_output tb
+        where 1 = 1
+        <if test="p.goodsName!=null and p.goodsName!=''">
+            and
+            (
+            tb.meal_code like CONCAT(CONCAT('%',#{p.goodsName}),'%')
+            OR
+            tb.meal_name like CONCAT(CONCAT('%',#{p.goodsName}),'%')
+            OR
+            tb.goods_code like CONCAT(CONCAT('%',#{p.goodsName}),'%')
+            OR
+            tb.goods_name like CONCAT(CONCAT('%',#{p.goodsName}),'%')
+            )
+        </if>
+        <if test="p.startDate!=null and p.startDate!=''">
+            and
+            (
+            tb.out_date &gt;= to_date(&apos;${p.startDate}&apos;,'yyyy-mm-dd')
+            )
+        </if>
+        <if test="p.endDate!=null and p.endDate!=''">
+            and
+            (
+            tb.out_date &lt;= to_date(&apos;${p.endDate}&apos;,'yyyy-mm-dd')
+            )
+        </if>
+
+        <if test="p.isClickFarming!=null ">
+            and
+            (
+            tb.is_click_farming = ${p.isClickFarming}
+            )
+        </if>
+        <if test="p.isGift!=null">
+            and
+            (
+            tb.is_gift = ${p.isGift}
+            )
+        </if>
+        <if test="p.factoryId!=null and p.factoryId!=''">
+            and
+            (
+            tb.factory_id = #{p.factoryId}
+            )
+        </if>
+        order by tb.output_date desc
+    </select>
+
+
+    <select id="countMap" parameterType="Map" resultType="Long">
+        select count(1) as totalCount
+        from app_output tb
+        where 1 = 1
+        <if test="p.goodsName!=null and p.goodsName!=''">
+            and
+            (
+            tb.meal_code like CONCAT(CONCAT('%',#{p.goodsName}),'%')
+            OR
+            tb.meal_name like CONCAT(CONCAT('%',#{p.goodsName}),'%')
+            OR
+            tb.goods_code like CONCAT(CONCAT('%',#{p.goodsName}),'%')
+            OR
+            tb.goods_name like CONCAT(CONCAT('%',#{p.goodsName}),'%')
+            )
+        </if>
+        order by tb.create_time desc
+    </select>
+</mapper>
