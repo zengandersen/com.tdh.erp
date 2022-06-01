@@ -39,6 +39,12 @@ public class ReturnUtils {
         public static final String missing_input_data_msg = "缺少入库日期";
         public static final String missing_property = "missing_property";
         public static final String missing_property_msg ="缺少属性标注,请选择对应的入库方式";
+        public static final String output_num_can_not_zero = "output_num_can_not_zero ";
+        public static final String output_num_can_not_zero_msg = "出库数量不能为0";
+        public static final String missing_output_consumer ="missing_output_consumer";
+        public static final String missing_output_consumer_msg = "当前为出库操作，请添加接收人信息";
+        public static final String missing_output_date ="missing_output_date";
+        public static final String missing_output_date_msg = "请选择出库时间";
     }
     /**
      * 写入日志信息

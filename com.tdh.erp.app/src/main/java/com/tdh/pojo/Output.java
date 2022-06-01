@@ -14,6 +14,9 @@ public class Output extends QueryBean {
     @JsonProperty("app_id")
     private String appId;
 
+    @JsonProperty("app_no")
+    private String appNo;
+
     @JsonProperty("factory_id")
     private String factoryId;
 
@@ -33,7 +36,7 @@ public class Output extends QueryBean {
     private String goodsCode;
 
     @JsonProperty("output_date")
-    private Date outputDate;
+    private String outputDate;
 
     @JsonProperty("output_num")
     private int outputNum;

@@ -8,6 +8,7 @@
         <if test="id!=null">id,</if>
         <if test="inputId!=null">input_id,</if>
         <if test="outputId!=null">output_id,</if>
+        <if test="inputAppNo!=null">input_app_no,</if>
         <if test="factoryId!=null">factory_id,</if>
         <if test="goodsId!=null">goods_id,</if>
         <if test="goodsName!=null">goods_name,</if>
@@ -29,6 +30,7 @@
         <if test="id!=null">#{id},</if>
         <if test="inputId!=null">#{inputId},</if>
         <if test="outputId!=null">#{outputId},</if>
+        <if test="inputAppNo!=null">#{inputAppNo},</if>
         <if test="factoryId!=null">#{factoryId},</if>
         <if test="goodsId!=null">#{goodsId},</if>
         <if test="goodsName!=null">#{goodsName},</if>

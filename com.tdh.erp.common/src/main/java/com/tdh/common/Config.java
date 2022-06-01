@@ -9,6 +9,7 @@ public class Config {
     public static final String searchSelectOne = "select_one";
     public static final String searchSelectTwo = "select_two";
     public static final String searchSelectThree = "select_three";
+    public static final String searchAppNo = "app_no";
 
     public static final String sysTrackCode = "sysTrackCode";
     public static final String page = "page";

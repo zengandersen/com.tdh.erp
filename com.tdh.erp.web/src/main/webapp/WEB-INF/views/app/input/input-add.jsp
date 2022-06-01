@@ -178,7 +178,8 @@
                                        {field: 'name', title: '商品名称'},
                                        {field: 'goods_img', title: '商品图片',templet: function(d){
                                                return ' <div><img src="'+d.goods_img+'" style="width: 60px; height: 60px;" onclick="showBigImage(this)"></div>';
-                                           }}
+                                           }},
+                        {field: 'total', title: '库存数量'}
                     ]]
                 },
                 done: function (elem, data) {

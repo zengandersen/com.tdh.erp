@@ -144,7 +144,9 @@
 
 
     <select id = "queryGoodsEnumAndImgByFactoryId" parameterType="String" resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
-        select t.goods_id as id,t.goods_name as name ,t.goods_img as goods_img from sys_goods t
+        select t.goods_id as id,t.goods_name as name ,t.goods_img as goods_img ,
+         (select total from sys_repertory a where a.goods_id = t.goods_id ) as total
+         from sys_goods t
          where t.status = ${status} and t.factory_id = #{factoryId} and t.goods_id in (select goods_id from sys_repertory)
     </select>
 

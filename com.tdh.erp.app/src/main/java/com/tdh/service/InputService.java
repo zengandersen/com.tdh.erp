@@ -1,7 +1,6 @@
 package com.tdh.service;
 
 
-import com.alibaba.fastjson.JSON;
 import com.tdh.common.*;
 import com.tdh.mapper.*;
 import com.tdh.pojo.*;
@@ -12,9 +11,9 @@ import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static com.tdh.common.Config.sysTrackCode;
 
 
 @Service("inputService")
@@ -138,13 +137,11 @@ public class InputService extends BaseService<Input, InputMapper> {
 
         int inputNum = Integer.parseInt(String.valueOf(object.get("input_num")));
         //处理商品库存数据，将传入的入库数量+库存现有数量
-        ReturnUtils.logger(Config.logClass.truce,sysTrackCode,"-处理商品库存数据-开始", JSON.toJSONString(repertoryList));
         for(Map<String,Object> map : repertoryList){
             int total = Integer.parseInt(String.valueOf(map.get("total")));
             total = total+inputNum;
             map.put("total",total);
         }
-        ReturnUtils.logger(Config.logClass.truce,sysTrackCode,"-处理商品库存数据-结束", JSON.toJSONString(repertoryList));
         return repertoryList;
     }
 
@@ -187,42 +184,74 @@ public class InputService extends BaseService<Input, InputMapper> {
                                     JSONObject object,
                                     User user)throws Exception{
         if(!CollectionUtils.isEmpty(repertoryList)){
-            //更新库存数据
-            for(Map<String ,Object> map : repertoryList ){
+            String appNo = CommonUtil.createAppno(CommonUtil.generateUID());
+            this.insertRepertory(repertoryList,user);
+            this.insertMealDetail(mealDetailList,user);
+            this.insertInput(repertoryList,mealDetailList,user,object,appNo);
+        }
+    }
+
+    /**
+     * 入库处理
+     * @param repertoryList
+     * @param mealDetailList
+     * @throws Exception
+     */
+    public void insertInput (List<Map<String ,Object>> repertoryList,
+                             List<Map<String ,Object>> mealDetailList,
+                             User user,JSONObject object,String appNo) throws Exception {
+        for(Map<String ,Object> map : repertoryList){
+            //入库id
+            String inputId = CommonUtil.createUUIDNoFlag();
+            //动账主索引id
+            String pinId = CommonUtil.createUUIDNoFlag();
+            //入库表新增
+            Input input = handleInputParam(map,user,object,inputId,appNo);
+            inputMapper.insert(input);
+            //动账记录入库
+            LogMovingPin lp = handleMovinePinParam(map,user,object,inputId,pinId,"",appNo);
+            logMovingPinMapper.insert(lp);
+            //判断该入库动账记录的商品是否有套餐， 有套餐则录入套餐记录表
+            for (Map<String ,Object> mealDeMap : mealDetailList){
+                if(String.valueOf(map.get("goods_id")).equals(String.valueOf(mealDeMap.get("goods_id")))){
+                    //如果有符合条件的套餐信息 则将信息写入动账套餐信息表
+                    LogMovingMeal lm = handleMovingMealParam(mealDeMap,user,inputId,"",pinId);
+                    logMovingMealMapper.insert(lm);
+                }
+            }
+        }
+    }
+
+    /**
+     * 更新库存数据
+     * @param list
+     * @param user
+     * @return
+     */
+    public void insertRepertory (List<Map<String,Object>> list,User user) throws Exception {
+            for(Map<String ,Object> map : list ){
                 Repertory re = new Repertory();
                 re.setTotal(Integer.parseInt(String.valueOf(map.get("total"))));
                 re.setRepertoryId(String.valueOf(map.get("repertory_id")));
                 re.setUpdateUser(user.getUser_code());
                 repertoryMapper.updateRepertoryInfoById(re);
             }
-            //更新套餐数据
-            for(Map<String ,Object> map : mealNumList){
-                Meal meal = new Meal();
-                meal.setMealId(String.valueOf(map.get("meal_id")));
-                meal.setRepTotle(Integer.parseInt(String.valueOf(map.get("rep_totle"))));
-                meal.setUpdateUser(user.getUser_code());
-                mealMapper.updateMealById(meal);
-            }
-            for(Map<String ,Object> map : repertoryList){
-                //入库id
-                String inputId = CommonUtil.createUUIDNoFlag();
-                //动账主索引id
-                String pinId = CommonUtil.createUUIDNoFlag();
-                //入库表新增
-                Input input = handleInputParam(map,user,object,inputId);
-                inputMapper.insert(input);
-                //动账记录入库
-                LogMovingPin lp = handleMovinePinParam(map,user,object,inputId,pinId,"");
-                logMovingPinMapper.insert(lp);
-                //判断该入库动账记录的商品是否有套餐， 有套餐则录入套餐记录表
-                for (Map<String ,Object> mealDeMap : mealDetailList){
-                    if(String.valueOf(map.get("goods_id")).equals(String.valueOf(mealDeMap.get("goods_id")))){
-                        //如果有符合条件的套餐信息 则将信息写入动账套餐信息表
-                        LogMovingMeal lm = handleMovingMealParam(mealDeMap,user,inputId,"",pinId);
-                        logMovingMealMapper.insert(lm);
-                    }
-                }
-            }
+    }
+
+    /**
+     * 更新套餐数据
+     * @param list
+     * @param user
+     * @throws Exception
+     */
+    public void insertMealDetail(List<Map<String ,Object>> list ,User user) throws Exception{
+        //更新套餐数据
+        for(Map<String ,Object> map : list){
+            Meal meal = new Meal();
+            meal.setMealId(String.valueOf(map.get("meal_id")));
+            meal.setRepTotle(Integer.parseInt(String.valueOf(map.get("rep_totle"))));
+            meal.setUpdateUser(user.getUser_code());
+            mealMapper.updateMealById(meal);
         }
     }
 
@@ -234,9 +263,10 @@ public class InputService extends BaseService<Input, InputMapper> {
      * @param inputId
      * @return
      */
-    public Input handleInputParam(Map<String ,Object> map ,User user,JSONObject object,String inputId) throws Exception{
+    public Input handleInputParam(Map<String ,Object> map ,User user,JSONObject object,String inputId,String appNo) throws Exception{
         Input input = new Input();
         input.setAppId(inputId);
+        input.setAppNo(appNo);
         input.setFactoryId(String.valueOf(map.get("factory_id")));
         input.setGoodsId(String.valueOf(map.get("goods_id")));
         input.setRepertoryId(String.valueOf(map.get("repertory_id")));
@@ -287,7 +317,7 @@ public class InputService extends BaseService<Input, InputMapper> {
      */
     public LogMovingPin handleMovinePinParam(Map<String ,Object> map ,
                                              User user,JSONObject object,
-                                             String inputId,String pinId,String outputId) throws Exception{
+                                             String inputId,String pinId,String outputId,String appNo) throws Exception{
         LogMovingPin lp = new LogMovingPin();
         lp.setId(pinId);
         if(StringUtils.isEmpty(inputId)){
@@ -300,6 +330,7 @@ public class InputService extends BaseService<Input, InputMapper> {
         }else{
             lp.setOutputId(outputId);
         }
+        lp.setInputAppNo(appNo);
         lp.setFactoryId(String.valueOf(map.get("factory_id")));
         lp.setGoodsId(String.valueOf(map.get("goods_id")));
         lp.setGoodsName(String.valueOf(map.get("goods_name")));
@@ -333,8 +364,15 @@ public class InputService extends BaseService<Input, InputMapper> {
         }else{
             lp.setIsClickFarming(Config.appStatus.no);
         }
-        lp.setPinDate(String.valueOf(object.get("input_date")));
-        lp.setPinPrice(new BigDecimal(String.valueOf(object.get("input_price"))));
+        if(StringUtils.isNotEmpty(inputId)){
+            lp.setPinDate(String.valueOf(object.get("input_date")));
+            lp.setPinPrice(new BigDecimal(String.valueOf(object.get("input_price"))));
+        }
+        if(StringUtils.isNotEmpty(outputId)){
+            lp.setPinDate(String.valueOf(object.get("output_date")));
+            lp.setPinPrice(new BigDecimal(String.valueOf(object.get("output_price"))));
+        }
+
         if(null!=object.get("remark")){
             lp.setRemark(String.valueOf(object.get("remark")));
         }else{
@@ -374,5 +412,7 @@ public class InputService extends BaseService<Input, InputMapper> {
         lm.setCreateUser(user.getUser_code());
         return lm;
     }
+
+
 
 }

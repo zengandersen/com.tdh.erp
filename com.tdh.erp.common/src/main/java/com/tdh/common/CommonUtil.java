@@ -32,6 +32,11 @@ public class CommonUtil {
         return result;
     }
 
+    public static String createAppno(String generateUID){
+        String date = new SimpleDateFormat("yyyyMMddHHmm").format(new Date());
+        return date+"-"+generateUID ;
+    }
+
     /**
      * json格式美化
      * @param object

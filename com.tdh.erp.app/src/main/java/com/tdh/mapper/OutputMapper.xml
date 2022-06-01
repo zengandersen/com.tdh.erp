@@ -5,6 +5,7 @@
             statementType="PREPARED">
         insert into app_output(
         <if test="appId!=null">app_id,</if>
+        <if test="appNo!=null">app_no,</if>
         <if test="factoryId!=null">factory_id,</if>
         <if test="goodsId!=null">goods_id,</if>
         <if test="repertoryId!=null">repertory_id,</if>
@@ -21,6 +22,7 @@
         create_time
         )values(
         <if test="appId!=null">#{appId},</if>
+        <if test="appNo!=null">#{appNo},</if>
         <if test="factoryId!=null">#{factoryId},</if>
         <if test="goodsId!=null">#{goodsId},</if>
         <if test="repertoryId!=null">#{repertoryId},</if>
@@ -92,6 +94,12 @@
             and
             (
             tb.factory_id = #{p.factoryId}
+            )
+        </if>
+        <if test="p.appNo!=null and p.appNo!=''">
+            and
+            (
+            tb.app_no  like CONCAT(CONCAT('%',#{p.appNo}),'%')
             )
         </if>
         order by tb.output_date desc

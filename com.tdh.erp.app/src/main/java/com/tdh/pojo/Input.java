@@ -12,6 +12,9 @@ public class Input  extends QueryBean {
     @JsonProperty("app_id")
     private String appId;
 
+    @JsonProperty("app_no")
+    private String appNo;
+
     @JsonProperty("factory_id")
     private String factoryId;
 

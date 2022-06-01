@@ -41,6 +41,12 @@
                                 <input value="" type="text" placeholder="商品名称/商品编码/套餐名称/套餐编码" id="goods_name" name="goods_name" autocomplete="off" class="layui-input">
                             </div>
                         </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">批次号</label>
+                            <div class="layui-input-inline">
+                                <input value="" type="text" placeholder="批次号" id="app_no" name="app_no" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
                     </div>
 
                             <div class="layui-form-item">
@@ -135,6 +141,7 @@ layui.use(['jquery', 'table', 'layer', 'laydate'], function () {
         loading: true,
         end: '没有更多数据展示啦', /*没有数据之后的提示语*/
         cols: [[{title: '序号', type: 'numbers'},
+            {field: 'app_no', title: '批次号',width: 200},
             {field: 'factory_name', title: '厂商名称'},
             {field: 'goods_name', title: '商品名称'},
             {field: 'goods_code', title: '商品编码'},
@@ -175,8 +182,9 @@ layui.use(['jquery', 'table', 'layer', 'laydate'], function () {
             var factoryId =$('#factory_select').val();
             var isSupplement =$('#is_supplement').val();
             var isReturned =$('#is_returned').val();
+            var appNo = $('#app_no').val();
             if ($('#goods_name').val() || $('#input_date_start').val() || $('#input_date_end').val()
-            ||$('#factory_select').val()||$('#is_supplement').val() || $('#is_returned').val() ) {
+            ||$('#factory_select').val()||$('#is_supplement').val() || $('#is_returned').val()||$('#app_no').val()) {
                 var index = layer.msg('处理中，请稍候...', {icon: 16, time: false, shade: 0});
                 tableIns.reload({
                     page: {curr: 1},

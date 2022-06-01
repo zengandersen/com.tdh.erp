@@ -16,8 +16,14 @@ public class LogMovingPin extends QueryBean{
     @JsonProperty("input_id")
     private String inputId;
 
+    @JsonProperty("input_app_no")
+    private String inputAppNo;
+
     @JsonProperty("output_id")
     private String outputId;
+
+    @JsonProperty("output_app_no")
+    private String outputAppNo;
 
     @JsonProperty("factory_id")
     private String factoryId;
