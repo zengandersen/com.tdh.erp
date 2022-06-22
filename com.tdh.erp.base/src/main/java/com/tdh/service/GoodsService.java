@@ -39,12 +39,12 @@ public class GoodsService extends BaseService<Goods, GoodsMapper> {
     /**
      * 编码及名称重复校验
      * @param goodsName
-     * @param goodsCode
+     * @param
      * @return
      * @throws Exception
      */
-    public String verifyAddRepeatParam(String goodsName,String goodsCode) throws Exception{
-        Map<String ,Object> map = goodsMapper.verifyRepeatParam(goodsName,goodsCode);
+    public String verifyAddRepeatParam(String goodsName) throws Exception{
+        Map<String ,Object> map = goodsMapper.verifyRepeatParam(goodsName);
         int result = Integer.parseInt(String.valueOf(map.get("count")));
         if(Config.integerClass.zero < result){
             return ReturnUtils.ReturnParam.param_repeat;
@@ -56,12 +56,11 @@ public class GoodsService extends BaseService<Goods, GoodsMapper> {
     /**
      * 编码及名称重复校验
      * @param goodsName
-     * @param goodsCode
      * @return
      * @throws Exception
      */
-    public String verifyEditRepeatParam(String goodsName,String goodsCode) throws Exception{
-        Map<String ,Object> map = goodsMapper.verifyRepeatParam(goodsName,goodsCode);
+    public String verifyEditRepeatParam(String goodsName) throws Exception{
+        Map<String ,Object> map = goodsMapper.verifyRepeatParam(goodsName);
         int result = Integer.parseInt(String.valueOf(map.get("count")));
         if(Config.integerClass.one < result){
             return ReturnUtils.ReturnParam.param_repeat;
@@ -77,6 +76,7 @@ public class GoodsService extends BaseService<Goods, GoodsMapper> {
      */
     public void insertServ(User user,Goods goods) throws Exception{
         goods.setGoodsId(CommonUtil.createUUIDNoFlag());
+        goods.setGoodsCode(PinyinAPI.getPinYinHeadChar(goods.getGoodsName()));
         goods.setPinyin(PinyinAPI.getPinYinHeadChar(goods.getGoodsName()));
         goods.setEname(PinyinAPI.getEname(goods.getGoodsName()));
         goods.setCreateUser(user.getUser_code());
@@ -92,6 +92,7 @@ public class GoodsService extends BaseService<Goods, GoodsMapper> {
      */
     public void updateServ(User user,Goods goods) throws Exception{
         goods.setUpdateUser(user.getUser_code());
+        goods.setGoodsCode(PinyinAPI.getPinYinHeadChar(goods.getGoodsName()));
         goods.setPinyin(PinyinAPI.getPinYinHeadChar(goods.getGoodsName()));
         goods.setEname(PinyinAPI.getEname(goods.getGoodsName()));
         boolean flag = goods.getGoodsImg().contains("data:image/png;base64");
@@ -172,6 +173,9 @@ public class GoodsService extends BaseService<Goods, GoodsMapper> {
         if(!CollectionUtils.isEmpty(list)){
             for(Map<String ,Object> map : list){
                 map.put("goods_img",ClobUtils.handleGoodsImageObject(map));
+                if(String.valueOf(map.get("goods_code")).contains("-")){
+                    map.put("goods_code",String.valueOf(map.get("goods_code")).split("-")[1]);
+                }
                 System.out.println();
             }
         }

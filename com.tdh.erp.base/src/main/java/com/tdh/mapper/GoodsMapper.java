@@ -21,8 +21,7 @@ public interface GoodsMapper extends BaseMapper<Goods> {
 
     public List<Map<String ,Object>> queryGoodsInfoEnum(@Param("status") int status);
 
-    public Map<String ,Object> verifyRepeatParam(@Param("goodsName") String goodsName,
-                                                 @Param("goodsCode") String goodsCode);
+    public Map<String ,Object> verifyRepeatParam(@Param("goodsName") String goodsName);
 
     public List<Map<String ,Object>>queryGoodsEnumByFactoryId(@Param("status") int status,
                                                        @Param("factoryId") String factoryId);

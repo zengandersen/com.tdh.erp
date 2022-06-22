@@ -59,13 +59,6 @@
 		</div>
 	</div>
 	<div class="layui-form-item">
-		<label class="layui-form-label">商品编码</label>
-		<div class="layui-input-inline">
-			<input type="text" name="goods_code"  autocomplete="off" placeholder="请输入商品编码" class="layui-input">
-		</div>
-	</div>
-
-	<div class="layui-form-item">
 		<label class="layui-form-label">单位</label>
 		<div class="layui-input-inline" id = "unit">
 
@@ -144,7 +137,7 @@
                             form.val('example', {
                                 "factory_id": json.data.factory_id,
                                 "goods_name": json.data.goods_name,
-                                "goods_code": json.data.goods_code,
+
                                 "unit": json.data.unit,
                                 "purch_price":json.data.purch_price,
                                 "unit_price":json.data.unit_price,

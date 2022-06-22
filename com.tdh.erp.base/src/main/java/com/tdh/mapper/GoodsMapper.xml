@@ -152,7 +152,7 @@
 
     <select id = "verifyRepeatParam" parameterType="String" resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
             select count(t.goods_id) as count from sys_goods t
-            where t.goods_name = #{goodsName} or t.goods_code = #{goodsCode}
+            where t.goods_name = #{goodsName}
     </select>
 
     <select id = "queryGoodsEnumById" parameterType="String" resultType="org.apache.commons.collections.map.CaseInsensitiveMap">

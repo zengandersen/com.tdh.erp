@@ -62,7 +62,7 @@ public class GoodsController extends BaseController {
 
             Goods param = (Goods) JsonUtil.toBean(request, new Goods());
             //参数重复校验
-            if (ReturnUtils.ReturnParam.param_repeat.equals(goodsService.verifyAddRepeatParam(param.getGoodsName(), param.getGoodsCode()))) {
+            if (ReturnUtils.ReturnParam.param_repeat.equals(goodsService.verifyAddRepeatParam(param.getGoodsName()))) {
                 return ReturnUtils.ReturnObj(ReturnUtils.ReturnParam.param_repeat, ReturnUtils.ReturnParam.param_repeat_msg, "");
             }
             goodsService.insertServ(user, param);
@@ -104,7 +104,7 @@ public class GoodsController extends BaseController {
         try {
             Goods param = (Goods) JsonUtil.toBean(request, new Goods());
             //参数重复校验
-            if (ReturnUtils.ReturnParam.param_repeat.equals(goodsService.verifyEditRepeatParam(param.getGoodsName(), param.getGoodsCode()))) {
+            if (ReturnUtils.ReturnParam.param_repeat.equals(goodsService.verifyEditRepeatParam(param.getGoodsName()))) {
                 return ReturnUtils.ReturnObj(ReturnUtils.ReturnParam.param_repeat, ReturnUtils.ReturnParam.param_repeat_msg, "");
             }
             goodsService.updateServ(user, param);

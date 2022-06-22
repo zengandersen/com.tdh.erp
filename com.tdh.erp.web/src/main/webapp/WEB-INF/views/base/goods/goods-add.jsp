@@ -58,12 +58,6 @@
 			<input type="text" name="goods_name"  autocomplete="off" placeholder="请输入商品名称" class="layui-input">
 		</div>
 	</div>
-	<div class="layui-form-item">
-		<label class="layui-form-label">商品编码</label>
-		<div class="layui-input-inline">
-			<input type="text" name="goods_code"  autocomplete="off" placeholder="请输入商品编码" class="layui-input">
-		</div>
-	</div>
 
 	<div class="layui-form-item">
 		<label class="layui-form-label">单位</label>
@@ -143,7 +137,6 @@
                             form.val('example', {
                                 "factory_id": "",
                                 "goods_name": "",
-                                "goods_code": "",
                                 "unit": "",
                                 "purch_price":"",
                                 "unit_price":"",
