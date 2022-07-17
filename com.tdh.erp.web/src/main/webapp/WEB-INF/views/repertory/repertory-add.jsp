@@ -234,6 +234,9 @@
                             window.parent.location.reload();
                         }, 1000);
                     }
+                    if(json.code = "repertory_goods_repeat"){
+                        layer.msg(json.msg);
+					}
                     if (json.code == "fail") {
                         layer.msg(json.msg);
                     }

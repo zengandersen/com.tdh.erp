@@ -53,6 +53,10 @@ public class RepertoryController extends BaseController {
         User user = (User) request.getSession().getAttribute(Config.loginUser);
         try{
             Repertory param = (Repertory) JsonUtil.toBean(request, new Repertory());
+            int count = repertoryService.queryRepertoryInfoVeifyServ(param.getGoodsId());
+            if(Config.integerClass.zero < count){
+                return ReturnUtils.ReturnObj(ReturnUtils.ReturnParam.repertory_goods_repeat, ReturnUtils.ReturnParam.epertory_goods_repeatr_msg, "");
+            }
             repertoryService.insertServ(user,param);
             return ReturnUtils.ReturnObj(ReturnUtils.ReturnParam.success, ReturnUtils.ReturnParam.success_msg, "");
         }catch(Exception e){

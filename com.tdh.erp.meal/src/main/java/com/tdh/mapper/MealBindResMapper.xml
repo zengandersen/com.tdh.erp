@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.tdh.mapper.MealBindResMapper">
 
-    <select id="queryRepertoryInfoAll" parameterType="String" resultType="com.tdh.pojo.MealBindRes">
+    <select id="selectMap" parameterType="Map"
+            resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
         select * from (select (select b.factory_name
         from sys_goods a
         left join sys_factory b
@@ -28,14 +29,21 @@
         from sys_repertory t
         where 1 = 1)
         where 1=1
-        <if test="searchName!=null and searchName!=''">
+        <if test="p.factory_name!=null and p.factory_name!=''">
             and
             (
-            factory_name like CONCAT(CONCAT('%',#{searchName}),'%')
+            factory_name like CONCAT(CONCAT('%',#{p.factory_name}),'%')
             OR
-            goods_name like CONCAT(CONCAT('%',#{searchName}),'%')
+            goods_name like CONCAT(CONCAT('%',#{p.factory_name}),'%')
             )
         </if>
-        order by factory_name
+        order by factory_name,goods_name
+    </select>
+
+    <select id="countMap" parameterType="Map" resultType="Long">
+        select count(1) as totalCount
+        from sys_repertory tb
+        where 1 = 1
+        order by tb.create_time desc
     </select>
 </mapper>

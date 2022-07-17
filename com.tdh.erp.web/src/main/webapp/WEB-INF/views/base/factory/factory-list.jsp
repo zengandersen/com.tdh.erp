@@ -109,14 +109,17 @@
                 {field: 'factory_name', title: '厂家名称', edit: 'text'},
                 {field: 'factory_code', title: '厂家编码', edit: 'text'},
                 {field: 'factory_url', title: '厂家链接', edit: 'text'},
-                {field: 'factory_addr', title: '厂家地址', edit: 'text'},
+                {field: 'factory_addr', title: '厂家地址',templet: function(d){
+                        var html = '<div><a rel="nofollow" style="color:#1E9FFF" href="javascript:void(0);" lay-event="showRec">' + d.factory_addr+ '</a></div>';
+                        return html;
+                }},
+                {field: 'remark', title: '备注', edit: 'text'},
                 {
                     field: 'type', title: '操作', templet: function (d) {
                         return'<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del" lay-id="\' + d.factory_id + \'"><i class="layui-icon layui-icon-delete"></i>移除</a>'+
                             '<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit" lay-id="\' + d.factory_id + \'"><i class="layui-icon layui-icon-edit"></i>修改</a>';
                     }
                 }
-
             ]],
 
             done: function (res, curr, count) {
@@ -126,8 +129,9 @@
         });
 
 
-        //定义事件集合
+
         var active = {
+
             getInfo: function () {
                 var fileName = $('#factory_name').val();
                 if ($('#factory_name').val()) {
@@ -233,6 +237,7 @@
             var type = $(this).data('type');
             activeByType(type);
         });
+
         //监听select下拉选中事件
         form.on('select(sex)', function (data) {
             var elem = data.elem; //得到select原始DOM对象
@@ -252,6 +257,9 @@
             var data = obj.data, event = obj.event, tr = obj.tr; //获得当前行 tr 的DOM对象;
             console.log(data);
             switch (event) {
+                case "showRec":
+                    window.open('http://'+data.factory_addr+'/');
+                    break;
                 case "edit":
                     var index = layer.open({
                         type: 2,

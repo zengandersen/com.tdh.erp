@@ -81,8 +81,8 @@ layui.use(['jquery', 'table', 'layer'], function () {
         toolbar: '#toolbarDemo',
         method: 'post',
         page: true,
-        limits: [50, 100, 200],
-        limit: 50,
+        limits: [25, 50, 100, 200],
+        limit: 25,
         loading: true,
         end: '没有更多数据展示啦', /*没有数据之后的提示语*/
         cols: [[{title: '序号', type: 'numbers'},

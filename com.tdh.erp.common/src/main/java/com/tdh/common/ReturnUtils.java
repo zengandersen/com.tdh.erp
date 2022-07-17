@@ -45,6 +45,9 @@ public class ReturnUtils {
         public static final String missing_output_consumer_msg = "当前为出库操作，请添加接收人信息";
         public static final String missing_output_date ="missing_output_date";
         public static final String missing_output_date_msg = "请选择出库时间";
+
+        public static final String repertory_goods_repeat = "repertory_goods_repeat";
+        public static final String epertory_goods_repeatr_msg= "该商品库存已有库存记录存在，不能进行库存记录创建";
     }
     /**
      * 写入日志信息

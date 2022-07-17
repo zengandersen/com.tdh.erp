@@ -12,8 +12,8 @@ import java.util.Map;
 
 
 @Mapper
-public interface MealBindResMapper extends BaseMapper<MealBindResMapper> {
+public interface MealBindResMapper extends BaseMapper<MealBindRes> {
 
-    public List<MealBindRes> queryRepertoryInfoAll(@Param("searchName") String searchName);
+//    public List<MealBindRes> queryRepertoryInfoAll(@Param("searchName") String searchName);
 
 }

@@ -58,6 +58,8 @@
 			<input type="text" name="goods_name"  autocomplete="off" placeholder="请输入商品名称" class="layui-input">
 		</div>
 	</div>
+
+
 	<div class="layui-form-item">
 		<label class="layui-form-label">单位</label>
 		<div class="layui-input-inline" id = "unit">
@@ -68,13 +70,13 @@
 	<div class="layui-form-item">
 		<label class="layui-form-label">进货单价</label>
 		<div class="layui-input-inline">
-			<input type="text" name="purch_price"  autocomplete="off" placeholder="请选择进货单价" class="layui-input">
+			<input type="number" name="purch_price"   placeholder="0" class="layui-input">
 		</div>
 	</div>
 	<div class="layui-form-item">
 		<label class="layui-form-label">商品单价</label>
 		<div class="layui-input-inline">
-			<input type="text" name="unit_price"  autocomplete="off" placeholder="请选择进货单价" class="layui-input">
+			<input type="number" name="unit_price"  placeholder="0" class="layui-input">
 		</div>
 	</div>
 	<div class="layui-form-item" id="imgdiv">
@@ -178,6 +180,7 @@
             , layedit = layui.layedit
             , laydate = layui.laydate;
         form = layui.form;
+
 
         //监听提交
         form.on('submit(demo1)', function (data) {

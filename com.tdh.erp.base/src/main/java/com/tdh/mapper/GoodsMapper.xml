@@ -140,6 +140,7 @@
 
     <select id = "queryGoodsEnumByFactoryId" parameterType="String" resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
         select t.goods_id as id,t.goods_name as name from sys_goods t where t.status = ${status} and t.factory_id = #{factoryId}
+        order by name asc
     </select>
 
 
@@ -148,6 +149,7 @@
          (select total from sys_repertory a where a.goods_id = t.goods_id ) as total
          from sys_goods t
          where t.status = ${status} and t.factory_id = #{factoryId} and t.goods_id in (select goods_id from sys_repertory)
+          order by name
     </select>
 
     <select id = "verifyRepeatParam" parameterType="String" resultType="org.apache.commons.collections.map.CaseInsensitiveMap">

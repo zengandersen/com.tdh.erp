@@ -53,7 +53,7 @@
             tb.Ename like CONCAT(CONCAT('%',#{p.factoryName}),'%')
             )
         </if>
-        order by tb.order_num desc
+        order by tb.order_num
     </select>
 
 

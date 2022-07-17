@@ -1,9 +1,7 @@
 package com.tdh.service;
 
 
-import com.tdh.common.BaseService;
-import com.tdh.common.CommonUtil;
-import com.tdh.common.ImgUtils;
+import com.tdh.common.*;
 import com.tdh.mapper.MealBindMapper;
 import com.tdh.mapper.MealBindResMapper;
 import com.tdh.mapper.MealMapper;
@@ -31,6 +29,10 @@ public class MealBindService extends BaseService<MealBind, MealBindMapper> {
 
     @Resource
     private MealBindResMapper mealBindResMapper;
+
+
+
+
     /**
      * 获取绑定信息
      * @param mealId
@@ -44,31 +46,12 @@ public class MealBindService extends BaseService<MealBind, MealBindMapper> {
         return result;
     }
 
-    /**
-     * 获取待绑定仓库数据
-     * @return
-     * @throws Exception
-     */
-    public List<MealBindRes> queryNotBIndInfo(String searchName,String mealId)throws Exception{
-        List<MealBindRes> result = mealBindResMapper.queryRepertoryInfoAll(searchName);
-        if(CollectionUtils.isEmpty(result)){
-            result = new ArrayList<>();
-        }else{
-            List<Map<String ,Object>> repList = this.queryBindComplateDataByMealIdServ(mealId);
-            if(!CollectionUtils.isEmpty(repList)){
-                for(Map<String ,Object> repMap : repList){
-                    for(MealBindRes mealBindRes : result){
-                        if(String.valueOf(repMap.get("repertory_id")).equals(
-                                String.valueOf(mealBindRes.getRepertory_id())
-                        )){
-                            mealBindRes.setLAY_CHECKED(true);
-                        }
-                    }
-                }
-            }
-        }
-        return result;
+    public PageList<Map<String, Object>> selectPageMap(MealBind params) throws Exception {
+        return this.selectMapPageSize(params, params.getCurPage(), params.getPageSize());
     }
+
+
+
 
     /**
      * 根据套餐主索引id 删除套餐明细
@@ -117,15 +100,7 @@ public class MealBindService extends BaseService<MealBind, MealBindMapper> {
         mealBindMapper.delMealBindInfoByBindId(mealBindId);
     }
 
-    /**
-     * 获取已绑定数据
-     * @param mealId
-     * @return
-     * @throws Exception
-     */
-    public List<Map<String ,Object>> queryBindComplateDataByMealIdServ(String mealId) throws Exception{
-        return mealBindMapper.queryBindComplateDataByMealId(mealId);
-    }
+
 
     /**
      * 通过商品id获取套餐绑定信息
@@ -137,6 +112,25 @@ public class MealBindService extends BaseService<MealBind, MealBindMapper> {
         List<Map<String ,Object >> result = mealBindMapper.queryMealInfoByGoodsId(goodsIds);
         return result;
     }
+
+
+    /**
+     *
+     * @param pageList
+     * @return
+     * @throws Exception
+     */
+    public PageList<Map<String, Object>> handlePageListImageData(PageList<Map<String, Object>> pageList) throws Exception{
+        List<Map<String ,Object>> list = pageList.getDataList();
+        if(!CollectionUtils.isEmpty(list)){
+            for(Map<String ,Object> map : list){
+                map.put("goods_img", ClobUtils.handleGoodsImageObject(map));
+                System.out.println();
+            }
+        }
+        return pageList;
+    }
+
 
 
 }

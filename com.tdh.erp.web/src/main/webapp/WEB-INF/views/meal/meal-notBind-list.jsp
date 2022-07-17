@@ -84,9 +84,10 @@ layui.use(['jquery', 'table', 'layer'], function () {
         where:{
             meal_id: param
         },
-        limits: [50, 100, 200],
-        limit: 50,
+        limits: [15,50, 100, 200],
+        limit: 15,
         loading: true,
+        page: true,
         end: '没有更多数据展示啦', /*没有数据之后的提示语*/
         cols: [[{type: 'checkbox'},
             {field: 'factory_name', title: '所属厂商'},

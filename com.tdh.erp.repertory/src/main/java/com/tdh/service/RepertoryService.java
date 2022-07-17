@@ -82,6 +82,17 @@ public class RepertoryService extends BaseService<Repertory, RepertoryMapper> {
         repertoryMapper.delRepertoryInfoById(repertoryId);
     }
 
+    /**
+     * 库存记录重复性商品校验
+     * @param goodIds
+     * @return
+     * @throws Exception
+     */
+    public int queryRepertoryInfoVeifyServ(String goodIds) throws Exception{
+        Map<String ,Object> countMap= repertoryMapper.queryRepertoryInfoVeify(goodIds);
+        int count = Integer.parseInt(String.valueOf(countMap.get("count")));
+        return count;
+    }
 
 
 }

@@ -52,12 +52,21 @@
 		</div>
 	</div>
 
+	<%--<div class="layui-form-item">--%>
+		<%--<label class="layui-form-label">单选</label>--%>
+		<%--<div class="layui-input-inline">--%>
+			<%--<input type="text" name="" placeholder="请输入" autocomplete="off" class="layui-input" id="demo2">--%>
+		<%--</div>--%>
+	<%--</div>--%>
+
 	<div class="layui-form-item">
 		<label class="layui-form-label">商品名称</label>
 		<div class="layui-input-inline">
 			<input type="text" name="goods_name"  autocomplete="off" placeholder="请输入商品名称" class="layui-input">
 		</div>
 	</div>
+
+
 
 	<div class="layui-form-item">
 		<label class="layui-form-label">单位</label>
@@ -69,13 +78,13 @@
 	<div class="layui-form-item">
 		<label class="layui-form-label">进货单价</label>
 		<div class="layui-input-inline">
-			<input type="text" name="purch_price"  autocomplete="off" placeholder="请选择进货单价" class="layui-input">
+			<input type="number" name="purch_price"   placeholder="0" class="layui-input">
 		</div>
 	</div>
 	<div class="layui-form-item">
 		<label class="layui-form-label">商品单价</label>
 		<div class="layui-input-inline">
-			<input type="text" name="unit_price"  autocomplete="off" placeholder="请选择进货单价" class="layui-input">
+			<input type="number" name="unit_price"  placeholder="0" class="layui-input">
 		</div>
 	</div>
 	<div class="layui-form-item" id="imgdiv">
@@ -150,6 +159,9 @@
                         layer.msg(json.msg);
                     }
                 })
+        // $(document).ready(function () {/*页面赋值*/
+        //     loadSelectDom(tableIns,api_id);
+        // });
     }
 
     //定义事件集合
@@ -176,7 +188,6 @@
             , layedit = layui.layedit
             , laydate = layui.laydate;
         form = layui.form;
-
         //监听提交
         form.on('submit(demo1)', function (data) {
             delete data.field.result_code;
@@ -270,6 +281,68 @@
             content: "<img src=" + $(e).attr('src') + " />"
         });
     }
+
+    //TODO 加载下拉筛选
+    // function loadSelectDom (tableIns,api_id){
+    //     var config =  layui.config({
+    //         base: '/layer/module/'
+    //     }).extend({
+    //         tableSelect: 'tableSelect/tableSelect'
+    //     });
+    //     config.use(['table', 'form', 'tableSelect'], function () {
+    //         var $ = layui.jquery,
+    //             table = layui.table,
+    //             form = layui.form,
+    //             tableSelect = layui.tableSelect;
+    //         tableSelect.render({
+    //             elem: '#demo2',
+    //             checkedKey: 'id',
+    //             table: {
+    //                 method: 'post',
+    //                 url: '/query-supplyinterface-enum.do',
+    //                 cols: [[
+    //                     { type: 'radio' },
+    //                     { field: 'name', title: '供应服务' }
+    //                 ]]
+    //             },
+    //             done: function (elem, data) {
+    //                 var NEWJSON = []
+    //                 layui.each(data.data, function (index, item) {
+    //                     NEWJSON.push(item.name)
+    //                 })
+    //                 elem.val(NEWJSON.join(","));
+    //                 //下拉选中参数
+    //                 interface_id = data.data[0].id;
+    //
+    //                 tableIns.reload({
+    //                     page: {
+    //                         curr: 1
+    //                     },
+    //                     where: {
+    //                         name: interface_id,
+    //                         api_id:api_id
+    //                     }
+    //                 });
+    //                 $.ajax({
+    //                     url: '/query-standardField-enum.do',
+    //                     type: 'POST',
+    //                     async: false,
+    //                     data: {"api_id":api_id,"field_site":"2"}
+    //                 })
+    //                     .done(function (message) {
+    //                         var json = eval("(" + message + ")")
+    //                         if (json.code == "success") {
+    //                             standardFieldEnum = json.data;
+    //                         }
+    //
+    //                         if (json.code == "fail") {
+    //                             layer.msg(json.msg);
+    //                         }
+    //                     });
+    //             }
+    //         })
+    //     });
+    // }
 </script>
 </body>
 </html>

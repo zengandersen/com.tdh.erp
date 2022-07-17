@@ -25,19 +25,10 @@
         select t.meal_bind_id,
        t.meal_id,
        t.repertory_id,
-       (select a.total from sys_repertory a where a.repertory_id = t.repertory_id) as total,
+
        t.goods_id,
-       (select c.factory_name from sys_goods b
-        left join sys_factory c on c.factory_id = b.factory_id
-        where b.goods_id = t.goods_id) as factory_name,
-            (select c.factory_code from sys_goods b
-        left join sys_factory c on c.factory_id = b.factory_id
-        where b.goods_id = t.goods_id) as factory_code,
-       (select b.goods_name from sys_goods b where b.goods_id = t.goods_id) as goods_name,
-       (select b.goods_code from sys_goods b where b.goods_id = t.goods_id) as goods_code,
-       (select b.goods_img from sys_goods b where b.goods_id = t.goods_id) as goods_img,
-       (select b.purch_price from sys_goods b where b.goods_id = t.goods_id) as purch_price,
-       (select b.unit_price from sys_goods b where b.goods_id = t.goods_id) as unit_price,
+
+
        t.create_time,
        t.create_user,
        t.update_time,
@@ -56,7 +47,9 @@
 
     <select id="queryBindComplateDataByMealId" parameterType="String"
             resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
-        select repertory_id from sys_meal_bind where meal_id = #{mealId}
+        select t.repertory_id from sys_meal_bind t where t.meal_id
+        in (select a.meal_id from sys_meal a where 1=1 and a.meal_code like  CONCAT(CONCAT('%',#{mealId}),'%')
+        or meal_name like CONCAT(CONCAT('%',#{mealId}),'%'))
     </select>
 
     <select id="queryMealInfoByGoodsId" parameterType="String"
@@ -96,6 +89,36 @@
         </foreach>
     </select>
 
+    <select id="selectMap" parameterType="Map"
+            resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+        select tb.*,
+        (select c.factory_name from sys_goods b
+        left join sys_factory c on c.factory_id = b.factory_id
+        where b.goods_id = tb.goods_id) as factory_name,
+        (select c.factory_code from sys_goods b
+        left join sys_factory c on c.factory_id = b.factory_id
+        where b.goods_id = tb.goods_id) as factory_code,
+        (select a.total from sys_repertory a where a.repertory_id =  tb.repertory_id) as total,
+        (select b.goods_name from sys_goods b where b.goods_id =  tb.goods_id) as goods_name,
+        (select b.goods_code from sys_goods b where b.goods_id =  tb.goods_id) as goods_code,
+        (select b.goods_img from sys_goods b where b.goods_id =  tb.goods_id) as goods_img,
+        (select b.purch_price from sys_goods b where b.goods_id =  tb.goods_id) as purch_price,
+        (select b.unit_price from sys_goods b where b.goods_id =  tb.goods_id) as unit_price,
+        (select u.user_name from sys_user u where u.user_id=tb.create_user) as create_by_transformation,
+        (select u.user_name from sys_user u where u.user_id=tb.update_user) as update_by_transformation
+        from sys_meal_bind tb
+        where 1 = 1 AND
+        meal_id = #{p.mealId}
+        order by goods_name
+    </select>
+
+
+    <select id="countMap" parameterType="Map" resultType="Long">
+        select count(1) as totalCount
+        from sys_meal_bind tb
+        where 1 = 1
+        order by tb.create_time desc
+    </select>
 
 
 </mapper>

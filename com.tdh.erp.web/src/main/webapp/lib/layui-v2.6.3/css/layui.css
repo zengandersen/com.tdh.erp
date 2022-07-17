@@ -3206,7 +3206,7 @@ a cite {
 .layui-table-view .layui-table td, .layui-table-view .layui-table th {
     padding: 5px 0;
     border-top: none;
-    border-left: none
+    border-left: none;
 }
 
 .layui-table-view .layui-table th.layui-unselect .layui-table-cell span {
@@ -3314,7 +3314,7 @@ a cite {
 .layui-table-cell, .layui-table-tool-panel li {
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap
+    white-space: nowrap;
 }
 
 .layui-table-tool-panel li {
@@ -3406,7 +3406,7 @@ a cite {
 }
 
 .layui-table-cell {
-    height: 28px;
+    height: auto;
     line-height: 28px;
     padding: 0 15px;
     position: relative;
@@ -5875,7 +5875,7 @@ body .layui-util-face .layui-layer-content {
 
 .table-overlay .layui-table-cell {
     height: auto;
-    overflow: visible;
+    /*overflow: visible;*/
 }
 
 .text-center {

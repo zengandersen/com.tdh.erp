@@ -73,9 +73,10 @@ layui.use(['jquery', 'table', 'layer'], function () {
         url: '/query-meal-bind-list.do',
         toolbar: '#toolbarDemo',
         method: 'post',
-        limits: [50, 100, 200],
-        limit: 50,
+        limits: [15 , 50, 100, 200],
+        limit: 15,
         loading: true,
+        page: true,
         where:{
             meal_id: param
         },
